@@ -1,0 +1,21 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-MyProject2.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\gronaldo44\Documents\Unreal Projects\MyProject2\Intermediate\Build\Win64\x64\MyProject2Editor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.InclOrderOldest.h.obj"
+"C:\Users\gronaldo44\Documents\Unreal Projects\MyProject2\Intermediate\Build\Win64\x64\UnrealEditor\Development\MyProject2\CPP_Card.gen.cpp.obj"
+"C:\Users\gronaldo44\Documents\Unreal Projects\MyProject2\Intermediate\Build\Win64\x64\UnrealEditor\Development\MyProject2\GM_Casino.gen.cpp.obj"
+"C:\Users\gronaldo44\Documents\Unreal Projects\MyProject2\Intermediate\Build\Win64\x64\UnrealEditor\Development\MyProject2\MyProject2.init.gen.cpp.obj"
+"C:\Users\gronaldo44\Documents\Unreal Projects\MyProject2\Intermediate\Build\Win64\x64\UnrealEditor\Development\MyProject2\Rules_ActivityBase.gen.cpp.obj"
+"C:\Users\gronaldo44\Documents\Unreal Projects\MyProject2\Intermediate\Build\Win64\x64\UnrealEditor\Development\MyProject2\Table_TimeBloodMoney.gen.cpp.obj"
+"C:\Users\gronaldo44\Documents\Unreal Projects\MyProject2\Intermediate\Build\Win64\x64\UnrealEditor\Development\MyProject2\CPP_Card.cpp.obj"
+"C:\Users\gronaldo44\Documents\Unreal Projects\MyProject2\Intermediate\Build\Win64\x64\UnrealEditor\Development\MyProject2\GM_Casino.cpp.obj"
+"C:\Users\gronaldo44\Documents\Unreal Projects\MyProject2\Intermediate\Build\Win64\x64\UnrealEditor\Development\MyProject2\MyProject2.cpp.obj"
+"C:\Users\gronaldo44\Documents\Unreal Projects\MyProject2\Intermediate\Build\Win64\x64\UnrealEditor\Development\MyProject2\Rules_ActivityBase.cpp.obj"
+"C:\Users\gronaldo44\Documents\Unreal Projects\MyProject2\Intermediate\Build\Win64\x64\UnrealEditor\Development\MyProject2\Table_TimeBloodMoney.cpp.obj"
+"C:\Users\gronaldo44\Documents\Unreal Projects\MyProject2\Intermediate\Build\Win64\x64\UnrealEditor\Development\MyProject2\Default.rc2.res"
+/OUT:"C:\Users\gronaldo44\Documents\Unreal Projects\MyProject2\Intermediate\Build\Win64\x64\UnrealEditor\Development\MyProject2\UnrealEditor-MyProject2.lib"
