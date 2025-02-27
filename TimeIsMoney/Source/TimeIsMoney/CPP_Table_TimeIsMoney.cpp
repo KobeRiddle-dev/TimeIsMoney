@@ -80,10 +80,10 @@ bool ACPP_Table_TimeIsMoney::CheckIfWin(TMap<ECardSuit, int> PlayerBeingChecked)
 	return playerIsWin;
 }
 
-bool ACPP_Table_TimeIsMoney::DetermineWinner(ACPP_Card* Player, ACPP_Card* Opponent)
+bool ACPP_Table_TimeIsMoney::DetermineWinner(ACPP_Card* Player, ACPP_Card* Opp)
 {
 	// Check if Player or Opponent is null to prevent crashes
-	if (!Player || !Opponent)
+	if (!Player || !Opp)
 	{
 		UE_LOG(LogTemp, Error, TEXT("DetermineWinner: Player or Opponent is null!"));
 		return false;
@@ -91,25 +91,25 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner(ACPP_Card* Player, ACPP_Card* Oppon
 
 	// Find game result
 	bool playerIsWin = false;
-	if (Player->CardSuit == ECardSuit::Blood && Opponent->CardSuit == ECardSuit::Time)
+	if (Player->CardSuit == ECardSuit::Blood && Opp->CardSuit == ECardSuit::Time)
 	{
 		playerIsWin = true;
 	}
-	else if (Player->CardSuit == ECardSuit::Time && Opponent->CardSuit == ECardSuit::Money)
+	else if (Player->CardSuit == ECardSuit::Time && Opp->CardSuit == ECardSuit::Money)
 	{
 		playerIsWin = true;
 	}
-	else if (Player->CardSuit == ECardSuit::Money && Opponent->CardSuit == ECardSuit::Blood)
+	else if (Player->CardSuit == ECardSuit::Money && Opp->CardSuit == ECardSuit::Blood)
 	{
 		playerIsWin = true;
 	}
-	else if (Player->CardSuit == Opponent->CardSuit)
+	else if (Player->CardSuit == Opp->CardSuit)
 	{
-		if (Player->CardNumber > Opponent->CardNumber)
+		if (Player->CardNumber > Opp->CardNumber)
 		{
 			playerIsWin = true;
 		}
-		else if (Player->CardNumber == Opponent->CardNumber)
+		else if (Player->CardNumber == Opp->CardNumber)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Tie"));
 			return true;
@@ -124,7 +124,7 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner(ACPP_Card* Player, ACPP_Card* Oppon
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Player Loses"));
-		OpponentHands[Opponent->CardSuit]++;
+		OpponentHands[Opp->CardSuit]++;
 	}
 	CheckForEndGame();
 	return playerIsWin;

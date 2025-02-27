@@ -25,3 +25,7 @@ void ACPP_NPC_Opp_TimeIsMoney::Tick(float DeltaTime)
 
 }
 
+void ACPP_NPC_Opp_TimeIsMoney::PlayCard()
+{
+	//CardPlayed = Deck.DrawRand();
+}

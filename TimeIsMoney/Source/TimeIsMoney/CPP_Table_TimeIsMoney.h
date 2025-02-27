@@ -23,11 +23,12 @@ protected:
 
 	bool CheckIfWin(TMap<ECardSuit, int> PlayerBeingChecked);
 
-
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	ACPP_NPC_Opp_TimeIsMoney* Opponent;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
 	ACPP_Card* PlayerCard;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
@@ -38,7 +39,7 @@ public:
 	TMap<ECardSuit, int> OpponentHands;
 
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
-	bool DetermineWinner(ACPP_Card* Player, ACPP_Card* Opponent);
+	bool DetermineWinner(ACPP_Card* Player, ACPP_Card* Opp);
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	void StartGame(ACPP_NPC_Opp_TimeIsMoney* Opp);
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
