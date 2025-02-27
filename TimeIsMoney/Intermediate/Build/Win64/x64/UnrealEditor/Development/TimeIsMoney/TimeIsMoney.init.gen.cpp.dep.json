@@ -1,0 +1,13 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\gronaldo44\\documents\\github\\timeismoney\\timeismoney\\intermediate\\build\\win64\\unrealeditor\\inc\\timeismoney\\uht\\timeismoney.init.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\gronaldo44\\documents\\github\\timeismoney\\timeismoney\\intermediate\\build\\win64\\x64\\timeismoneyeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "c:\\users\\gronaldo44\\documents\\github\\timeismoney\\timeismoney\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\timeismoney\\definitions.timeismoney.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

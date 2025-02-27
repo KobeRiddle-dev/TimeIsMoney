@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "TimeIsMoney",
+			"Path": "..\\Source\\TimeIsMoney.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "TimeIsMoneyEditor",
+			"Path": "..\\Source\\TimeIsMoneyEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}
