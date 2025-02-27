@@ -8562,23 +8562,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\gronaldo44\\.nuget\\packages\\": {},
+    "C:\\Users\\Tyler Kendall\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\gronaldo44\\Documents\\GitHub\\TimeIsMoney\\TimeIsMoney\\Intermediate\\Build\\BuildRulesProjects\\TimeIsMoneyModuleRules\\TimeIsMoneyModuleRules.csproj",
+      "projectUniqueName": "C:\\Users\\Tyler Kendall\\Documents\\Unreal Projects\\TimeIsMoney\\TimeIsMoney\\Intermediate\\Build\\BuildRulesProjects\\TimeIsMoneyModuleRules\\TimeIsMoneyModuleRules.csproj",
       "projectName": "TimeIsMoneyModuleRules",
-      "projectPath": "C:\\Users\\gronaldo44\\Documents\\GitHub\\TimeIsMoney\\TimeIsMoney\\Intermediate\\Build\\BuildRulesProjects\\TimeIsMoneyModuleRules\\TimeIsMoneyModuleRules.csproj",
-      "packagesPath": "C:\\Users\\gronaldo44\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\gronaldo44\\Documents\\GitHub\\TimeIsMoney\\TimeIsMoney\\Intermediate\\Build\\BuildRulesProjects\\TimeIsMoneyModuleRules\\obj\\",
+      "projectPath": "C:\\Users\\Tyler Kendall\\Documents\\Unreal Projects\\TimeIsMoney\\TimeIsMoney\\Intermediate\\Build\\BuildRulesProjects\\TimeIsMoneyModuleRules\\TimeIsMoneyModuleRules.csproj",
+      "packagesPath": "C:\\Users\\Tyler Kendall\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Tyler Kendall\\Documents\\Unreal Projects\\TimeIsMoney\\TimeIsMoney\\Intermediate\\Build\\BuildRulesProjects\\TimeIsMoneyModuleRules\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\gronaldo44\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Tyler Kendall\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -8616,13 +8616,7 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
-      },
-      "SdkAnalysisLevel": "9.0.100"
+      }
     },
     "frameworks": {
       "net6.0": {
@@ -8643,7 +8637,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CPP_Card.h"
+#include "CPP_Card_Deck.h"
 #include "GameFramework/Actor.h"
 #include "CPP_NPC_Opp_TimeIsMoney.h"
 #include "CPP_Table_TimeIsMoney.generated.h"

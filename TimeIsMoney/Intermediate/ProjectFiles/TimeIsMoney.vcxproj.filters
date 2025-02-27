@@ -57,5 +57,6 @@
     <ClInclude Include="..\..\Source\TimeIsMoney\TimeIsMoney.h">
       <Filter>Source\TimeIsMoney</Filter>
     </ClInclude>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>
