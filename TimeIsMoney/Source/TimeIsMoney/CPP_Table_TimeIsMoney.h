@@ -6,6 +6,7 @@
 #include "CPP_Card.h"
 #include "CPP_Card_Deck.h"
 #include "GameFramework/Actor.h"
+#include "CPP_NPC_Opp_TimeIsMoney.h"
 #include "CPP_Table_TimeIsMoney.generated.h"
 
 UCLASS()
@@ -23,6 +24,7 @@ protected:
 
 	bool CheckIfWin(TMap<ECardSuit, int> PlayerBeingChecked);
 
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -39,8 +41,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	bool DetermineWinner(ACPP_Card* Player, ACPP_Card* Opponent);
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
-	void StartGame();
+	void StartGame(ACPP_NPC_Opp_TimeIsMoney* Opp);
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	void CheckForEndGame();
+	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
+	void StartHand();
 
 };

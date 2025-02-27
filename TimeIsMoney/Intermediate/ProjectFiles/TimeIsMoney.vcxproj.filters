@@ -36,10 +36,10 @@
     <ClInclude Include="..\..\Source\TimeIsMoney\CPP_Card.h">
       <Filter>Source\TimeIsMoney</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\Source\TimeIsMoney\CPP_Card_Deck.cpp">
+    <ClCompile Include="..\..\Source\TimeIsMoney\CPP_NPC_Opp_TimeIsMoney.cpp">
       <Filter>Source\TimeIsMoney</Filter>
     </ClCompile>
-    <ClInclude Include="..\..\Source\TimeIsMoney\CPP_Card_Deck.h">
+    <ClInclude Include="..\..\Source\TimeIsMoney\CPP_NPC_Opp_TimeIsMoney.h">
       <Filter>Source\TimeIsMoney</Filter>
     </ClInclude>
     <ClCompile Include="..\..\Source\TimeIsMoney\CPP_Table_TimeIsMoney.cpp">

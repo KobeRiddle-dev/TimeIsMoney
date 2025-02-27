@@ -25,7 +25,7 @@ void ACPP_Table_TimeIsMoney::Tick(float DeltaTime)
 
 }
 
-void ACPP_Table_TimeIsMoney::StartGame()
+void ACPP_Table_TimeIsMoney::StartGame(ACPP_NPC_Opp_TimeIsMoney* Opp)
 {
 	// reset player hand wins
 	PlayerHands[ECardSuit::Blood] = 0;
@@ -35,6 +35,13 @@ void ACPP_Table_TimeIsMoney::StartGame()
 	OpponentHands[ECardSuit::Blood] = 0;
 	OpponentHands[ECardSuit::Time] = 0;
 	OpponentHands[ECardSuit::Money] = 0;
+	// reset opponent
+	Opponent = Opp;
+}
+
+void ACPP_Table_TimeIsMoney::StartHand()
+{
+	Opponent->PlayCard();
 }
 
 void ACPP_Table_TimeIsMoney::CheckForEndGame()
