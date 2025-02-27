@@ -261,6 +261,10 @@
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="..\..\Source\TimeIsMoney\CPP_Card.h"/>
+    <ClCompile Include="..\..\Source\TimeIsMoney\CPP_NPC_Opp_TimeIsMoney.cpp">
+      <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\TimeIsMoney\CPP_NPC_Opp_TimeIsMoney.h"/>
     <ClCompile Include="..\..\Source\TimeIsMoney\CPP_Table_TimeIsMoney.cpp">
       <AdditionalIncludeDirectories>$(ClCompile_AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

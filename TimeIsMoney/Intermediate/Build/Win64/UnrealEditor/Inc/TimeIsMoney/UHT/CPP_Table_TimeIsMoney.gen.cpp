@@ -12,6 +12,7 @@ void EmptyLinkFunctionForGeneratedCodeCPP_Table_TimeIsMoney() {}
 // Begin Cross Module References
 ENGINE_API UClass* Z_Construct_UClass_AActor();
 TIMEISMONEY_API UClass* Z_Construct_UClass_ACPP_Card_NoRegister();
+TIMEISMONEY_API UClass* Z_Construct_UClass_ACPP_NPC_Opp_TimeIsMoney_NoRegister();
 TIMEISMONEY_API UClass* Z_Construct_UClass_ACPP_Table_TimeIsMoney();
 TIMEISMONEY_API UClass* Z_Construct_UClass_ACPP_Table_TimeIsMoney_NoRegister();
 TIMEISMONEY_API UEnum* Z_Construct_UEnum_TimeIsMoney_ECardSuit();
@@ -108,15 +109,27 @@ DEFINE_FUNCTION(ACPP_Table_TimeIsMoney::execDetermineWinner)
 // Begin Class ACPP_Table_TimeIsMoney Function StartGame
 struct Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics
 {
+	struct CPP_Table_TimeIsMoney_eventStartGame_Parms
+	{
+		ACPP_NPC_Opp_TimeIsMoney* Opp;
+	};
 #if WITH_METADATA
 	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
 		{ "Category", "Table_TimeIsMoney" },
 		{ "ModuleRelativePath", "CPP_Table_TimeIsMoney.h" },
 	};
 #endif // WITH_METADATA
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_Opp;
+	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 	static const UECodeGen_Private::FFunctionParams FuncParams;
 };
-const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ACPP_Table_TimeIsMoney, nullptr, "StartGame", nullptr, nullptr, nullptr, 0, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::Function_MetaDataParams), Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::Function_MetaDataParams) };
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::NewProp_Opp = { "Opp", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(CPP_Table_TimeIsMoney_eventStartGame_Parms, Opp), Z_Construct_UClass_ACPP_NPC_Opp_TimeIsMoney_NoRegister, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::NewProp_Opp,
+};
+static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::PropPointers) < 2048);
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ACPP_Table_TimeIsMoney, nullptr, "StartGame", nullptr, nullptr, Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::PropPointers), sizeof(Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::CPP_Table_TimeIsMoney_eventStartGame_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::Function_MetaDataParams), Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::Function_MetaDataParams) };
+static_assert(sizeof(Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame_Statics::CPP_Table_TimeIsMoney_eventStartGame_Parms) < MAX_uint16);
 UFunction* Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame()
 {
 	static UFunction* ReturnFunction = nullptr;
@@ -128,12 +141,43 @@ UFunction* Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame()
 }
 DEFINE_FUNCTION(ACPP_Table_TimeIsMoney::execStartGame)
 {
+	P_GET_OBJECT(ACPP_NPC_Opp_TimeIsMoney,Z_Param_Opp);
 	P_FINISH;
 	P_NATIVE_BEGIN;
-	P_THIS->StartGame();
+	P_THIS->StartGame(Z_Param_Opp);
 	P_NATIVE_END;
 }
 // End Class ACPP_Table_TimeIsMoney Function StartGame
+
+// Begin Class ACPP_Table_TimeIsMoney Function StartHand
+struct Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartHand_Statics
+{
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "Category", "Table_TimeIsMoney" },
+		{ "ModuleRelativePath", "CPP_Table_TimeIsMoney.h" },
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartHand_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ACPP_Table_TimeIsMoney, nullptr, "StartHand", nullptr, nullptr, nullptr, 0, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartHand_Statics::Function_MetaDataParams), Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartHand_Statics::Function_MetaDataParams) };
+UFunction* Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartHand()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartHand_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(ACPP_Table_TimeIsMoney::execStartHand)
+{
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	P_THIS->StartHand();
+	P_NATIVE_END;
+}
+// End Class ACPP_Table_TimeIsMoney Function StartHand
 
 // Begin Class ACPP_Table_TimeIsMoney
 void ACPP_Table_TimeIsMoney::StaticRegisterNativesACPP_Table_TimeIsMoney()
@@ -143,6 +187,7 @@ void ACPP_Table_TimeIsMoney::StaticRegisterNativesACPP_Table_TimeIsMoney()
 		{ "CheckForEndGame", &ACPP_Table_TimeIsMoney::execCheckForEndGame },
 		{ "DetermineWinner", &ACPP_Table_TimeIsMoney::execDetermineWinner },
 		{ "StartGame", &ACPP_Table_TimeIsMoney::execStartGame },
+		{ "StartHand", &ACPP_Table_TimeIsMoney::execStartHand },
 	};
 	FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 }
@@ -190,7 +235,8 @@ struct Z_Construct_UClass_ACPP_Table_TimeIsMoney_Statics
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
 		{ &Z_Construct_UFunction_ACPP_Table_TimeIsMoney_CheckForEndGame, "CheckForEndGame" }, // 2615763833
 		{ &Z_Construct_UFunction_ACPP_Table_TimeIsMoney_DetermineWinner, "DetermineWinner" }, // 1133375456
-		{ &Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame, "StartGame" }, // 2920465295
+		{ &Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartGame, "StartGame" }, // 1305191933
+		{ &Z_Construct_UFunction_ACPP_Table_TimeIsMoney_StartHand, "StartHand" }, // 3986453095
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
@@ -261,10 +307,10 @@ ACPP_Table_TimeIsMoney::~ACPP_Table_TimeIsMoney() {}
 struct Z_CompiledInDeferFile_FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Table_TimeIsMoney_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ACPP_Table_TimeIsMoney, ACPP_Table_TimeIsMoney::StaticClass, TEXT("ACPP_Table_TimeIsMoney"), &Z_Registration_Info_UClass_ACPP_Table_TimeIsMoney, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ACPP_Table_TimeIsMoney), 2159241911U) },
+		{ Z_Construct_UClass_ACPP_Table_TimeIsMoney, ACPP_Table_TimeIsMoney::StaticClass, TEXT("ACPP_Table_TimeIsMoney"), &Z_Registration_Info_UClass_ACPP_Table_TimeIsMoney, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ACPP_Table_TimeIsMoney), 2600193475U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Table_TimeIsMoney_h_1203893391(TEXT("/Script/TimeIsMoney"),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Table_TimeIsMoney_h_2108899217(TEXT("/Script/TimeIsMoney"),
 	Z_CompiledInDeferFile_FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Table_TimeIsMoney_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Table_TimeIsMoney_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);
