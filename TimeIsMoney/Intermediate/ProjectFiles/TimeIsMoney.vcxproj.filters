@@ -36,6 +36,12 @@
     <ClInclude Include="..\..\Source\TimeIsMoney\CPP_Card.h">
       <Filter>Source\TimeIsMoney</Filter>
     </ClInclude>
+    <ClCompile Include="..\..\Source\TimeIsMoney\CPP_Card_Deck.cpp">
+      <Filter>Source\TimeIsMoney</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\TimeIsMoney\CPP_Card_Deck.h">
+      <Filter>Source\TimeIsMoney</Filter>
+    </ClInclude>
     <ClCompile Include="..\..\Source\TimeIsMoney\CPP_Table_TimeIsMoney.cpp">
       <Filter>Source\TimeIsMoney</Filter>
     </ClCompile>
@@ -51,5 +57,6 @@
     <ClInclude Include="..\..\Source\TimeIsMoney\TimeIsMoney.h">
       <Filter>Source\TimeIsMoney</Filter>
     </ClInclude>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>
