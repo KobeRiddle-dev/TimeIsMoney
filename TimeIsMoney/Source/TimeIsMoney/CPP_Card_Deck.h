@@ -10,15 +10,19 @@ UCLASS()
 class TIMEISMONEY_API ACPP_Card_Deck : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	ACPP_Card_Deck();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+
+public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
 	TArray<ACPP_Card*> PlayerDeck;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
@@ -28,13 +32,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
 	TArray<ACPP_Card*> OpponentHeldHand;
 
-
 	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
-	void DrawRandom();
-
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	ACPP_Card* DrawRandom();
+	UFUNCTION(Blueprintcallable, Category = "Card_Deck")
+	void DiscardHands();
 };

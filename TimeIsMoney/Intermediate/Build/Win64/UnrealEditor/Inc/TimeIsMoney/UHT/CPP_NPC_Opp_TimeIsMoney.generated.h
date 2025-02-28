@@ -9,6 +9,7 @@
 #include "UObject/ScriptMacros.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
+class ACPP_Card;
 #ifdef TIMEISMONEY_CPP_NPC_Opp_TimeIsMoney_generated_h
 #error "CPP_NPC_Opp_TimeIsMoney.generated.h already included, missing '#pragma once' in CPP_NPC_Opp_TimeIsMoney.h"
 #endif

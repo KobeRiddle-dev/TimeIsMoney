@@ -38,14 +38,18 @@ public:
 	TMap<ECardSuit, int> PlayerHands;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
 	TMap<ECardSuit, int> OpponentHands;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	bool GameIsActive;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	ACPP_Card_Deck* Deck;
 
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	bool DetermineWinner(ACPP_Card* Player, ACPP_Card* Opp);
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
-	void StartGame(ACPP_NPC_Opp_TimeIsMoney* Opp);
+	void StartGame();
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	void CheckForEndGame();
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
-	void StartHand();
+	bool StartHand();
 
 };

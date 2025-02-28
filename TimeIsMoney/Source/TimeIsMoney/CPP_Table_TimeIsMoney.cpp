@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "Kismet/GameplayStatics.h"
 #include "CPP_Table_TimeIsMoney.h"
 
 // Sets default values
@@ -11,11 +11,20 @@ ACPP_Table_TimeIsMoney::ACPP_Table_TimeIsMoney()
 
 }
 
-// Called when the game starts or when spawned
 void ACPP_Table_TimeIsMoney::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Initialize PlayerHands and OpponentHands with default values (0 wins)
+	PlayerHands.Add(ECardSuit::Blood, 0);
+	PlayerHands.Add(ECardSuit::Time, 0);
+	PlayerHands.Add(ECardSuit::Money, 0);
+
+	OpponentHands.Add(ECardSuit::Blood, 0);
+	OpponentHands.Add(ECardSuit::Time, 0);
+	OpponentHands.Add(ECardSuit::Money, 0);
+
+	GameIsActive = false;
 }
 
 // Called every frame
@@ -25,36 +34,58 @@ void ACPP_Table_TimeIsMoney::Tick(float DeltaTime)
 
 }
 
-void ACPP_Table_TimeIsMoney::StartGame(ACPP_NPC_Opp_TimeIsMoney* Opp)
+void ACPP_Table_TimeIsMoney::StartGame()
 {
-	// reset player hand wins
+	// Reset player hand wins
 	PlayerHands[ECardSuit::Blood] = 0;
 	PlayerHands[ECardSuit::Time] = 0;
 	PlayerHands[ECardSuit::Money] = 0;
-	// reset opponent hand wins
+
+	// Reset opponent hand wins
 	OpponentHands[ECardSuit::Blood] = 0;
 	OpponentHands[ECardSuit::Time] = 0;
 	OpponentHands[ECardSuit::Money] = 0;
-	// reset opponent
-	Opponent = Opp;
+
+	GameIsActive = true;
 }
 
-void ACPP_Table_TimeIsMoney::StartHand()
+bool ACPP_Table_TimeIsMoney::StartHand()
 {
-	Opponent->PlayCard();
+	UE_LOG(LogTemp, Warning, TEXT("Starting Hand"));
+	if (!GameIsActive)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Game is not active!"));
+		return false;
+	}
+
+	if (Deck->PlayersHeldHand.Num() > 0)
+	{
+		Deck->DiscardHands();
+	}
+
+	int drawPower = 3;
+	int maxHandSize = 3;
+	while (Deck->PlayersHeldHand.Num() < drawPower && Deck->PlayersHeldHand.Num() < maxHandSize)
+	{
+		Deck->DrawRandom();
+	}
+	OpponentCard = Opponent->PlayCard();
+	return true;
 }
 
 void ACPP_Table_TimeIsMoney::CheckForEndGame()
 {
 	if (CheckIfWin(PlayerHands))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Wins"));
+		UE_LOG(LogTemp, Warning, TEXT("Player Wins The Game"));
 		// TODO: emit result to listeners and/or cleanup game
+		GameIsActive = false;
 	}
 	else if (CheckIfWin(OpponentHands))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Opponent Wins"));
+		UE_LOG(LogTemp, Warning, TEXT("Opponent Wins The Game"));
 		// TODO: emit result to listeners and/or cleanup game
+		GameIsActive = false;
 	}
 }
 
@@ -115,6 +146,7 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner(ACPP_Card* Player, ACPP_Card* Opp)
 			return true;
 		}
 	}
+
 	// Store the result of the game
 	if (playerIsWin)
 	{
@@ -126,7 +158,14 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner(ACPP_Card* Player, ACPP_Card* Opp)
 		UE_LOG(LogTemp, Warning, TEXT("Player Loses"));
 		OpponentHands[Opp->CardSuit]++;
 	}
+
+	// Check if the game is over
 	CheckForEndGame();
+	//if (GameIsActive)
+	//{
+	//	StartHand();
+	//}
+
 	return playerIsWin;
 }
 

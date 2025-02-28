@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-//#include "CPP_Card_Deck.h"
+#include "CPP_Card_Deck.h"
 #include "CPP_Card.h"
 #include "CPP_NPC_Opp_TimeIsMoney.generated.h"
 
@@ -25,11 +25,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	//UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "NPC_TimeIsMoney")
-	//ACPP_Card_Deck Deck;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "NPC_TimeIsMoney")
+	ACPP_Card_Deck* Deck;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "NPC_TimeIsMoney")
 	ACPP_Card* CardPlayed;
 
 	UFUNCTION(BlueprintCallable, Category = "NPC_TimeIsMoney")
-	void PlayCard();
+	ACPP_Card* PlayCard();
 };
