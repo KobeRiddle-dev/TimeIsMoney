@@ -7,23 +7,29 @@
 #include "UObject/GeneratedCppIncludes.h"
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeTimeIsMoney_init() {}
+	TIMEISMONEY_API UFunction* Z_Construct_UDelegateFunction_TimeIsMoney__CardDrawnEventDispatcher__DelegateSignature();
+	TIMEISMONEY_API UFunction* Z_Construct_UDelegateFunction_TimeIsMoney__HandDiscardedEventDispatcher__DelegateSignature();
 	static FPackageRegistrationInfo Z_Registration_Info_UPackage__Script_TimeIsMoney;
 	FORCENOINLINE UPackage* Z_Construct_UPackage__Script_TimeIsMoney()
 	{
 		if (!Z_Registration_Info_UPackage__Script_TimeIsMoney.OuterSingleton)
 		{
+			static UObject* (*const SingletonFuncArray[])() = {
+				(UObject* (*)())Z_Construct_UDelegateFunction_TimeIsMoney__CardDrawnEventDispatcher__DelegateSignature,
+				(UObject* (*)())Z_Construct_UDelegateFunction_TimeIsMoney__HandDiscardedEventDispatcher__DelegateSignature,
+			};
 			static const UECodeGen_Private::FPackageParams PackageParams = {
 				"/Script/TimeIsMoney",
-				nullptr,
-				0,
+				SingletonFuncArray,
+				UE_ARRAY_COUNT(SingletonFuncArray),
 				PKG_CompiledIn | 0x00000000,
-				0xE60F3210,
-				0x596D3E13,
+				0x2D29C113,
+				0x9B3B5D52,
 				METADATA_PARAMS(0, nullptr)
 			};
 			UECodeGen_Private::ConstructUPackage(Z_Registration_Info_UPackage__Script_TimeIsMoney.OuterSingleton, PackageParams);
 		}
 		return Z_Registration_Info_UPackage__Script_TimeIsMoney.OuterSingleton;
 	}
-	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_TimeIsMoney(Z_Construct_UPackage__Script_TimeIsMoney, TEXT("/Script/TimeIsMoney"), Z_Registration_Info_UPackage__Script_TimeIsMoney, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0xE60F3210, 0x596D3E13));
+	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_TimeIsMoney(Z_Construct_UPackage__Script_TimeIsMoney, TEXT("/Script/TimeIsMoney"), Z_Registration_Info_UPackage__Script_TimeIsMoney, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0x2D29C113, 0x9B3B5D52));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
