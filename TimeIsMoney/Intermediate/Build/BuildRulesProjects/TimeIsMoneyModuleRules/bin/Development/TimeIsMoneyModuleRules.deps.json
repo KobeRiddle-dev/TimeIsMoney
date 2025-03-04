@@ -1743,10 +1743,7 @@
           "System.Memory": "4.5.5"
         },
         "runtime": {
-          "EpicGames.Core.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "5.0.0.0"
-          }
+          "EpicGames.Core.dll": {}
         }
       },
       "EpicGames.Horde/1.0.0": {
@@ -1768,10 +1765,7 @@
           "Microsoft.Extensions.Logging": "6.0.0"
         },
         "runtime": {
-          "EpicGames.Horde.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "5.0.0.0"
-          }
+          "EpicGames.Horde.dll": {}
         }
       },
       "EpicGames.IoHash/1.0.0": {
@@ -1781,10 +1775,7 @@
           "System.Memory": "4.5.5"
         },
         "runtime": {
-          "EpicGames.IoHash.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "5.0.0.0"
-          }
+          "EpicGames.IoHash.dll": {}
         }
       },
       "EpicGames.MsBuild/1.0.0": {
@@ -1792,10 +1783,7 @@
           "EpicGames.Core": "1.0.0"
         },
         "runtime": {
-          "EpicGames.MsBuild.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "5.0.0.0"
-          }
+          "EpicGames.MsBuild.dll": {}
         }
       },
       "EpicGames.OIDC/1.0.0": {
@@ -1805,18 +1793,12 @@
           "Microsoft.Extensions.Configuration.Json": "6.0.0"
         },
         "runtime": {
-          "EpicGames.OIDC.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "5.0.0.0"
-          }
+          "EpicGames.OIDC.dll": {}
         }
       },
       "EpicGames.Oodle/1.0.0": {
         "runtime": {
-          "EpicGames.Oodle.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "5.0.0.0"
-          }
+          "EpicGames.Oodle.dll": {}
         }
       },
       "EpicGames.Serialization/1.0.0": {
@@ -1824,10 +1806,7 @@
           "EpicGames.IoHash": "1.0.0"
         },
         "runtime": {
-          "EpicGames.Serialization.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "5.0.0.0"
-          }
+          "EpicGames.Serialization.dll": {}
         }
       },
       "EpicGames.UBA/1.0.0": {
@@ -1836,10 +1815,7 @@
           "Microsoft.Extensions.Logging": "6.0.0"
         },
         "runtime": {
-          "EpicGames.UBA.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "5.0.0.0"
-          }
+          "EpicGames.UBA.dll": {}
         }
       },
       "EpicGames.UHT/1.0.0": {
@@ -1849,10 +1825,7 @@
           "Microsoft.CSharp": "4.7.0"
         },
         "runtime": {
-          "EpicGames.UHT.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "5.0.0.0"
-          }
+          "EpicGames.UHT.dll": {}
         }
       }
     }

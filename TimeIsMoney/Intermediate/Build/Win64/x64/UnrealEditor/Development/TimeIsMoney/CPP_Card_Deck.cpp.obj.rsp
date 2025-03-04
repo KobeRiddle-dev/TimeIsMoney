@@ -1,11 +1,11 @@
-"C:\Users\gronaldo44\Documents\GitHub\TimeIsMoney\TimeIsMoney\Source\TimeIsMoney\CPP_Card_Deck.cpp"
-/FI"C:\Users\gronaldo44\Documents\GitHub\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\TimeIsMoneyEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h"
-/FI"C:\Users\gronaldo44\Documents\GitHub\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\Definitions.TimeIsMoney.h"
-/Yu"C:\Users\gronaldo44\Documents\GitHub\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\TimeIsMoneyEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h"
-/Fp"C:\Users\gronaldo44\Documents\GitHub\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\TimeIsMoneyEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.pch"
-/Fo"C:\Users\gronaldo44\Documents\GitHub\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\CPP_Card_Deck.cpp.obj"
-/sourceDependencies "C:\Users\gronaldo44\Documents\GitHub\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\CPP_Card_Deck.cpp.dep.json"
-@"C:\Users\gronaldo44\Documents\GitHub\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\TimeIsMoney.Shared.rsp"
+"C:\Users\ajken\Desktop\School\Capstone\Final\TimeIsMoney\TimeIsMoney\Source\TimeIsMoney\CPP_Card_Deck.cpp"
+/FI"C:\Users\ajken\Desktop\School\Capstone\Final\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\TimeIsMoneyEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h"
+/FI"C:\Users\ajken\Desktop\School\Capstone\Final\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\Definitions.TimeIsMoney.h"
+/Yu"C:\Users\ajken\Desktop\School\Capstone\Final\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\TimeIsMoneyEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h"
+/Fp"C:\Users\ajken\Desktop\School\Capstone\Final\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\TimeIsMoneyEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.h.pch"
+/Fo"C:\Users\ajken\Desktop\School\Capstone\Final\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\CPP_Card_Deck.cpp.obj"
+/sourceDependencies "C:\Users\ajken\Desktop\School\Capstone\Final\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\CPP_Card_Deck.cpp.dep.json"
+@"C:\Users\ajken\Desktop\School\Capstone\Final\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\TimeIsMoney.Shared.rsp"
 /Zc:inline
 /nologo
 /Oi

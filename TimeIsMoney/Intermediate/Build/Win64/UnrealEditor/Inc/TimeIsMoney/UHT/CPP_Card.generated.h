@@ -16,14 +16,14 @@ enum class ECardSuit : uint8;
 #endif
 #define TIMEISMONEY_CPP_Card_generated_h
 
-#define FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_RPC_WRAPPERS_NO_PURE_DECLS \
 	DECLARE_FUNCTION(execInitializeCard); \
 	DECLARE_FUNCTION(execSetCardSuit); \
 	DECLARE_FUNCTION(execSetCardNumber); \
 	DECLARE_FUNCTION(execSetCardTexture);
 
 
-#define FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_INCLASS_NO_PURE_DECLS \
+#define FID_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesACPP_Card(); \
 	friend struct Z_Construct_UClass_ACPP_Card_Statics; \
@@ -32,7 +32,7 @@ public: \
 	DECLARE_SERIALIZER(ACPP_Card)
 
 
-#define FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_ENHANCED_CONSTRUCTORS \
+#define FID_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	ACPP_Card(ACPP_Card&&); \
@@ -44,13 +44,13 @@ public: \
 	NO_API virtual ~ACPP_Card();
 
 
-#define FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_18_PROLOG
-#define FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_GENERATED_BODY \
+#define FID_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_18_PROLOG
+#define FID_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_INCLASS_NO_PURE_DECLS \
-	FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_ENHANCED_CONSTRUCTORS \
+	FID_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_INCLASS_NO_PURE_DECLS \
+	FID_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h_21_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -58,7 +58,7 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 template<> TIMEISMONEY_API UClass* StaticClass<class ACPP_Card>();
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h
+#define CURRENT_FILE_ID FID_TimeIsMoney_Source_TimeIsMoney_CPP_Card_h
 
 
 #define FOREACH_ENUM_ECARDSUIT(op) \

@@ -1,14 +1,14 @@
-"C:\Users\gronaldo44\Documents\GitHub\TimeIsMoney\TimeIsMoney\Source\TimeIsMoney\CPP_Card.cpp"
+"C:\Users\ajken\Desktop\School\Capstone\Final\TimeIsMoney\TimeIsMoney\Source\TimeIsMoney\CPP_Card.cpp"
 /external:W0
-/external:I "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\INCLUDE"
-/external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt"
-/external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\shared"
-/external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\um"
-/external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\winrt"
-/FI"C:\Users\gronaldo44\Documents\GitHub\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\Definitions.TimeIsMoney.h"
-/Fo"C:\Users\gronaldo44\Documents\GitHub\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\SingleFile\CPP_Card.cpp.lcpt.obj"
-/sourceDependencies"C:\Users\gronaldo44\Documents\GitHub\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\SingleFile\CPP_Card.cpp.dep.lcpt.json"
-@"C:\Users\gronaldo44\Documents\GitHub\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\TimeIsMoney.Shared.rsp"
+/external:I "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.36.32532\INCLUDE"
+/external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt"
+/external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared"
+/external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um"
+/external:I "C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt"
+/FI"C:\Users\ajken\Desktop\School\Capstone\Final\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\Definitions.TimeIsMoney.h"
+/Fo"C:\Users\ajken\Desktop\School\Capstone\Final\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\SingleFile\CPP_Card.cpp.lcpt.obj"
+/sourceDependencies"C:\Users\ajken\Desktop\School\Capstone\Final\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\SingleFile\CPP_Card.cpp.dep.lcpt.json"
+@"C:\Users\ajken\Desktop\School\Capstone\Final\TimeIsMoney\TimeIsMoney\Intermediate\Build\Win64\x64\UnrealEditor\Development\TimeIsMoney\TimeIsMoney.Shared.rsp"
 /Zc:inline
 /nologo
 /Oi

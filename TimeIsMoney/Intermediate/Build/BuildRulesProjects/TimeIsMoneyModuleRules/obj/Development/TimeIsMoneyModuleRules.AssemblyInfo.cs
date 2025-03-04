@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TimeIsMoneyModuleRules")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Development")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+629fd15320e4c414e8a8945979ec255032e47da8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1adb9af110297b1ff71777059c9a6eb27c2b72ac")]
 [assembly: System.Reflection.AssemblyProductAttribute("TimeIsMoneyModuleRules")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TimeIsMoneyModuleRules")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

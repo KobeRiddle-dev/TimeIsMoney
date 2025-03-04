@@ -161,6 +161,52 @@ DEFINE_FUNCTION(ACPP_Card_Deck::execDrawRandom)
 }
 // End Class ACPP_Card_Deck Function DrawRandom
 
+// Begin Class ACPP_Card_Deck Function ShuffleDeck
+struct Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics
+{
+	struct CPP_Card_Deck_eventShuffleDeck_Parms
+	{
+		TArray<ACPP_Card*> deck;
+	};
+#if WITH_METADATA
+	static constexpr UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[] = {
+		{ "Category", "Card_Deck" },
+		{ "ModuleRelativePath", "CPP_Card_Deck.h" },
+	};
+#endif // WITH_METADATA
+	static const UECodeGen_Private::FObjectPropertyParams NewProp_deck_Inner;
+	static const UECodeGen_Private::FArrayPropertyParams NewProp_deck;
+	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
+	static const UECodeGen_Private::FFunctionParams FuncParams;
+};
+const UECodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::NewProp_deck_Inner = { "deck", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_ACPP_Card_NoRegister, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::NewProp_deck = { "deck", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(CPP_Card_Deck_eventShuffleDeck_Parms, deck), EArrayPropertyFlags::None, METADATA_PARAMS(0, nullptr) };
+const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::PropPointers[] = {
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::NewProp_deck_Inner,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::NewProp_deck,
+};
+static_assert(UE_ARRAY_COUNT(Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::PropPointers) < 2048);
+const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ACPP_Card_Deck, nullptr, "ShuffleDeck", nullptr, nullptr, Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::PropPointers), sizeof(Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::CPP_Card_Deck_eventShuffleDeck_Parms), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::Function_MetaDataParams), Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::Function_MetaDataParams) };
+static_assert(sizeof(Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::CPP_Card_Deck_eventShuffleDeck_Parms) < MAX_uint16);
+UFunction* Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck()
+{
+	static UFunction* ReturnFunction = nullptr;
+	if (!ReturnFunction)
+	{
+		UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck_Statics::FuncParams);
+	}
+	return ReturnFunction;
+}
+DEFINE_FUNCTION(ACPP_Card_Deck::execShuffleDeck)
+{
+	P_GET_TARRAY(ACPP_Card*,Z_Param_deck);
+	P_FINISH;
+	P_NATIVE_BEGIN;
+	P_THIS->ShuffleDeck(Z_Param_deck);
+	P_NATIVE_END;
+}
+// End Class ACPP_Card_Deck Function ShuffleDeck
+
 // Begin Class ACPP_Card_Deck
 void ACPP_Card_Deck::StaticRegisterNativesACPP_Card_Deck()
 {
@@ -168,6 +214,7 @@ void ACPP_Card_Deck::StaticRegisterNativesACPP_Card_Deck()
 	static const FNameNativePtrPair Funcs[] = {
 		{ "DiscardHands", &ACPP_Card_Deck::execDiscardHands },
 		{ "DrawRandom", &ACPP_Card_Deck::execDrawRandom },
+		{ "ShuffleDeck", &ACPP_Card_Deck::execShuffleDeck },
 	};
 	FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 }
@@ -199,6 +246,14 @@ struct Z_Construct_UClass_ACPP_Card_Deck_Statics
 		{ "Category", "Card_Deck" },
 		{ "ModuleRelativePath", "CPP_Card_Deck.h" },
 	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_playerCardIndex_MetaData[] = {
+		{ "Category", "Card_Deck" },
+		{ "ModuleRelativePath", "CPP_Card_Deck.h" },
+	};
+	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_opponentCardIndex_MetaData[] = {
+		{ "Category", "Card_Deck" },
+		{ "ModuleRelativePath", "CPP_Card_Deck.h" },
+	};
 	static constexpr UECodeGen_Private::FMetaDataPairParam NewProp_OnCardDrawn_MetaData[] = {
 		{ "Category", "Card_Deck" },
 		{ "ModuleRelativePath", "CPP_Card_Deck.h" },
@@ -216,6 +271,8 @@ struct Z_Construct_UClass_ACPP_Card_Deck_Statics
 	static const UECodeGen_Private::FArrayPropertyParams NewProp_PlayersHeldHand;
 	static const UECodeGen_Private::FObjectPropertyParams NewProp_OpponentHeldHand_Inner;
 	static const UECodeGen_Private::FArrayPropertyParams NewProp_OpponentHeldHand;
+	static const UECodeGen_Private::FIntPropertyParams NewProp_playerCardIndex;
+	static const UECodeGen_Private::FIntPropertyParams NewProp_opponentCardIndex;
 	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_OnCardDrawn;
 	static const UECodeGen_Private::FMulticastDelegatePropertyParams NewProp_OnHandDiscarded;
 	static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
@@ -223,6 +280,7 @@ struct Z_Construct_UClass_ACPP_Card_Deck_Statics
 	static constexpr FClassFunctionLinkInfo FuncInfo[] = {
 		{ &Z_Construct_UFunction_ACPP_Card_Deck_DiscardHands, "DiscardHands" }, // 1384432899
 		{ &Z_Construct_UFunction_ACPP_Card_Deck_DrawRandom, "DrawRandom" }, // 3276155464
+		{ &Z_Construct_UFunction_ACPP_Card_Deck_ShuffleDeck, "ShuffleDeck" }, // 364469508
 	};
 	static_assert(UE_ARRAY_COUNT(FuncInfo) < 2048);
 	static constexpr FCppClassTypeInfoStatic StaticCppClassTypeInfo = {
@@ -238,6 +296,8 @@ const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ACPP_Card_Deck
 const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_PlayersHeldHand = { "PlayersHeldHand", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ACPP_Card_Deck, PlayersHeldHand), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_PlayersHeldHand_MetaData), NewProp_PlayersHeldHand_MetaData) };
 const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_OpponentHeldHand_Inner = { "OpponentHeldHand", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, 0, Z_Construct_UClass_ACPP_Card_NoRegister, METADATA_PARAMS(0, nullptr) };
 const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_OpponentHeldHand = { "OpponentHeldHand", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ACPP_Card_Deck, OpponentHeldHand), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OpponentHeldHand_MetaData), NewProp_OpponentHeldHand_MetaData) };
+const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_playerCardIndex = { "playerCardIndex", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ACPP_Card_Deck, playerCardIndex), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_playerCardIndex_MetaData), NewProp_playerCardIndex_MetaData) };
+const UECodeGen_Private::FIntPropertyParams Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_opponentCardIndex = { "opponentCardIndex", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ACPP_Card_Deck, opponentCardIndex), METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_opponentCardIndex_MetaData), NewProp_opponentCardIndex_MetaData) };
 const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_OnCardDrawn = { "OnCardDrawn", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ACPP_Card_Deck, OnCardDrawn), Z_Construct_UDelegateFunction_TimeIsMoney__CardDrawnEventDispatcher__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OnCardDrawn_MetaData), NewProp_OnCardDrawn_MetaData) }; // 836698495
 const UECodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_OnHandDiscarded = { "OnHandDiscarded", nullptr, (EPropertyFlags)0x0010000010080000, UECodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ACPP_Card_Deck, OnHandDiscarded), Z_Construct_UDelegateFunction_TimeIsMoney__HandDiscardedEventDispatcher__DelegateSignature, METADATA_PARAMS(UE_ARRAY_COUNT(NewProp_OnHandDiscarded_MetaData), NewProp_OnHandDiscarded_MetaData) }; // 3306591478
 const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ACPP_Card_Deck_Statics::PropPointers[] = {
@@ -249,6 +309,8 @@ const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ACPP_Card
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_PlayersHeldHand,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_OpponentHeldHand_Inner,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_OpponentHeldHand,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_playerCardIndex,
+	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_opponentCardIndex,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_OnCardDrawn,
 	(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ACPP_Card_Deck_Statics::NewProp_OnHandDiscarded,
 };
@@ -290,14 +352,14 @@ ACPP_Card_Deck::~ACPP_Card_Deck() {}
 // End Class ACPP_Card_Deck
 
 // Begin Registration
-struct Z_CompiledInDeferFile_FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_Deck_h_Statics
+struct Z_CompiledInDeferFile_FID_TimeIsMoney_Source_TimeIsMoney_CPP_Card_Deck_h_Statics
 {
 	static constexpr FClassRegisterCompiledInInfo ClassInfo[] = {
-		{ Z_Construct_UClass_ACPP_Card_Deck, ACPP_Card_Deck::StaticClass, TEXT("ACPP_Card_Deck"), &Z_Registration_Info_UClass_ACPP_Card_Deck, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ACPP_Card_Deck), 3444359703U) },
+		{ Z_Construct_UClass_ACPP_Card_Deck, ACPP_Card_Deck::StaticClass, TEXT("ACPP_Card_Deck"), &Z_Registration_Info_UClass_ACPP_Card_Deck, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ACPP_Card_Deck), 3987205907U) },
 	};
 };
-static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_Deck_h_463666515(TEXT("/Script/TimeIsMoney"),
-	Z_CompiledInDeferFile_FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_Deck_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_gronaldo44_Documents_GitHub_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_Deck_h_Statics::ClassInfo),
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_TimeIsMoney_Source_TimeIsMoney_CPP_Card_Deck_h_4033457178(TEXT("/Script/TimeIsMoney"),
+	Z_CompiledInDeferFile_FID_TimeIsMoney_Source_TimeIsMoney_CPP_Card_Deck_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_TimeIsMoney_Source_TimeIsMoney_CPP_Card_Deck_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);
 // End Registration
