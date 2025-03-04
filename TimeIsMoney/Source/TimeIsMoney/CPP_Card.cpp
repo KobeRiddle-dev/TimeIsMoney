@@ -31,7 +31,7 @@ void ACPP_Card::BeginPlay()
 		DynMaterial = UMaterialInstanceDynamic::Create(CardMesh->GetMaterial(0), this);
 		if (DynMaterial)
 		{
-			UE_LOG(LogTemp, Log, TEXT("Dynamic Material Created Successfully"));
+			UE_LOG(LogTemp, Warning, TEXT("Dynamic Material Created Successfully"));
 			CardMesh->SetMaterial(0, DynMaterial);
 		}
 		else
@@ -62,7 +62,7 @@ void ACPP_Card::SetCardTexture(UTexture2D* NewTexture)
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("CardMesh, CardMeshMaterial, or NewTexture is NULL"));
+		UE_LOG(LogTemp, Warning, TEXT("CardMesh, CardMeshMaterial, or NewTexture is NULL"));
 	}
 }
 

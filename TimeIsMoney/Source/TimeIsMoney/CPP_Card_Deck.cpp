@@ -37,7 +37,7 @@ ACPP_Card* ACPP_Card_Deck::DrawRandom()
         }
         // Add to the Opponent's hand (assuming this is an array of pointers)
         OpponentHeldHand.Add(randomCard);
-        UE_LOG(LogTemp, Log, TEXT("Opponent Drew: %d of %d"), randomCard->CardNumber, randomCard->CardSuit);
+        UE_LOG(LogTemp, Warning, TEXT("Opponent Drew: %d of %d"), randomCard->CardNumber, randomCard->CardSuit);
 
         // Initialize the card with a random suit and rank
         switch (rand() % 3)
@@ -54,10 +54,9 @@ ACPP_Card* ACPP_Card_Deck::DrawRandom()
         }
         // Add to the player's hand (assuming this is an array of pointers)
         PlayersHeldHand.Add(randomCard);
-        UE_LOG(LogTemp, Log, TEXT("Player Drew: %d of %d"), randomCard->CardNumber, randomCard->CardSuit);
+        UE_LOG(LogTemp, Warning, TEXT("Player Drew: %d of %d"), randomCard->CardNumber, randomCard->CardSuit);
 
-        // Return the player's randomly drawn card and notify listeners
-		OnCardDrawn.Broadcast(randomCard);
+        // Return the player's randomly drawn card
         return randomCard;
     }
 
@@ -66,7 +65,7 @@ ACPP_Card* ACPP_Card_Deck::DrawRandom()
 
 void ACPP_Card_Deck::DiscardHands()
 {
-	UE_LOG(LogTemp, Log, TEXT("Discarding hands"));
+	UE_LOG(LogTemp, Warning, TEXT("Discarding hands"));
 	// Clear the player's hand
 	for (ACPP_Card* card : PlayersHeldHand)
 	{
@@ -79,9 +78,6 @@ void ACPP_Card_Deck::DiscardHands()
 		card->Destroy();
 	}
 	OpponentHeldHand.Empty();
-
-	// Notify listeners that the hands have been discarded
-	OnHandDiscarded.Broadcast();
 }
 
  
