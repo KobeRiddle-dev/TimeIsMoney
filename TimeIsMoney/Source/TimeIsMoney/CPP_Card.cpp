@@ -28,15 +28,23 @@ void ACPP_Card::BeginPlay()
 	CardNumberText = Cast<UTextRenderComponent>(GetComponentByClass(UTextRenderComponent::StaticClass()));
 	if (CardMesh && CardNumberText)
 	{
-		DynMaterial = UMaterialInstanceDynamic::Create(CardMesh->GetMaterial(0), this);
-		if (DynMaterial)
+		UMaterialInterface* Material = CardMesh->GetMaterial(0);
+		if (Material)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Dynamic Material Created Successfully"));
-			CardMesh->SetMaterial(0, DynMaterial);
+			DynMaterial = UMaterialInstanceDynamic::Create(Material, this);
+			if (DynMaterial)
+			{
+				UE_LOG(LogTemp, Log, TEXT("Dynamic Material Created Successfully"));
+				CardMesh->SetMaterial(0, DynMaterial);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Failed to create dynamic material"));
+			}
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Failed to create dynamic material"));
+			UE_LOG(LogTemp, Warning, TEXT("No material found on CardMesh"));
 		}
 
 		SetCardSuit(CardSuit);
@@ -58,7 +66,7 @@ void ACPP_Card::Tick(float DeltaTime)
 void ACPP_Card::SetCardTexture(UTexture2D* NewTexture)
 {
 	if (CardMesh && DynMaterial && NewTexture) {
-		DynMaterial->SetTextureParameterValue("CardTexture", NewTexture);
+		DynMaterial->SetTextureParameterValue("CardTexture", NewTexture);	// "CardTexture" needs to match the param name exactly
 	}
 	else
 	{
@@ -100,4 +108,3 @@ void ACPP_Card::SetCardSuit(ECardSuit Suit)
 		break;
 	}
 }
-
