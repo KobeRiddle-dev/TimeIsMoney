@@ -53,10 +53,10 @@ void ACPP_Table_TimeIsMoney::StartGame()
 
 bool ACPP_Table_TimeIsMoney::StartHand()
 {
-	UE_LOG(LogTemp, Log, TEXT("Starting Hand"));
+	UE_LOG(LogTemp, Warning, TEXT("Starting Hand"));
 	if (!GameIsActive)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Game is not active. Cannot start hand."));
+		UE_LOG(LogTemp, Error, TEXT("Game is not active!"));
 		return false;
 	}
 
@@ -85,13 +85,13 @@ void ACPP_Table_TimeIsMoney::CheckForEndGame()
 {
 	if (CheckIfWin(PlayerHands))
 	{
-		UE_LOG(LogTemp, Log, TEXT("Player Wins The Game"));
+		UE_LOG(LogTemp, Warning, TEXT("Player Wins The Game"));
 		// TODO: emit result to listeners and/or cleanup game
 		GameIsActive = false;
 	}
 	else if (CheckIfWin(OppHand))
 	{
-		UE_LOG(LogTemp, Log, TEXT("Opponent Wins The Game"));
+		UE_LOG(LogTemp, Warning, TEXT("Opponent Wins The Game"));
 		// TODO: emit result to listeners and/or cleanup game
 		GameIsActive = false;
 	}
@@ -123,9 +123,9 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner(ACPP_Card* Player, ACPP_Card* Opp)
 {
 	OnHandStart.Broadcast();
 	// Check if Player or Opponent is null to prevent crashes
-	if (!Player)
+	if (!Player || !Opp)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("DetermineWinner: Player null!"));
+		UE_LOG(LogTemp, Error, TEXT("DetermineWinner: Player or Opponent is null!"));
 		return false;
 	}
 	else {
@@ -169,8 +169,8 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner(ACPP_Card* Player, ACPP_Card* Opp)
 		}
 		else if (Player->CardNumber == Opp->CardNumber)
 		{
-			UE_LOG(LogTemp, Log, TEXT("Tie"));
-			playerIsWin = true;
+			UE_LOG(LogTemp, Warning, TEXT("Tie"));
+			return true;
 		}
 	}
 
