@@ -210,7 +210,11 @@ struct Z_CompiledInDeferFile_FID_Goode_4500_TimeIsMoney_TimeIsMoney_Source_TimeI
 		{ Z_Construct_UClass_ACPP_Card_Deck, ACPP_Card_Deck::StaticClass, TEXT("ACPP_Card_Deck"), &Z_Registration_Info_UClass_ACPP_Card_Deck, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ACPP_Card_Deck), 1037104899U) },
 	};
 };
+<<<<<<< Updated upstream
 static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Goode_4500_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_Deck_h_3720373540(TEXT("/Script/TimeIsMoney"),
+=======
+static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Goode_4500_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_Deck_h_463666515(TEXT("/Script/TimeIsMoney"),
+>>>>>>> Stashed changes
 	Z_CompiledInDeferFile_FID_Goode_4500_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_Deck_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Goode_4500_TimeIsMoney_TimeIsMoney_Source_TimeIsMoney_CPP_Card_Deck_h_Statics::ClassInfo),
 	nullptr, 0,
 	nullptr, 0);

@@ -9,7 +9,6 @@
       "TimeIsMoneyModuleRules/1.0.0": {
         "dependencies": {
           "EpicGames.Build": "1.0.0",
-          "MarketplaceRules": "1.0.0",
           "UE5ProgramRules": "1.0.0",
           "UE5Rules": "1.0.0",
           "UnrealBuildTool": "1.0.0"
