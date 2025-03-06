@@ -13,6 +13,12 @@ ACPP_Card::ACPP_Card()
 }
 
 // Pseudo-constructor: Initializes the card with a suit and number
+/*
+* This changes the internal values of the card suit and number to the argued params.
+* It also updates the static mesh and text components
+* 
+* Does not create or construct a new Card. It just changes the values of this Card.
+*/
 void ACPP_Card::InitializeCard(ECardSuit Suit, int Number)
 {
 	SetCardSuit(Suit);
