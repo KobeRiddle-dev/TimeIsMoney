@@ -34,6 +34,10 @@ public:
 	TArray<ACPP_Card*> PlayersHeldHand;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
 	TArray<ACPP_Card*> OpponentHeldHand;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
+	int playerCardIndex;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
+	int opponentCardIndex;
 	UPROPERTY(BlueprintAssignable, Category = "Card_Deck")
 	F_CardDrawnEventDispatcher OnCardDrawn;
 	UPROPERTY(BlueprintAssignable, Category = "Card_Deck")
@@ -41,6 +45,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
 	ACPP_Card* DrawRandom();
+	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
+	void ShuffleDeck(TArray<ACPP_Card*> deck);
 	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
 	void DiscardHands();
 };
