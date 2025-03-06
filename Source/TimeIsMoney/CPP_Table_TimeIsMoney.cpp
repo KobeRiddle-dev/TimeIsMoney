@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Kismet/GameplayStatics.h"
 #include "CPP_Table_TimeIsMoney.h"
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 ACPP_Table_TimeIsMoney::ACPP_Table_TimeIsMoney()
