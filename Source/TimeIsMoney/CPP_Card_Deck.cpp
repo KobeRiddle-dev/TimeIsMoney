@@ -60,15 +60,15 @@ void ACPP_Card_Deck::BeginPlay()
 
 ACPP_Card* ACPP_Card_Deck::DrawRandom()
 {
-    // Log all cards in PlayerDeck before drawing
-    UE_LOG(LogTemp, Log, TEXT("Current PlayerDeck:"));
-    for (const ACPP_Card* Card : PlayerDeck)
-    {
-        UE_LOG(LogTemp, Log, TEXT("%d of %s"),
-            Card->CardNumber,
-            *StaticEnum<ECardSuit>()->GetNameStringByValue(static_cast<int64>(Card->CardSuit))
-        );
-    }
+    //// Log all cards in PlayerDeck before drawing
+    //UE_LOG(LogTemp, Log, TEXT("Current PlayerDeck:"));
+    //for (const ACPP_Card* Card : PlayerDeck)
+    //{
+    //    UE_LOG(LogTemp, Log, TEXT("%d of %s"),
+    //        Card->CardNumber,
+    //        *StaticEnum<ECardSuit>()->GetNameStringByValue(static_cast<int64>(Card->CardSuit))
+    //    );
+    //}
 
     // If we reached the end of the deck shuffle
     if (playerCardIndex == PlayerDeck.Num())

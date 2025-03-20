@@ -12,6 +12,8 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerCardPlayedEventDispatcher, ACPP_Card*, CardPlayed);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOppCardPlayedEventDispatcher, ACPP_Card*, CardPlayed);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHandStartEventDispatcher);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWinnerDeterminedEventDispatcher);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGameEndedEventDispatcher, bool, PlayerIsWin);
 
 UCLASS()
 class TIMEISMONEY_API ACPP_Table_TimeIsMoney : public AActor
@@ -41,7 +43,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
 	TMap<ECardSuit, int> PlayerHands;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
-	TMap<ECardSuit, int> OppHand;
+	TMap<ECardSuit, int> OppHands;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
 	bool GameIsActive;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
@@ -52,6 +54,10 @@ public:
 	FOnOppCardPlayedEventDispatcher OnOppCardPlayed;
 	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney")
 	FOnHandStartEventDispatcher OnHandStart;
+	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney")
+	FOnWinnerDeterminedEventDispatcher OnWinnerDetermined;
+	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney")
+	FOnGameEndedEventDispatcher OnGameEnded;
 
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	bool DetermineWinner(ACPP_Card* Player, ACPP_Card* Opp);
