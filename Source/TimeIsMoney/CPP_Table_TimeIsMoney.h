@@ -67,5 +67,6 @@ public:
 	void CheckForEndGame();
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	bool StartHand();
+	void ResetHands();
 
 };

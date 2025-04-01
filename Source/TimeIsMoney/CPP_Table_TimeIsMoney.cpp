@@ -15,16 +15,7 @@ ACPP_Table_TimeIsMoney::ACPP_Table_TimeIsMoney()
 void ACPP_Table_TimeIsMoney::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// Initialize PlayerHands and OpponentHands with default values (0 wins)
-	PlayerHands.Add(ECardSuit::Blood, 0);
-	PlayerHands.Add(ECardSuit::Time, 0);
-	PlayerHands.Add(ECardSuit::Money, 0);
-
-	OppHands.Add(ECardSuit::Blood, 0);
-	OppHands.Add(ECardSuit::Time, 0);
-	OppHands.Add(ECardSuit::Money, 0);
-
+	ResetHands();
 	GameIsActive = false;
 }
 
@@ -32,24 +23,26 @@ void ACPP_Table_TimeIsMoney::BeginPlay()
 void ACPP_Table_TimeIsMoney::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ACPP_Table_TimeIsMoney::StartGame()
 {
-	// Reset player hand wins
-	PlayerHands[ECardSuit::Blood] = 0;
-	PlayerHands[ECardSuit::Time] = 0;
-	PlayerHands[ECardSuit::Money] = 0;
-
-	// Reset opponent hand wins
-	OppHands[ECardSuit::Blood] = 0;
-	OppHands[ECardSuit::Time] = 0;
-	OppHands[ECardSuit::Money] = 0;
-
+	ResetHands();
 	GameIsActive = true;
 	OnHandStart.Broadcast();
 	StartHand();
+}
+
+void ACPP_Table_TimeIsMoney::ResetHands()
+{
+	// Reset player hand wins
+	PlayerHands.FindOrAdd(ECardSuit::Blood) = 0;
+	PlayerHands.FindOrAdd(ECardSuit::Time) = 0;
+	PlayerHands.FindOrAdd(ECardSuit::Money) = 0;
+
+	OppHands.FindOrAdd(ECardSuit::Blood) = 0;
+	OppHands.FindOrAdd(ECardSuit::Time) = 0;
+	OppHands.FindOrAdd(ECardSuit::Money) = 0;
 }
 
 bool ACPP_Table_TimeIsMoney::StartHand()
@@ -87,14 +80,12 @@ void ACPP_Table_TimeIsMoney::CheckForEndGame()
 	if (CheckIfWin(PlayerHands))
 	{
 		UE_LOG(LogTemp, Log, TEXT("Player Wins The Game"));
-		// TODO: emit result to listeners and/or cleanup game
 		GameIsActive = false;
 		OnGameEnded.Broadcast(true);
 	}
 	else if (CheckIfWin(OppHands))
 	{
 		UE_LOG(LogTemp, Log, TEXT("Opponent Wins The Game"));
-		// TODO: emit result to listeners and/or cleanup game
 		GameIsActive = false;
 		OnGameEnded.Broadcast(false);
 	}
@@ -107,47 +98,49 @@ void ACPP_Table_TimeIsMoney::CheckForEndGame()
 
 bool ACPP_Table_TimeIsMoney::CheckIfWin(TMap<ECardSuit, int> PlayerBeingChecked)
 {
-	// Check if player has 3 wins in any suit
+	bool hasThreeWins = false;
+	bool hasOneWinInEachSuit = true;
+
 	for (const auto& suit : PlayerBeingChecked)
 	{
 		if (suit.Value >= 3)
 		{
-			return true;
+			hasThreeWins = true;
 		}
-	}
-	// Check if player has 1 or more wins in every suit
-	bool playerIsWin = true;
-	for (const auto& suit : PlayerBeingChecked)
-	{
 		if (suit.Value <= 0)
 		{
-			playerIsWin = false;
+			hasOneWinInEachSuit = false;
 		}
 	}
-	return playerIsWin;
+
+	return hasThreeWins || hasOneWinInEachSuit;
 }
 
 bool ACPP_Table_TimeIsMoney::DetermineWinner(ACPP_Card* Player, ACPP_Card* Opp)
 {
 	OnHandStart.Broadcast();
-	// Check if Player or Opponent is null to prevent crashes
+
 	if (!Player)
 	{
 		UE_LOG(LogTemp, Error, TEXT("DetermineWinner: Player null!"));
 		return false;
 	}
-	else {
+	else
+	{
 		UE_LOG(LogTemp, Log, TEXT("Player played: %d of %s"),
 			Player->CardNumber,
 			*StaticEnum<ECardSuit>()->GetNameStringByValue(static_cast<int64>(Player->CardSuit))
 		);
 		OnPlayerCardPlayed.Broadcast(Player);
 	}
-	if (!Opp) {
+
+	if (!Opp)
+	{
 		UE_LOG(LogTemp, Error, TEXT("DetermineWinner: Opponent is null!"));
 		return false;
 	}
-	else {
+	else
+	{
 		UE_LOG(LogTemp, Log, TEXT("Opponent played: %d of %s"),
 			Opp->CardNumber,
 			*StaticEnum<ECardSuit>()->GetNameStringByValue(static_cast<int64>(Opp->CardSuit))
@@ -155,34 +148,15 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner(ACPP_Card* Player, ACPP_Card* Opp)
 		OnOppCardPlayed.Broadcast(Opp);
 	}
 
-	// Find game result
 	bool playerIsWin = false;
-	if (Player->CardSuit == ECardSuit::Blood && Opp->CardSuit == ECardSuit::Time)
+	if ((Player->CardSuit == ECardSuit::Blood && Opp->CardSuit == ECardSuit::Time) ||	// blood beats time
+		(Player->CardSuit == ECardSuit::Time && Opp->CardSuit == ECardSuit::Money) ||	// time beats money
+		(Player->CardSuit == ECardSuit::Money && Opp->CardSuit == ECardSuit::Blood) ||	// money beats blood
+		(Player->CardSuit == Opp->CardSuit && Player->CardNumber >= Opp->CardNumber))	// same suit, higher number wins
 	{
 		playerIsWin = true;
-	}
-	else if (Player->CardSuit == ECardSuit::Time && Opp->CardSuit == ECardSuit::Money)
-	{
-		playerIsWin = true;
-	}
-	else if (Player->CardSuit == ECardSuit::Money && Opp->CardSuit == ECardSuit::Blood)
-	{
-		playerIsWin = true;
-	}
-	else if (Player->CardSuit == Opp->CardSuit)
-	{
-		if (Player->CardNumber > Opp->CardNumber)
-		{
-			playerIsWin = true;
-		}
-		else if (Player->CardNumber == Opp->CardNumber)
-		{
-			UE_LOG(LogTemp, Log, TEXT("Tie"));
-			playerIsWin = true;
-		}
 	}
 
-	// Store the result of the game
 	if (playerIsWin)
 	{
 		UE_LOG(LogTemp, Log, TEXT("Player Wins %s"),
@@ -198,7 +172,6 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner(ACPP_Card* Player, ACPP_Card* Opp)
 		OppHands[Opp->CardSuit]++;
 	}
 
-	// Check if the game is over
 	CheckForEndGame();
 	if (GameIsActive)
 	{

@@ -12,77 +12,71 @@ ACPP_Card_Deck::ACPP_Card_Deck()
 // Called when the game starts or when spawned
 void ACPP_Card_Deck::BeginPlay()
 {
-    ACPP_Card* card = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
-
-    playerCardIndex = 0;
-    opponentCardIndex = 0;
-
-    // There are 13 cards per suit so loop through the 13 cards
-    for (int i = 1; i <= 13; i++)
-    {
-        // Create a new card instance for each card added
-        ACPP_Card* bloodCard = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
-        bloodCard->InitializeCard(ECardSuit::Blood, i);
-        PlayerDeck.Add(bloodCard);
-
-        ACPP_Card* timeCard = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
-        timeCard->InitializeCard(ECardSuit::Time, i);
-        PlayerDeck.Add(timeCard);
-
-        ACPP_Card* moneyCard = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
-        moneyCard->InitializeCard(ECardSuit::Money, i);
-        PlayerDeck.Add(moneyCard);
-
-        // Opponent's deck
-        ACPP_Card* bloodCardOpponent = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
-        bloodCardOpponent->InitializeCard(ECardSuit::Blood, i);
-        OpponentDeck.Add(bloodCardOpponent);
-
-        ACPP_Card* timeCardOpponent = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
-        timeCardOpponent->InitializeCard(ECardSuit::Time, i);
-        OpponentDeck.Add(timeCardOpponent);
-
-        ACPP_Card* moneyCardOpponent = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
-        moneyCardOpponent->InitializeCard(ECardSuit::Money, i);
-        OpponentDeck.Add(moneyCardOpponent);
-    }
-
-    // Initial Shuffle
-    PlayerDeck.Sort([this](const ACPP_Card& Item1, const ACPP_Card& Item2) {
-        return FMath::RandBool();
-        });
-    OpponentDeck.Sort([this](const ACPP_Card& Item1, const ACPP_Card& Item2) {
-        return FMath::RandBool();
-        });
-
 	Super::BeginPlay();
+
+	// There are 13 cards per suit so loop through the 13 cards
+	for (int i = 1; i <= 13; i++)
+	{
+		// Create a new card instance for each card added
+		ACPP_Card* bloodCard = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
+		bloodCard->InitializeCard(ECardSuit::Blood, i);
+		PlayerDeck.Add(bloodCard);
+
+		ACPP_Card* timeCard = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
+		timeCard->InitializeCard(ECardSuit::Time, i);
+		PlayerDeck.Add(timeCard);
+
+		ACPP_Card* moneyCard = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
+		moneyCard->InitializeCard(ECardSuit::Money, i);
+		PlayerDeck.Add(moneyCard);
+
+		// Opponent's deck
+		ACPP_Card* bloodCardOpponent = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
+		bloodCardOpponent->InitializeCard(ECardSuit::Blood, i);
+		OpponentDeck.Add(bloodCardOpponent);
+
+		ACPP_Card* timeCardOpponent = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
+		timeCardOpponent->InitializeCard(ECardSuit::Time, i);
+		OpponentDeck.Add(timeCardOpponent);
+
+		ACPP_Card* moneyCardOpponent = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
+		moneyCardOpponent->InitializeCard(ECardSuit::Money, i);
+		OpponentDeck.Add(moneyCardOpponent);
+	}
+
+	// Initial Shuffle
+	ShufflePlayerDeck();
+	ShuffleOpponentDeck();
+}
+
+void ACPP_Card_Deck::ShufflePlayerDeck()
+{
+	PlayerDeck.Sort([this](const ACPP_Card& Item1, const ACPP_Card& Item2) {
+		return FMath::RandBool();
+		});
+	playerCardIndex = 0;
+
+}
+
+void ACPP_Card_Deck::ShuffleOpponentDeck()
+{
+	OpponentDeck.Sort([this](const ACPP_Card& Item1, const ACPP_Card& Item2) {
+		return FMath::RandBool();
+		});
+	opponentCardIndex = 0;
 }
 
 ACPP_Card* ACPP_Card_Deck::DrawRandom()
 {
-    //// Log all cards in PlayerDeck before drawing
-    //UE_LOG(LogTemp, Log, TEXT("Current PlayerDeck:"));
-    //for (const ACPP_Card* Card : PlayerDeck)
-    //{
-    //    UE_LOG(LogTemp, Log, TEXT("%d of %s"),
-    //        Card->CardNumber,
-    //        *StaticEnum<ECardSuit>()->GetNameStringByValue(static_cast<int64>(Card->CardSuit))
-    //    );
-    //}
-
     // If we reached the end of the deck shuffle
     if (playerCardIndex == PlayerDeck.Num())
     {
-        PlayerDeck.Sort([this](const ACPP_Card& Item1, const ACPP_Card& Item2) {
-            return FMath::RandBool();
-            });
+		ShufflePlayerDeck();
     }
 
     if (opponentCardIndex == OpponentDeck.Num())
     {
-        OpponentDeck.Sort([this](const ACPP_Card& Item1, const ACPP_Card& Item2) {
-            return FMath::RandBool();
-            });
+		ShuffleOpponentDeck();
     }
 
     ACPP_Card* randomPlayerCard = PlayerDeck[playerCardIndex];

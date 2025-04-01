@@ -47,4 +47,6 @@ public:
 	ACPP_Card* DrawRandom();
 	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
 	void DiscardHands();
+	void ShufflePlayerDeck();
+	void ShuffleOpponentDeck();
 };
