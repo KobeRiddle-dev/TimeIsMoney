@@ -69,12 +69,12 @@ void ACPP_Card_Deck::ShuffleOpponentDeck()
 ACPP_Card* ACPP_Card_Deck::DrawRandom()
 {
     // If we reached the end of the deck shuffle
-    if (playerCardIndex == PlayerDeck.Num())
+    if (playerCardIndex == PlayerDeck.Num() - 1)
     {
 		ShufflePlayerDeck();
     }
 
-    if (opponentCardIndex == OpponentDeck.Num())
+    if (opponentCardIndex == OpponentDeck.Num() - 1)
     {
 		ShuffleOpponentDeck();
     }
