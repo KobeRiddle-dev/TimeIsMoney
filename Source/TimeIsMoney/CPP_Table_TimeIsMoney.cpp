@@ -48,12 +48,19 @@ void ACPP_Table_TimeIsMoney::ResetHands()
 bool ACPP_Table_TimeIsMoney::StartHand()
 {
 	UE_LOG(LogTemp, Log, TEXT("Starting Hand"));
+
 	if (!GameIsActive)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Game is not active. Cannot start hand."));
 		return false;
 	}
 
+	// Null Check for `Deck`
+	if (!Deck)
+	{
+		UE_LOG(LogTemp, Error, TEXT("StartHand: Deck is NULL!"));
+		return false;
+	}
 	// Discard old hand
 	if (Deck->PlayersHeldHand.Num() > 0)
 	{
@@ -67,13 +74,29 @@ bool ACPP_Table_TimeIsMoney::StartHand()
 	{
 		Deck->DrawRandom();
 	}
+
+	// Null Check for `Opponent`
+	if (!Opponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("StartHand: Opponent is NULL!"));
+		return false;
+	}
 	OppCard = Opponent->PlayCard();
+
+	// Null Check for `OppCard`
+	if (!OppCard)
+	{
+		UE_LOG(LogTemp, Error, TEXT("StartHand: Opponent played a NULL card!"));
+		return false;
+	}
 	UE_LOG(LogTemp, Log, TEXT("Opponent Card is: %d of %s"),
 		OppCard->CardNumber,
 		*StaticEnum<ECardSuit>()->GetNameStringByValue(static_cast<int64>(OppCard->CardSuit))
 	);
+
 	return true;
 }
+
 
 void ACPP_Table_TimeIsMoney::CheckForEndGame()
 {
