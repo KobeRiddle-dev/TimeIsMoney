@@ -69,17 +69,20 @@ void ACPP_Card_Deck::ShuffleOpponentDeck()
 ACPP_Card* ACPP_Card_Deck::DrawRandom()
 {
     // If we reached the end of the deck shuffle
-    if (playerCardIndex == PlayerDeck.Num() - 1)
+    if (playerCardIndex == PlayerDeck.Num())
     {
 		ShufflePlayerDeck();
     }
 
-    if (opponentCardIndex == OpponentDeck.Num() - 1)
+    if (opponentCardIndex == OpponentDeck.Num())
     {
 		ShuffleOpponentDeck();
     }
 
     ACPP_Card* randomPlayerCard = PlayerDeck[playerCardIndex];
+	if (!randomPlayerCard){
+		UE_LOG(LogTemp, Error, TEXT("Player Card is NULL!"));
+	}
     // Add to the Opponent's hand (assuming this is an array of pointers)
     PlayersHeldHand.Add(randomPlayerCard);
     UE_LOG(LogTemp, Log, TEXT("Player Card is: %d of %s"),
@@ -89,6 +92,9 @@ ACPP_Card* ACPP_Card_Deck::DrawRandom()
 
 
     ACPP_Card* randomOpponentCard = OpponentDeck[opponentCardIndex];
+	if (!randomOpponentCard) {
+		UE_LOG(LogTemp, Error, TEXT("Opponent Card is NULL!"));
+	}
     // Add to the player's hand (assuming this is an array of pointers)
     OpponentHeldHand.Add(randomOpponentCard);
     UE_LOG(LogTemp, Log, TEXT("Opponent Card is: %d of %s"),
