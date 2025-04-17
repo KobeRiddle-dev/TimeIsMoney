@@ -29,44 +29,52 @@ protected:
 	virtual void BeginPlay() override;
 
 	bool CheckIfWin(TMap<ECardSuit, int> PlayerBeingChecked);
+	void ResetHands();
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
 	ACPP_NPC_Opp_TimeIsMoney* Opponent;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
+	ACPP_Card_Deck* Deck;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
-	ACPP_Card* PlayerCard;
+	ACPP_Card* PublicPlayerCard;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
-	ACPP_Card* OppCard;
+	TArray<ACPP_Card*> PlayerCards;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	ACPP_Card* PublicOppCard;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
 	TMap<ECardSuit, int> PlayerHands;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
 	TMap<ECardSuit, int> OppHands;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
-	bool GameIsActive;
+	TArray<ACPP_Card*> OppCards;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
-	ACPP_Card_Deck* Deck;
-	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney")
+	bool GameIsActive;
+
+	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney_Events")
 	FOnPlayerCardPlayedEventDispatcher OnPlayerCardPlayed;
-	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney")
+	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney_Events")
 	FOnOppCardPlayedEventDispatcher OnOppCardPlayed;
-	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney")
+	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney_Events")
 	FOnHandStartEventDispatcher OnHandStart;
-	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney")
+	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney_Events")
 	FOnWinnerDeterminedEventDispatcher OnWinnerDetermined;
-	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney")
+	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney_Events")
 	FOnGameEndedEventDispatcher OnGameEnded;
 
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
-	bool DetermineWinner(ACPP_Card* Player, ACPP_Card* Opp);
+	bool DetermineWinner();
+	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
+	void PlayCard(ACPP_Card* PlayerCard);
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	void StartGame();
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
-	void CheckForEndGame();
+	bool CheckForEndGame();
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	bool StartHand();
-	void ResetHands();
 
 };
