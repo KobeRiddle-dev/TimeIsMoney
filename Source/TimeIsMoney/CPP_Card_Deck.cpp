@@ -17,18 +17,21 @@ void ACPP_Card_Deck::BeginPlay()
 	// There are 13 cards per suit so loop through the 13 cards
 	for (int i = 1; i <= 13; i++)
 	{
-		// Create a new card instance for each card added
-		ACPP_Card* bloodCard = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
-		bloodCard->InitializeCard(ECardSuit::Blood, i);
-		PlayerDeck.Add(bloodCard);
+		// TEMPORARY: I'm making the player deck weaker while we are on the old system
+		if (i <= 8) {
+			// Create a new card instance for each card added
+			ACPP_Card* bloodCard = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
+			bloodCard->InitializeCard(ECardSuit::Blood, i);
+			PlayerDeck.Add(bloodCard);
 
-		ACPP_Card* timeCard = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
-		timeCard->InitializeCard(ECardSuit::Time, i);
-		PlayerDeck.Add(timeCard);
+			ACPP_Card* timeCard = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
+			timeCard->InitializeCard(ECardSuit::Time, i);
+			PlayerDeck.Add(timeCard);
 
-		ACPP_Card* moneyCard = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
-		moneyCard->InitializeCard(ECardSuit::Money, i);
-		PlayerDeck.Add(moneyCard);
+			ACPP_Card* moneyCard = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());
+			moneyCard->InitializeCard(ECardSuit::Money, i);
+			PlayerDeck.Add(moneyCard);
+		}
 
 		// Opponent's deck
 		ACPP_Card* bloodCardOpponent = NewObject<ACPP_Card>(this, ACPP_Card::StaticClass());

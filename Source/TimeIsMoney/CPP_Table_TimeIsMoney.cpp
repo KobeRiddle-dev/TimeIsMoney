@@ -30,6 +30,13 @@ void ACPP_Table_TimeIsMoney::StartGame()
 	ResetHands();
 	GameIsActive = true;
 	OnHandStart.Broadcast();
+
+	// Tmp while we only play 1 card
+	Deck->DrawRandom();
+	PublicOppCard = Opponent->PlayCard();
+	OnOppCardPlayed.Broadcast(PublicOppCard);
+	// Tmp while we only play 1 card
+
 	StartHand();
 }
 
@@ -98,7 +105,7 @@ bool ACPP_Table_TimeIsMoney::StartHand()
 		PublicOppCard->CardNumber,
 		*StaticEnum<ECardSuit>()->GetNameStringByValue(static_cast<int64>(PublicOppCard->CardSuit))
 	);
-	OnOppCardPlayed.Broadcast(PublicOppCard);
+	//OnOppCardPlayed.Broadcast(PublicOppCard);		Disabled while we only play 1 card
 
 	return true;
 }
@@ -221,16 +228,24 @@ void ACPP_Table_TimeIsMoney::PlayCard(ACPP_Card* PlayerCard)
 	PublicPlayerCard = PlayerCards.Last();
 	OnPlayerCardPlayed.Broadcast(PublicPlayerCard);
 
-	// Add a card from the opponenet's hand to their board
-	if (Deck->OpponentHeldHand.Num() > 0)
+	// TEMPORARY: Only play one card
+	if (PlayerCards.Num() >= 1)
 	{
-		OppCards.Add(Opponent->PlayCard());
-		PublicOppCard = OppCards.Last();
-		OnOppCardPlayed.Broadcast(PublicOppCard);
+		DetermineWinner();
+		return;
 	}
 
-	// If this is the 6th card, determine the winner
-	if (PlayerCards.Num() >= 3) {
-		DetermineWinner();
-	}
+	// TODO:
+	//// Add a card from the opponenet's hand to their board
+	//if (Deck->OpponentHeldHand.Num() > 0)
+	//{
+	//	OppCards.Add(Opponent->PlayCard());
+	//	PublicOppCard = OppCards.Last();
+	//	OnOppCardPlayed.Broadcast(PublicOppCard);
+	//}
+
+	//// If this is the 6th card, determine the winner
+	//if (PlayerCards.Num() >= 3) {
+	//	DetermineWinner();
+	//}
 }
