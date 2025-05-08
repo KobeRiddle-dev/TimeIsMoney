@@ -2,6 +2,7 @@
 * [Alpha Trailer](https://www.youtube.com/watch?v=C_mjkXX7HSU)
 * [Concept Art and Alpha Screenshots](https://imgur.com/a/mBRoPgi)
 * [Alpha One Sheet](https://imgur.com/a/Grtqsvg)
+
 Time Is Money is a first-person card-playing game set in a world where everyone’s time to live is both known and used as currency. As an individual with very little time left, you seek to gain more time in a desperate bid at the casino. You’ll need to improve your strategy and your deck as you face off against tougher opponents on your way towards the top of the casino.
 
 ## Our Team
