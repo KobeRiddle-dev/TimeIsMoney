@@ -1,5 +1,6 @@
 # TimeIsMoney
 * [Alpha Trailer](https://www.youtube.com/watch?v=C_mjkXX7HSU)
+* [Alpha Build Free Download](https://drive.google.com/file/d/1TS8AoBj8CNSg5MZKDrK5p8S8K5ymEtDV/view?usp=sharing)
 * [Concept Art and Alpha Screenshots](https://imgur.com/a/mBRoPgi)
 * [Alpha One Sheet](https://imgur.com/a/Grtqsvg)
 
@@ -59,6 +60,8 @@ Time Is Money is a first-person card-playing game set in a world where everyoneâ
 > Authored by: Aidan, Ronald, AJ, Taibai, Chris  
 >  
 > This has logic for spawning cards, calling CPP_Table_TimeIsMoney core game-loop functions, moving cards around, deleting cards from the scene that were spawned via this BP, and it has events bound for each of the CPP_Table_TimeIsMoney events.
+
+*All Pawns use InputActionMaps to get input from the player. Pawns are found inside /content/Blueprints/Pawns. Within /Pawns, you can find the ActionMaps and their InputActions.*
 
 * Pawn_TimeIsMoneyPlayer  
 > Authored by: Ronald  
