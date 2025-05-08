@@ -20,73 +20,86 @@ Time Is Money is a first-person card-playing game set in a world where everyone�
 * Erin Cervantes     (Artist, Narrative)
 
 ### Technical Documentation
-* CPP_Card.cpp
-> Authored by: Ronald Foster
->
+* CPP_Card.cpp  
+> Authored by: Ronald Foster  
+>  
 > This has logic for setting the texture and number of a Card Blueprint. It also has accessible vars for retrieving the suit and number of a card.
-    
-* BP_Card
-> Authored by: Ronald
->
-> This has as static mesh with the suit and number of our cards. It has functionality for changing both the suit and number via CPP_Card method calls.
-    
-•	CPP_Card_Deck.cpp
-    o	Authored by: Ronald Foster, Tyler Kendall, AJ Kennedy
-    o	This has logic for storing the opponent and player deck. It is function for drawing cards. It has events to tell the UE5 Editor blueprints when cards were drawn. The NPC_OPP and Table_TimeIsMoney blueprints need to reference a blueprint descended from this class.
-    
-•	BP_Card_Deck
-    o	Authored by: Ronald, Tyler
-    o	This is an instantiation of CPP_Card_Deck and must be present in the scene and referenced by other actors for the game to function
-    
-•	CPP_NPC_Opp_TimeIsMoney.cpp
-    o	Authored by: Tyler Kendall, Ronald Foster
-    o	This has logic for how our opponent in the TimeIsMoney card game plays their cards. It stores their hand too.
-    
-•	BP_NPC_Opp_TimeIsMoney
-    o	Authored by: Ronald, Tyler
-    o	This is the object referenced to get what cards our opponent is playing by the BP_Table_TimeIsMoney
- 
-•	CPP_Table_TimeIsMoney.cpp
-    o	Authored by: Ronald Foster, AJ Kennedy
-    o	This has logic for our core gameloop of the card game. It keeps track of what cards were played. It has functions for determining the winner of a hand and game. It has functions for starting a new game. And it has events that tell UE5 Editor blueprints when games were started, when a         game ended, when a hand started, when player cards were played, and when opponent cards were played.
-    
-•	BP_Table_TimeIsMoney
-    o	Authored by: Aidan, Ronald, AJ, Taibai, Chris
-    o	This has logic for spawning cards, calling CPP_Table_TimeIsMoney core game-loop functions, moving cards around, deleting cards from the scene that were spawned via this BP, and it has events bound for each of the CPP_Table_TimeIsMoney events.
 
-*All Pawns use InputActionMaps to get input from the player. Pawns are found inside /content/Blueprints/Pawns. Within /Pawns, you can find the ActionMaps and their InputActions.*
+* BP_Card  
+> Authored by: Ronald  
+>  
+> This has a static mesh with the suit and number of our cards. It has functionality for changing both the suit and number via CPP_Card method calls.
 
-•	Pawn_TimeIsMoneyPlayer
-    o	Authored by: Ronald
-    o	This is the actor our player controls to play cards in the casino game
-    
-•	Pawn_ShopPlayer
-    o	Authored by: Ronald, Aidan
-    o	This is the actor our player controls to use our Shop
-    
-•	Pawn_firstpersonCharacter
-    o	Authored by: Taibai, Ronald, AJ, Aidan
-    o	This is the actor our player used to walk around the casino. It has functionality to interact with other pawns.
- 
-•	BP_Gamemode
-    o	Authored by: Taibai, Ronald
-    o	This is a mostly untouched default UE5 Gamemode blueprint we used to set our custom player controller and default pawn
-    
-•	BP_PlayerController
-    o	Authored by: Ronald
-    o	Has functions for possessing different Pawns
-    
-•	BP_ShopInteract
-    o	Authored by: Aidan, AJ
-    o	Interact interface for on-screen popup
-    
-•	/Content/UI/WBP_...UI.uasset
-    o	Authored by: Ronald, AJ
-    o	Old 2D UI we are in the middle of migrating to a 3D alternative implementation. These Widget Blueprints listen for important events from our TimeIsMoney table and card draws from our Card_Deck to update the UI. WBP_FinalUI is an important class to look at to understand how these all         work together. WBP_Card has functions for playing cards. WBP_WinResults listens to hand and game win events from TimeIsMoney table.
-    
-•	/Content/dialogue
-    o	Authored by: Taibai
-    o	Blueprints for our dialogue system.
+* CPP_Card_Deck.cpp  
+> Authored by: Ronald Foster, Tyler Kendall, AJ Kennedy  
+>  
+> This has logic for storing the opponent and player deck. It is function for drawing cards. It has events to tell the UE5 Editor blueprints when cards were drawn. The NPC_OPP and Table_TimeIsMoney blueprints need to reference a blueprint descended from this class.
+
+* BP_Card_Deck  
+> Authored by: Ronald, Tyler  
+>  
+> This is an instantiation of CPP_Card_Deck and must be present in the scene and referenced by other actors for the game to function.
+
+* CPP_NPC_Opp_TimeIsMoney.cpp  
+> Authored by: Tyler Kendall, Ronald Foster  
+>  
+> This has logic for how our opponent in the TimeIsMoney card game plays their cards. It stores their hand too.
+
+* BP_NPC_Opp_TimeIsMoney  
+> Authored by: Ronald, Tyler  
+>  
+> This is the object referenced to get what cards our opponent is playing by the BP_Table_TimeIsMoney.
+
+* CPP_Table_TimeIsMoney.cpp  
+> Authored by: Ronald Foster, AJ Kennedy  
+>  
+> This has logic for our core gameloop of the card game. It keeps track of what cards were played. It has functions for determining the winner of a hand and game. It has functions for starting a new game. And it has events that tell UE5 Editor blueprints when games were started, when a game ended, when a hand started, when player cards were played, and when opponent cards were played.
+
+* BP_Table_TimeIsMoney  
+> Authored by: Aidan, Ronald, AJ, Taibai, Chris  
+>  
+> This has logic for spawning cards, calling CPP_Table_TimeIsMoney core game-loop functions, moving cards around, deleting cards from the scene that were spawned via this BP, and it has events bound for each of the CPP_Table_TimeIsMoney events.
+
+* Pawn_TimeIsMoneyPlayer  
+> Authored by: Ronald  
+>  
+> This is the actor our player controls to play cards in the casino game.
+
+* Pawn_ShopPlayer  
+> Authored by: Ronald, Aidan  
+>  
+> This is the actor our player controls to use our Shop.
+
+* Pawn_firstpersonCharacter  
+> Authored by: Taibai, Ronald, AJ, Aidan  
+>  
+> This is the actor our player used to walk around the casino. It has functionality to interact with other pawns.
+
+* BP_Gamemode  
+> Authored by: Taibai, Ronald  
+>  
+> This is a mostly untouched default UE5 Gamemode blueprint we used to set our custom player controller and default pawn.
+
+* BP_PlayerController  
+> Authored by: Ronald  
+>  
+> Has functions for possessing different Pawns.
+
+* BP_ShopInteract  
+> Authored by: Aidan, AJ  
+>  
+> Interact interface for on-screen popup.
+
+* /Content/UI/WBP_...UI.uasset  
+> Authored by: Ronald, AJ  
+>  
+> Old 2D UI we are in the middle of migrating to a 3D alternative implementation. These Widget Blueprints listen for important events from our TimeIsMoney table and card draws from our Card_Deck to update the UI. WBP_FinalUI is an important class to look at to understand how these all work together. WBP_Card has functions for playing cards. WBP_WinResults listens to hand and game win events from TimeIsMoney table.
+
+* /Content/dialogue  
+> Authored by: Taibai  
+>  
+> Blueprints for our dialogue system.
+
 
 **Essentials for the Project to Run in UE5 Editor**
 * [Visual Studio Integration Tool](https://www.fab.com/listings/8a639215-7f85-4cc7-b155-fa2137326209)
