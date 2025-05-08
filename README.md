@@ -21,7 +21,9 @@ Time Is Money is a first-person card-playing game set in a world where everyone�
 
 ### Technical Documentation
 •	CPP_Card.cpp
+
     o	Authored by: Ronald Foster
+
     o	This has logic for setting the texture and number of a Card Blueprint. It also has accessible vars for retrieving the suit and number of a card.
     
 •	BP_Card
