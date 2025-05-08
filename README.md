@@ -22,11 +22,13 @@ Time Is Money is a first-person card-playing game set in a world where everyone�
 ### Technical Documentation
 * CPP_Card.cpp
 > Authored by: Ronald Foster
+>
 > This has logic for setting the texture and number of a Card Blueprint. It also has accessible vars for retrieving the suit and number of a card.
     
-•	BP_Card
-    o	Authored by: Ronald
-    o	This has as static mesh with the suit and number of our cards. It has functionality for changing both the suit and number via CPP_Card method calls.
+* BP_Card
+> Authored by: Ronald
+>
+> This has as static mesh with the suit and number of our cards. It has functionality for changing both the suit and number via CPP_Card method calls.
     
 •	CPP_Card_Deck.cpp
     o	Authored by: Ronald Foster, Tyler Kendall, AJ Kennedy
