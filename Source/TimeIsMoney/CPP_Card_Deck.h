@@ -2,11 +2,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CPP_Card.h"
+#include "CPP_Card_EffectCard.h"
 #include "GameFramework/Actor.h"
 #include "CPP_Card_Deck.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(F_CardDrawnEventDispatcher, ACPP_Card*, DrawnCard);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(F_CardDrawnEventDispatcher, ACPP_Card_EffectCard*, DrawnCard);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(F_HandDiscardedEventDispatcher);
 
 UCLASS()
@@ -27,13 +27,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
-	TArray<ACPP_Card*> PlayerDeck;
+	TArray<ACPP_Card_EffectCard*> PlayerDeck;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
-	TArray<ACPP_Card*> OpponentDeck;
+	TArray<ACPP_Card_EffectCard*> OpponentDeck;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
-	TArray<ACPP_Card*> PlayersHeldHand;
+	TArray<ACPP_Card_EffectCard*> PlayersHeldHand;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
-	TArray<ACPP_Card*> OpponentHeldHand;
+	TArray<ACPP_Card_EffectCard*> OpponentHeldHand;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
 	int playerCardIndex;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
@@ -44,7 +44,7 @@ public:
 	F_HandDiscardedEventDispatcher OnHandDiscarded;
 
 	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
-	ACPP_Card* DrawRandom();
+	ACPP_Card_EffectCard* DrawRandom();
 	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
 	void DiscardHands();
 	void ShufflePlayerDeck();

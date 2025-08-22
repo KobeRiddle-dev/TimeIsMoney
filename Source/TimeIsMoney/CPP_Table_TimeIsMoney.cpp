@@ -31,12 +31,6 @@ void ACPP_Table_TimeIsMoney::StartGame()
 	GameIsActive = true;
 	OnHandStart.Broadcast();
 
-	// Tmp while we only play 1 card
-	Deck->DrawRandom();
-	PublicOppCard = Opponent->PlayCard();
-	OnOppCardPlayed.Broadcast(PublicOppCard);
-	// Tmp while we only play 1 card
-
 	StartHand();
 }
 
@@ -85,16 +79,25 @@ bool ACPP_Table_TimeIsMoney::StartHand()
 	{
 		Deck->DrawRandom();
 	}
+	// Determine starting suits and reset number value
+	PublicPlayerCard->SetCardNumber(0);
+	PlayerStartingSuit = GetRandomSuit();
+	PrivatePlayerCard->InitializeCard(PlayerStartingSuit, 0);
+	OppStartingSuit = GetRandomSuit();
+	PublicOppCard->SetCardNumber(0);
+	PrivateOppCard->InitializeCard(OppStartingSuit, 0);
 
+	// TODO: Determine who goes first. Right now opp always goes first.
 	// Null Check for `Opponent`
 	if (!Opponent)
 	{
 		UE_LOG(LogTemp, Error, TEXT("StartHand: Opponent is NULL!"));
 		return false;
 	}
-	// Opponenet play their first card
+	// Opponenet plays a card
 	OppCards.Add(Opponent->PlayCard());
-	PublicOppCard = OppCards.Last();
+	CPP_CardEffectEvaluator::ApplyEffect(OppCards.Last()->RevealedEffect, this);
+	OnOppCardPlayed.Broadcast(OppCards.Last());
 	// Null Check for `OppCard`
 	if (!PublicOppCard)
 	{
@@ -168,7 +171,6 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner()
 			PublicPlayerCard->CardNumber,
 			*StaticEnum<ECardSuit>()->GetNameStringByValue(static_cast<int64>(PublicPlayerCard->CardSuit))
 		);
-		
 	}
 	if (!PublicOppCard)
 	{
@@ -181,6 +183,20 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner()
 			PublicOppCard->CardNumber,
 			*StaticEnum<ECardSuit>()->GetNameStringByValue(static_cast<int64>(PublicOppCard->CardSuit))
 		);
+	}
+
+	// TODO: need to make this more robust, currently assumes opp always goes first
+	// Apply the Hidden and Revealed effects of the cards
+	OnBeginEffectReveal.Broadcast();
+	PublicPlayerCard->InitializeCard(PlayerStartingSuit, 0);
+	PublicOppCard->InitializeCard(OppStartingSuit, 0);
+	for (int i = 0; i < PlayerCards.Num(); i++)
+	{
+		CPP_CardEffectEvaluator::ApplyEffect(OppCards[i]->RevealedEffect, this);
+		CPP_CardEffectEvaluator::ApplyEffect(OppCards[i]->HiddenEffect, this);
+
+		CPP_CardEffectEvaluator::ApplyEffect(PlayerCards[i]->RevealedEffect, this);
+		CPP_CardEffectEvaluator::ApplyEffect(PlayerCards[i]->HiddenEffect, this);
 	}
 
 	// Determine winner based on suit and number
@@ -221,31 +237,36 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner()
 	return playerIsWin;
 }
 
-void ACPP_Table_TimeIsMoney::PlayCard(ACPP_Card* PlayerCard)
+void ACPP_Table_TimeIsMoney::PlayCard(ACPP_Card_EffectCard* PlayerCard)
 {
 	// Add the card to the player's board
+	// TODO: The public card should update with revealed. 
+	// and the private should update with both revealed and hidden.
 	PlayerCards.Add(PlayerCard);
-	PublicPlayerCard = PlayerCards.Last();
-	OnPlayerCardPlayed.Broadcast(PublicPlayerCard);
+	CPP_CardEffectEvaluator::ApplyEffect(PlayerCard->RevealedEffect, this);
+	CPP_CardEffectEvaluator::ApplyEffect(PlayerCard->HiddenEffect, this);
+	OnPlayerCardPlayed.Broadcast(PlayerCard);
 
-	// TEMPORARY: Only play one card
-	if (PlayerCards.Num() >= 1)
+	// Add a card from the opponenet's hand to their board
+	if (Deck->OpponentHeldHand.Num() > 0)
 	{
-		DetermineWinner();
-		return;
+		OppCards.Add(Opponent->PlayCard());
+		CPP_CardEffectEvaluator::ApplyEffect(OppCards.Last()->RevealedEffect, this);
+		OnOppCardPlayed.Broadcast(OppCards.Last());
 	}
 
-	// TODO:
-	//// Add a card from the opponenet's hand to their board
-	//if (Deck->OpponentHeldHand.Num() > 0)
-	//{
-	//	OppCards.Add(Opponent->PlayCard());
-	//	PublicOppCard = OppCards.Last();
-	//	OnOppCardPlayed.Broadcast(PublicOppCard);
-	//}
+	// If this is the 6th card, determine the winner
+	if (PlayerCards.Num() >= 3) {
+		DetermineWinner();
+	}
+}
 
-	//// If this is the 6th card, determine the winner
-	//if (PlayerCards.Num() >= 3) {
-	//	DetermineWinner();
-	//}
+ECardSuit ACPP_Table_TimeIsMoney::GetRandomSuit()
+{
+	TArray<ECardSuit> Suits;
+	Suits.Add(ECardSuit::Blood);
+	Suits.Add(ECardSuit::Time);
+	Suits.Add(ECardSuit::Money);
+	int32 RandomIndex = FMath::RandRange(0, Suits.Num() - 1);
+	return Suits[RandomIndex];
 }

@@ -25,7 +25,7 @@ void ACPP_NPC_Opp_TimeIsMoney::Tick(float DeltaTime)
 
 }
 
-ACPP_Card* ACPP_NPC_Opp_TimeIsMoney::PlayCard()
+ACPP_Card_EffectCard* ACPP_NPC_Opp_TimeIsMoney::PlayCard()
 {
 	// TODO logic to determine which card to play
 	return Deck->OpponentHeldHand.Pop();
