@@ -242,6 +242,7 @@ void ACPP_Table_TimeIsMoney::PlayCard(ACPP_Card_EffectCard* PlayerCard)
 	// Add the card to the player's board
 	// TODO: The public card should update with revealed. 
 	// and the private should update with both revealed and hidden.
+	// TODO: Table needs to keep track of public, private, and true game state.
 	PlayerCards.Add(PlayerCard);
 	CPP_CardEffectEvaluator::ApplyEffect(PlayerCard->RevealedEffect, this);
 	CPP_CardEffectEvaluator::ApplyEffect(PlayerCard->HiddenEffect, this);

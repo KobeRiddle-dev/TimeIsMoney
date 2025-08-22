@@ -18,6 +18,7 @@ enum class ECardConditionType : uint8
     None,
     SuitEquals,
     PlayedPositionEquals 
+    // SuitAtPosition
 };
 
 UENUM(BlueprintType)

@@ -93,3 +93,25 @@ void ACPP_Card_Deck::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ACPP_Card_Deck::SetPlayerDeck()
+{
+	// Initialize the player deck with cards
+	// This should be done in the editor or through a data table
+}
+
+void ACPP_Card_Deck::AddCardToPlayerDeck(UCPP_Data_EffectCards* Card)
+{
+	// Create a new card instance and add it to the player deck
+}
+
+void ACPP_Card_Deck::SetOpponentDeck()
+{
+	// Initialize the opponent deck with cards
+	// This should be done in the editor or through a data table
+}
+
+void ACPP_Card_Deck::AddCardToOpponentDeck(UCPP_Data_EffectCards* Card)
+{
+	// Create a new card instance and add it to the opponent deck
+}
+

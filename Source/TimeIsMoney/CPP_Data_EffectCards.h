@@ -66,4 +66,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effect Cards")
 	bool Hidden_Effect_IsTargetingOpponent = false;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effect Cards")
+	//TArray<bool> TMP_multipleconditions;
 };
