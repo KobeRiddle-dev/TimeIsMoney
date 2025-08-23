@@ -9,7 +9,7 @@
 #include "CPP_Data_Condition.generated.h"
 
 UCLASS(Abstract, Blueprintable)
-class UPredicate : public UObject
+class UPredicate : public UDataAsset
 {
 	GENERATED_BODY()
 
