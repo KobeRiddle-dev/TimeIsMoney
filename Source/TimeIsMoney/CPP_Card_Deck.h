@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "CPP_Card_EffectCard.h"
+#include "CPP_Data_EffectCards.h"
 #include "GameFramework/Actor.h"
 #include "CPP_Card_Deck.generated.h"
 
@@ -44,9 +45,24 @@ public:
 	F_HandDiscardedEventDispatcher OnHandDiscarded;
 
 	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
+	void SetPlayerDeck();
+
+	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
+	void AddCardToPlayerDeck(UCPP_Data_EffectCards* Card);
+
+	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
+	void SetOpponentDeck();
+
+	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
+	void AddCardToOpponentDeck(UCPP_Data_EffectCards* Card);
+
+	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
 	ACPP_Card_EffectCard* DrawRandom();
+
 	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
 	void DiscardHands();
+
 	void ShufflePlayerDeck();
 	void ShuffleOpponentDeck();
+
 };

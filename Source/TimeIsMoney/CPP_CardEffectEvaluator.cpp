@@ -29,7 +29,6 @@ void CPP_CardEffectEvaluator::SetCardSuit(bool IsTargetingOpp, ECardSuit Suit, A
 	//}
 }
 
-
 // TODO
 void CPP_CardEffectEvaluator::IgnoreRevealedEffectOfCard(ACPP_Table_TimeIsMoney* GameState)
 {
@@ -79,6 +78,7 @@ bool CPP_CardEffectEvaluator::EvaluateCondition(const FCardEffect& CardPlayed, A
 	}
 }
 
+// TODO: ApplyEffect(s)
 void CPP_CardEffectEvaluator::ApplyEffect(const FCardEffect& Effect, ACPP_Table_TimeIsMoney* GameState)
 {
 	if (!EvaluateCondition(Effect, GameState))

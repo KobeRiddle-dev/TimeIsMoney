@@ -43,7 +43,7 @@ struct FCardEffect
 	bool IsTargetingOpponent = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FCardCondition Condition;
+	FCardCondition Condition;	// TODO: and or conditions; multiple conditions
 };
 
 UCLASS()
