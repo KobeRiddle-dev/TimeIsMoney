@@ -69,4 +69,7 @@ public:
 
 	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effect Cards")
 	//TArray<bool> TMP_multipleconditions;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effect Cards")
+	//MyCustomConditionDataAsset* MyConditions;
 };
