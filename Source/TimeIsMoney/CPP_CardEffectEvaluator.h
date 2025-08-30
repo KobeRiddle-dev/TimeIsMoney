@@ -7,8 +7,37 @@
 #include "CPP_CardTypes.h"
 #include "CPP_Card_EffectCard.h"
 #include "CPP_Card_Deck.h"
+#include "CPP_CardEffectEvaluator.generated.h"
 
 class ACPP_Table_TimeIsMoney;
+
+UCLASS(BlueprintType)
+/// <summary>
+/// Condition State Results for Private, Public, and True 
+/// states of the game.
+/// </summary>
+class TIMEISMONEY_API UConditionStateResults : public UObject
+{
+    GENERATED_BODY()
+
+public:
+    UPROPERTY(BlueprintReadWrite)
+    bool Private;
+
+    UPROPERTY(BlueprintReadWrite)
+    bool Public;
+
+    UPROPERTY(BlueprintReadWrite)
+    bool True;
+
+    // Optional: helper initializer
+    void Initialize(bool InPrivate, bool InPublic, bool InTrue)
+    {
+        Private = InPrivate;
+        Public = InPublic;
+        True = InTrue;
+    }
+};
 
 /**
  * 
@@ -16,18 +45,52 @@ class ACPP_Table_TimeIsMoney;
 class TIMEISMONEY_API CPP_CardEffectEvaluator
 {
 private:
-	static void SetCardNumberRelative(bool IsTargetingOpp, int32 RelativeNumber, ACPP_Table_TimeIsMoney* GameState);
-	static void SetCardSuit(bool IsTargetingOpp, ECardSuit Suit, ACPP_Table_TimeIsMoney* GameState);
-	static void IgnoreRevealedEffectOfCard(ACPP_Table_TimeIsMoney* GameState);
-	static void DrawCards(int NumOfDraws);
-	static void RevealHiddenEffectOfCard(ACPP_Table_TimeIsMoney* GameState);
-	static void RevealStartingSuit(bool IsTargetingOpp, ACPP_Table_TimeIsMoney* GameState);
+	static void SetCardNumberRelative(
+        bool IsTargetingOpp, 
+        int32 RelativeNumber, 
+        ACPP_Table_TimeIsMoney* GameState,
+		UConditionStateResults* ConditionResult,
+        bool IsPublicEffect);
 
-	static bool EvaluateCondition(const FCardEffect& CardPlayed, ACPP_Table_TimeIsMoney* GameState);
+	static void SetCardSuit(
+        bool IsTargetingOpp, 
+        ECardSuit Suit, 
+        ACPP_Table_TimeIsMoney* GameState,  
+        UConditionStateResults* ConditionResult,
+        bool IsPublicEffect);
+
+	static void IgnoreRevealedEffectOfCard(
+        ACPP_Table_TimeIsMoney* GameState);
+
+	static void DrawCards(
+        int NumOfDraws);
+
+	static void RevealHiddenEffectOfCard(
+        ACPP_Table_TimeIsMoney* GameState);
+
+	static void RevealStartingSuit(
+        bool IsTargetingOpp, 
+        ACPP_Table_TimeIsMoney* GameState);
+
+	static UConditionStateResults* EvaluateConditionNode(
+        const TArray<FCardConditionNode>& Nodes,
+        int32 NodeIndex, ACPP_Table_TimeIsMoney* GameState);
+
+	static UConditionStateResults* EvaluateConditionSuitEquals(
+        bool IsTargetingOpp, 
+        ECardSuit Suit, 
+        ACPP_Table_TimeIsMoney* GameState);
+
+	static UConditionStateResults* EvaluateConditionPlayedPositionEquals(
+        int PlayedPosition, 
+        ACPP_Table_TimeIsMoney* GameState);
 
 public:
 	CPP_CardEffectEvaluator();
 	~CPP_CardEffectEvaluator();
 
-	static void ApplyEffect(const FCardEffect& Effect, ACPP_Table_TimeIsMoney* GameState);
+	static void ApplyEffect(
+        const TArray<FCardEffect>& Effects, 
+        ACPP_Table_TimeIsMoney* GameState,
+        bool IsPublicEffect);
 };

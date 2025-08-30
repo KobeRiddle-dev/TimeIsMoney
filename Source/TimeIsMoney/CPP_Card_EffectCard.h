@@ -7,22 +7,43 @@
 #include "CPP_CardTypes.h"
 #include "CPP_Card_EffectCard.generated.h"
 
+/// <summary>
+/// Tree structure of AND, OR, NOT conditions.
+/// 
+/// Every Leaf node will have their conditions evaluated.
+/// 
+/// Non-leaf nodes will evaluate their children based on their Operator 
+/// until reaching their leaf children at the end of the tree.
+/// </summary>
 USTRUCT(BlueprintType)
-struct FCardCondition
+struct FCardConditionNode
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	ECardConditionType ConditionType = ECardConditionType::None;
+	// Index of the parent node in the array. -1 for root.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Condition")
+	int32 ParentIndex = -1;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// Operator used if this node has children
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Condition")
+	EBooleanOperator Operator = EBooleanOperator::OR;
+
+	// Is this node a leaf (has no children)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Condition")
+	bool IsLeaf = true;
+
+	// Leaf data
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Condition")
+	ECardConditionType LeafConditionType = ECardConditionType::None;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Condition")
+	bool IsTargetingOpponent = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Condition")
 	int32 IntParam = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool IsTargetingOpponent = false;	
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	ECardSuit SuitParam = ECardSuit::Time;	// tmp default value
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Condition")
+	ECardSuit SuitParam = ECardSuit::Time;
 };
 
 USTRUCT(BlueprintType)
@@ -42,8 +63,9 @@ struct FCardEffect
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsTargetingOpponent = false;
 
+	// Flat array of all nodes in the tree
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FCardCondition Condition;	// TODO: and or conditions; multiple conditions
+	TArray<FCardConditionNode> ConditionNodes;
 };
 
 UCLASS()
@@ -67,10 +89,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EffectCard")
-	FCardEffect HiddenEffect;
+	TArray<FCardEffect> HiddenEffects;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EffectCard")
-	FCardEffect RevealedEffect;;
+	TArray<FCardEffect> RevealedEffects;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EffectCard")
 	UTexture2D* CardTexture;

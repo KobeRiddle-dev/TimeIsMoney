@@ -61,6 +61,7 @@ void ACPP_Card_EffectCard::SetCardTexture(UTexture2D* NewTexture)
 	if (CardMesh && DynMaterial && NewTexture)
 	{
 		DynMaterial->SetTextureParameterValue("CardTexture", NewTexture);	// "CardTexture" needs to match the param name exactly
+		CardTexture = NewTexture; 
 	}
 	else
 	{
@@ -70,32 +71,14 @@ void ACPP_Card_EffectCard::SetCardTexture(UTexture2D* NewTexture)
 
 void ACPP_Card_EffectCard::InitializeCard(UCPP_Data_EffectCards* CardData)
 {
-	if (CardData)
-	{
-		RevealedEffect.Condition.ConditionType = CardData->Revealed_Condition_Type;
-		RevealedEffect.Condition.IntParam = CardData->Revealed_Condition_IntParam;
-		RevealedEffect.Condition.IsTargetingOpponent = CardData->Revealed_Condtion_IsTargetingOpponent;
-		RevealedEffect.Condition.SuitParam = CardData->Revealed_Condition_SuitParam;
-		RevealedEffect.EffectType = CardData->Revealed_Effect_Type;
-		RevealedEffect.IntParam = CardData->Revealed_Effect_IntParam;
-		RevealedEffect.SuitParam = CardData->Revealed_Effect_SuitParam;
-		RevealedEffect.IsTargetingOpponent = CardData->Revealed_Effect_IsTargetingOpponent;
-		HiddenEffect.Condition.ConditionType = CardData->Hidden_Condition_Type;
-		HiddenEffect.Condition.IntParam = CardData->Hidden_Condition_IntParam;
-		HiddenEffect.Condition.IsTargetingOpponent = CardData->Hidden_Condition_IsTargetingOpponent;
-		HiddenEffect.Condition.SuitParam = CardData->Hidden_Condition_SuitParam;
-		HiddenEffect.EffectType = CardData->Hidden_Effect_Type;
-		HiddenEffect.IntParam = CardData->Hidden_Effect_IntParam;
-		HiddenEffect.SuitParam = CardData->Hidden_Effect_SuitParam;
-		HiddenEffect.IsTargetingOpponent = CardData->Hidden_Effect_IsTargetingOpponent;
-		CardTexture = CardData->CardTexture;
-		if (DynMaterial && CardTexture)
-		{
-			SetCardTexture(CardTexture);
-		}
+	try {
+		HiddenEffects = CardData->HiddenEffects;
+		RevealedEffects = CardData->RevealedEffects;
+
+		SetCardTexture(CardData->CardTexture);
 	}
-	else
+	catch (...)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("CardData is NULL!"));
+		UE_LOG(LogTemp, Warning, TEXT("There was a problem with Effect Card Data"));
 	}
 }

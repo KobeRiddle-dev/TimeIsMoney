@@ -29,18 +29,25 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
 	TArray<ACPP_Card_EffectCard*> PlayerDeck;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
 	TArray<ACPP_Card_EffectCard*> OpponentDeck;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
 	TArray<ACPP_Card_EffectCard*> PlayersHeldHand;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
 	TArray<ACPP_Card_EffectCard*> OpponentHeldHand;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
 	int playerCardIndex;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
 	int opponentCardIndex;
+
 	UPROPERTY(BlueprintAssignable, Category = "Card_Deck")
 	F_CardDrawnEventDispatcher OnCardDrawn;
+
 	UPROPERTY(BlueprintAssignable, Category = "Card_Deck")
 	F_HandDiscardedEventDispatcher OnHandDiscarded;
 

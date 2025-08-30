@@ -53,6 +53,9 @@ public:
 	ACPP_Card* PrivatePlayerCard;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	ACPP_Card* TruePlayerCard;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
 	ECardSuit PlayerStartingSuit;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
@@ -63,6 +66,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
 	ACPP_Card* PrivateOppCard;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	ACPP_Card* TrueOppCard;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
 	ECardSuit OppStartingSuit;
