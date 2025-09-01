@@ -92,4 +92,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
 	void PlayCardFromHand(ACPP_Card_EffectCard* CardToPlay);
+
+	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
+	int GetCardFromHandIndex(ACPP_Card_EffectCard* CardToFind);
 };

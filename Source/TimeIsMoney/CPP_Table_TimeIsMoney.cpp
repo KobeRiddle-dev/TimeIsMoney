@@ -49,7 +49,6 @@ void ACPP_Table_TimeIsMoney::ResetHands()
 bool ACPP_Table_TimeIsMoney::StartHand()
 {
 	UE_LOG(LogTemp, Log, TEXT("Starting Hand"));
-	OnHandStart.Broadcast();
 	if (!GameIsActive)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Game is not active. Cannot start hand."));
@@ -85,6 +84,9 @@ bool ACPP_Table_TimeIsMoney::StartHand()
 	PublicOppCard->InitializeCard(ECardSuit::Unknown, 0);
 	PrivateOppCard->InitializeCard(OppStartingSuit, 0);
 	TrueOppCard->InitializeCard(OppStartingSuit, 0);
+
+	// Notify listeners
+	OnHandStart.Broadcast();
 
 	// Null Check for `Opponent`
 	if (!IsValid(OpponentAI))

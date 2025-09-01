@@ -140,20 +140,8 @@ void ACPP_Card_Deck::PlayCardFromHand(ACPP_Card_EffectCard* CardToPlay)
 		return;
 	}
 
-	// Remove from Hand
-	int32 Index = Hand.IndexOfByPredicate([CardToPlay](const FCardInstance& Card) {
-		return Card.CardActor == CardToPlay;
-		});
-	if (Index == INDEX_NONE)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayCardFromHand: Searching hand for %s"), *CardToPlay->GetName());
-		for (const FCardInstance& Card : Hand)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("  Hand has actor: %s"), Card.CardActor ? *Card.CardActor->GetName() : TEXT("NULL"));
-		}
-		UE_LOG(LogTemp, Warning, TEXT("ACPP_Card_Deck::PlayCardFromHand: Card not found in hand!"));
-		return;
-	}
+	// Find card in Hand
+	int32 Index = GetCardFromHandIndex(CardToPlay);
 
 	// Add to InPlay
 	FCardInstance PlayedCard = Hand[Index];
@@ -163,13 +151,31 @@ void ACPP_Card_Deck::PlayCardFromHand(ACPP_Card_EffectCard* CardToPlay)
 	// Move the actor in the world if it exists
 	if (PlayedCard.CardActor)
 	{
-		try {
+		if (InPlay.Num() > 0) {
 			PlayedCard.CardActor->SetActorLocation(BoardSlots[InPlay.Num() - 1].GetLocation());
 		}
-		catch (...) {
+		else {
 			UE_LOG(LogTemp, Error, TEXT("PlayCardFromHand: BoardSlots index out of range! Make sure BoardSlots are set in Card Deck Setup."));
 		}
 	}
+}
+
+// Returns -1 if the card is not found in hand
+int ACPP_Card_Deck::GetCardFromHandIndex(ACPP_Card_EffectCard* CardToFind)
+{
+	if (!CardToFind)
+	{
+		UE_LOG(LogTemp, Error, TEXT("GetCardFromHandIndex: CardToFind is NULL!"));
+		return INDEX_NONE;
+	}
+	int32 Index = Hand.IndexOfByPredicate([CardToFind](const FCardInstance& Card) {
+		return Card.CardActor == CardToFind;
+		});
+	if (Index == INDEX_NONE)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GetCardFromHandIndex: Card not found in hand!"));
+	}
+	return Index;
 }
 
 // Called every frame
