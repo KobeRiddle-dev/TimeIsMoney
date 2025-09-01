@@ -44,6 +44,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Card")
 	UTexture2D* MoneyTexture;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Card")
+	UTexture2D* UnknownTexture;
+
 	UFUNCTION(BlueprintCallable, Category = "Card")
 	void SetCardTexture(UTexture2D* NewTexture);
 

@@ -76,7 +76,7 @@ void ACPP_Card::SetCardTexture(UTexture2D* NewTexture)
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("CardMesh, CardMeshMaterial, or NewTexture is NULL"));
+		UE_LOG(LogTemp, Warning, TEXT("ACPP_CARD::SetCardTexture: CardMesh, CardMeshMaterial, or NewTexture is NULL"));
 	}
 }
 
@@ -91,6 +91,10 @@ void ACPP_Card::SetCardNumber(int Number)
 
 		// Set the new text
 		CardNumberText->SetText(NewText);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ACPP_CARD::SetCardNumber: CardNumberText is NULL"));
 	}
 }
 
@@ -108,6 +112,9 @@ void ACPP_Card::SetCardSuit(ECardSuit Suit)
 		break;
 	case ECardSuit::Money:
 		SetCardTexture(MoneyTexture);
+		break;
+	case ECardSuit::Unknown:
+		SetCardTexture(UnknownTexture);
 		break;
 	default:
 		UE_LOG(LogTemp, Warning, TEXT("Invalid Card Suit"));

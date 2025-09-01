@@ -50,64 +50,69 @@ bool ACPP_Table_TimeIsMoney::StartHand()
 {
 	UE_LOG(LogTemp, Log, TEXT("Starting Hand"));
 	OnHandStart.Broadcast();
-
 	if (!GameIsActive)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Game is not active. Cannot start hand."));
 		return false;
 	}
 
-	// Empty the board
-	OppCards.Empty();
-	PlayerCards.Empty();
-
-	// Null Check for `Deck`
-	if (!Deck)
+	// Null Check for `Deck` FIRST
+	if (!IsValid(PlayerDeck) || !IsValid(OpponentDeck))
 	{
-		UE_LOG(LogTemp, Error, TEXT("StartHand: Deck is NULL!"));
+		UE_LOG(LogTemp, Error, TEXT("StartHand: PlayerDeck or OpponentDeck is NULL/invalid!"));
 		return false;
 	}
+
+	// Empty the board
+	PlayerDeck->DiscardInPlayCards();
+	OpponentDeck->DiscardInPlayCards();
 	// Discard old hand
-	if (Deck->PlayersHeldHand.Num() > 0)
+	PlayerDeck->DiscardHand();
+	OpponentDeck->DiscardHand();
+	// Draw 5 cards to hand
+	for (int i = 0; i < 5; i++)
 	{
-		Deck->DiscardHands();
-	}
-	// Draw new hand
-	int drawPower = 5;
-	int maxHandSize = 5;
-	while (Deck->PlayersHeldHand.Num() < drawPower && Deck->PlayersHeldHand.Num() < maxHandSize)
-	{
-		Deck->DrawRandom();
+		PlayerDeck->DrawRandom();
+		OpponentDeck->DrawRandom();
 	}
 
 	// Determine starting suits and reset number value
-	PublicPlayerCard->SetCardNumber(0);
 	PlayerStartingSuit = GetRandomSuit();
+	PublicPlayerCard->InitializeCard(ECardSuit::Unknown, 0);
 	PrivatePlayerCard->InitializeCard(PlayerStartingSuit, 0);
 	TruePlayerCard->InitializeCard(PlayerStartingSuit, 0);
 	OppStartingSuit = GetRandomSuit();
-	PublicOppCard->SetCardNumber(0);
+	PublicOppCard->InitializeCard(ECardSuit::Unknown, 0);
 	PrivateOppCard->InitializeCard(OppStartingSuit, 0);
 	TrueOppCard->InitializeCard(OppStartingSuit, 0);
 
-	// TODO: Determine who goes first. Right now opp always goes first.
 	// Null Check for `Opponent`
-	if (!Opponent)
+	if (!IsValid(OpponentAI))
 	{
-		UE_LOG(LogTemp, Error, TEXT("StartHand: Opponent is NULL!"));
+		UE_LOG(LogTemp, Error, TEXT("StartHand: OpponentAI is NULL/invalid!"));
 		return false;
 	}
-	// Opponenet plays a card
-	OppCards.Add(Opponent->PlayCard());
-	CPP_CardEffectEvaluator::ApplyEffect(OppCards.Last()->RevealedEffects, this, true);
-	CPP_CardEffectEvaluator::ApplyEffect(OppCards.Last()->HiddenEffects, this, false);
-	OnOppCardPlayed.Broadcast(OppCards.Last());
+	// Opponent plays a card
+	ACPP_Card_EffectCard* OppCard = OpponentAI->PlayCard();
+	if (!IsValid(OppCard))
+	{
+		UE_LOG(LogTemp, Error, TEXT("StartHand: OpponentAI returned null card!"));
+		return false;
+	}
+	// Safely play the card and apply effects
+	OpponentDeck->PlayCardFromHand(OppCard);
+	// CardData check: never assume it exists
+	if (!IsValid(OppCard->CardData))
+	{
+		UE_LOG(LogTemp, Error, TEXT("StartHand: OppCard has no CardData!"));
+	}
+	else
+	{
+		CPP_CardEffectEvaluator::ApplyEffect(OppCard->CardData->RevealedEffects, this, true, false);
+		CPP_CardEffectEvaluator::ApplyEffect(OppCard->CardData->HiddenEffects, this, false, false);
+	}
+	OnOppCardPlayed.Broadcast(OppCard);
 
-	// for debugging
-	UE_LOG(LogTemp, Log, TEXT("Opponent Card is: %d of %s"),
-		PublicOppCard->CardNumber,
-		*StaticEnum<ECardSuit>()->GetNameStringByValue(static_cast<int64>(PublicOppCard->CardSuit))
-	);
 	return true;
 }
 
@@ -129,7 +134,7 @@ bool ACPP_Table_TimeIsMoney::CheckForEndGame()
 
 	if (!GameIsActive)
 	{
-		Deck->DiscardHands();
+		PlayerDeck->DiscardHand();
 	}
 
 	return GameIsActive;
@@ -162,13 +167,33 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner()
 	OnBeginEffectReveal.Broadcast();
 	PublicPlayerCard->InitializeCard(PlayerStartingSuit, 0);
 	PublicOppCard->InitializeCard(OppStartingSuit, 0);
-	for (int i = 0; i < PlayerCards.Num(); i++)
+	for (int i = 0; i < PlayerDeck->InPlay.Num(); i++)
 	{
-		CPP_CardEffectEvaluator::ApplyEffect(OppCards[i]->RevealedEffects, this, true);
-		CPP_CardEffectEvaluator::ApplyEffect(OppCards[i]->HiddenEffects, this, false);
+		CPP_CardEffectEvaluator::ApplyEffect(
+			OpponentDeck->InPlay[i].CardData->RevealedEffects, 
+			this, 
+			true,
+			false
+		);
+		CPP_CardEffectEvaluator::ApplyEffect(
+			OpponentDeck->InPlay[i].CardData->HiddenEffects, 
+			this, 
+			false,
+			false
+		);
 
-		CPP_CardEffectEvaluator::ApplyEffect(PlayerCards[i]->RevealedEffects, this, true);
-		CPP_CardEffectEvaluator::ApplyEffect(PlayerCards[i]->HiddenEffects, this, false);
+		CPP_CardEffectEvaluator::ApplyEffect(
+			PlayerDeck->InPlay[i].CardData->RevealedEffects, 
+			this, 
+			true,
+			true
+		);
+		CPP_CardEffectEvaluator::ApplyEffect(
+			PlayerDeck->InPlay[i].CardData->HiddenEffects, 
+			this, 
+			false,
+			true
+		);
 	}
 
 	// Determine winner based on suit and number
@@ -218,24 +243,24 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner()
 	return playerIsWin;
 }
 
+// TODO: This function should just play a card agnostic of player or opponent
 void ACPP_Table_TimeIsMoney::PlayCard(ACPP_Card_EffectCard* PlayerCard)
 {
 	// Add the card to the player's board
-	PlayerCards.Add(PlayerCard);
-	CPP_CardEffectEvaluator::ApplyEffect(PlayerCard->RevealedEffects, this, true);
-	CPP_CardEffectEvaluator::ApplyEffect(PlayerCard->HiddenEffects, this, false);
+	PlayerDeck->PlayCardFromHand(PlayerCard);
+	CPP_CardEffectEvaluator::ApplyEffect(PlayerCard->CardData->RevealedEffects, this, true, true);
+	CPP_CardEffectEvaluator::ApplyEffect(PlayerCard->CardData->HiddenEffects, this, false, true);
 	OnPlayerCardPlayed.Broadcast(PlayerCard);
 
-	// Add a card from the opponenet's hand to their board
-	if (Deck->OpponentHeldHand.Num() > 0)
-	{
-		OppCards.Add(Opponent->PlayCard());
-		//CPP_CardEffectEvaluator::ApplyEffect(OppCards.Last()->RevealedEffects, this);
-		OnOppCardPlayed.Broadcast(OppCards.Last());
-	}
+	// Play a card from the opponent's hand in response
+	ACPP_Card_EffectCard* OppCard = OpponentAI->PlayCard();
+	OpponentDeck->PlayCardFromHand(OppCard);
+	CPP_CardEffectEvaluator::ApplyEffect(OppCard->CardData->RevealedEffects, this, true, false);
+	CPP_CardEffectEvaluator::ApplyEffect(OppCard->CardData->HiddenEffects, this, false, false);
+	OnOppCardPlayed.Broadcast(OppCard);
 
 	// If this is the 6th card, determine the winner
-	if (PlayerCards.Num() >= 3) {
+	if (PlayerDeck->InPlay.Num() >= 3) {
 		DetermineWinner();
 	}
 }

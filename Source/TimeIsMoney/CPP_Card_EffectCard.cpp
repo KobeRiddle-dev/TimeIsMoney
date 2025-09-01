@@ -69,12 +69,10 @@ void ACPP_Card_EffectCard::SetCardTexture(UTexture2D* NewTexture)
 	}
 }
 
-void ACPP_Card_EffectCard::InitializeCard(UCPP_Data_EffectCards* CardData)
+void ACPP_Card_EffectCard::InitializeCard(UCPP_Data_EffectCards* card)
 {
 	try {
-		HiddenEffects = CardData->HiddenEffects;
-		RevealedEffects = CardData->RevealedEffects;
-
+		CardData = card;
 		SetCardTexture(CardData->CardTexture);
 	}
 	catch (...)

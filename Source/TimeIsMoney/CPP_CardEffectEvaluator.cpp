@@ -13,68 +13,81 @@ CPP_CardEffectEvaluator::~CPP_CardEffectEvaluator()
 }
 
 void CPP_CardEffectEvaluator::SetCardNumberRelative(
-	bool IsTargetingOpp, 
-	int32 RelativeNumber, 
+	bool IsTargetingOpp,
+	int32 RelativeNumber,
 	ACPP_Table_TimeIsMoney* GameState,
 	UConditionStateResults* ConditionResult,
-	bool IsPublicEffect)
+	bool IsPublicEffect,
+	bool IsPlayedByPlayer)
 {
+	if (!IsPlayedByPlayer)
+	{
+		IsTargetingOpp = !IsTargetingOpp;
+	}
 	if (IsTargetingOpp)
 	{
-		// Set the opponent's number relative
-		if (IsPublicEffect) 
+		if (ConditionResult->Private)
 		{
-			if (ConditionResult->Private)
-			{
-				GameState->PrivateOppCard->SetCardNumber(GameState->PrivateOppCard->CardNumber + RelativeNumber);
-			}
+			UE_LOG(LogTemp, Log, TEXT("Setting Private Opp Card Number Relative by %d"), RelativeNumber);
+			GameState->PrivateOppCard->SetCardNumber(GameState->PrivateOppCard->CardNumber + RelativeNumber);
+		}
+		if (IsPublicEffect)
+		{
 			if (ConditionResult->Public)
 			{
+				UE_LOG(LogTemp, Log, TEXT("Setting Public Opp Card Number Relative by %d"), RelativeNumber);
 				GameState->PublicOppCard->SetCardNumber(GameState->PublicOppCard->CardNumber + RelativeNumber);
 			}
 		}
 		if (ConditionResult->True)
 		{
+			UE_LOG(LogTemp, Log, TEXT("Setting True Opp Card Number Relative by %d"), RelativeNumber);
 			GameState->TrueOppCard->SetCardNumber(GameState->TrueOppCard->CardNumber + RelativeNumber);
 		}
 	}
 	else
 	{
-		// Set the player's number relative
 		if (ConditionResult->Private)
 		{
+			UE_LOG(LogTemp, Log, TEXT("Setting Private Player Card Number Relative by %d"), RelativeNumber);
 			GameState->PrivatePlayerCard->SetCardNumber(GameState->PrivatePlayerCard->CardNumber + RelativeNumber);
 		}
 		if (IsPublicEffect)
 		{
 			if (ConditionResult->Public)
 			{
+				UE_LOG(LogTemp, Log, TEXT("Setting Public Player Card Number Relative by %d"), RelativeNumber);
 				GameState->PublicPlayerCard->SetCardNumber(GameState->PublicPlayerCard->CardNumber + RelativeNumber);
 			}
 		}
 		if (ConditionResult->True)
 		{
+			UE_LOG(LogTemp, Log, TEXT("Setting True Player Card Number Relative by %d"), RelativeNumber);
 			GameState->TruePlayerCard->SetCardNumber(GameState->TruePlayerCard->CardNumber + RelativeNumber);
 		}
 	}
 }
 
 void CPP_CardEffectEvaluator::SetCardSuit(
-	bool IsTargetingOpp, 
-	ECardSuit Suit, 
-	ACPP_Table_TimeIsMoney* GameState, 
+	bool IsTargetingOpp,
+	ECardSuit Suit,
+	ACPP_Table_TimeIsMoney* GameState,
 	UConditionStateResults* ConditionResult,
-	bool IsPublicEffect)
+	bool IsPublicEffect,
+	bool IsPlayedByPlayer)
 {
+	if (!IsPlayedByPlayer)
+	{
+		IsTargetingOpp = !IsTargetingOpp;
+	}
 	if (IsTargetingOpp)
 	{
-		// Set the opponent's suit
+		if (ConditionResult->Private)
+		{
+			GameState->PrivateOppCard->SetCardSuit(Suit);
+		}
 		if (IsPublicEffect)
 		{
-			if (ConditionResult->Private)
-			{
-				GameState->PrivateOppCard->SetCardSuit(Suit);
-			}
 			if (ConditionResult->Public)
 			{
 				GameState->PublicOppCard->SetCardSuit(Suit);
@@ -82,17 +95,17 @@ void CPP_CardEffectEvaluator::SetCardSuit(
 		}
 		if (ConditionResult->True)
 		{
+			UE_LOG(LogTemp, Log, TEXT("Setting True Opp Card Suit to %d"), static_cast<int>(Suit));
 			GameState->TrueOppCard->SetCardSuit(Suit);
 		}
 	}
 	else
 	{
-		// Set the player's suit
 		if (ConditionResult->Private)
 		{
 			GameState->PrivatePlayerCard->SetCardSuit(Suit);
 		}
-		if (IsPublicEffect) 
+		if (IsPublicEffect)
 		{
 			if (ConditionResult->Public)
 			{
@@ -101,6 +114,7 @@ void CPP_CardEffectEvaluator::SetCardSuit(
 		}
 		if (ConditionResult->True)
 		{
+			UE_LOG(LogTemp, Log, TEXT("Setting True Player Card Suit to %d"), static_cast<int>(Suit));
 			GameState->TruePlayerCard->SetCardSuit(Suit);
 		}
 	}
@@ -128,8 +142,8 @@ void CPP_CardEffectEvaluator::RevealStartingSuit(bool IsTargetingOpp, ACPP_Table
 }
 
 UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionSuitEquals(
-	bool IsTargetingOpp, 
-	ECardSuit Suit, 
+	bool IsTargetingOpp,
+	ECardSuit Suit,
 	ACPP_Table_TimeIsMoney* GameState)
 {
 	UConditionStateResults* Result = NewObject<UConditionStateResults>();
@@ -164,8 +178,16 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionNode(
 	int32 NodeIndex,
 	ACPP_Table_TimeIsMoney* GameState)
 {
+	if (Nodes.Num() == 0)
+	{
+		UE_LOG(LogTemp, Log, TEXT("EvaluateConditionNode: No condition nodes, returning true"));
+		UConditionStateResults* Result = NewObject<UConditionStateResults>();
+		Result->Initialize(true, true, true);
+		return Result;
+	}
 	if (!Nodes.IsValidIndex(NodeIndex))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("EvaluateConditionNode: Invalid NodeIndex %d"), NodeIndex);
 		UConditionStateResults* Result = NewObject<UConditionStateResults>();
 		Result->Initialize(false, false, false);
 		return Result;
@@ -179,16 +201,28 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionNode(
 		switch (Node.LeafConditionType)
 		{
 		case ECardConditionType::SuitEquals:
-			EvaluateConditionSuitEquals(Node.IsTargetingOpponent, Node.SuitParam, GameState);
-			break;
+		{
+			UConditionStateResults* Result = EvaluateConditionSuitEquals(Node.IsTargetingOpponent, Node.SuitParam, GameState);
+			UE_LOG(LogTemp, Log, TEXT("EvaluateConditionNode: SuitEquals result - Private: %d, Public: %d, True: %d"),
+				Result->Private ? 1 : 0,
+				Result->Public ? 1 : 0,
+				Result->True ? 1 : 0
+			);
+			return Result;
+		}
 		case ECardConditionType::PlayedPositionEquals:
-			// TODO: playedpositionequals method
-			break;
-		default:
-			// Unknown condition type
+		{
+			// TODO: implement playedpositionequals method
 			UConditionStateResults* Result = NewObject<UConditionStateResults>();
 			Result->Initialize(false, false, false);
 			return Result;
+		}
+		default:
+		{
+			UConditionStateResults* Result = NewObject<UConditionStateResults>();
+			Result->Initialize(false, false, false);
+			return Result;
+		}
 		}
 	}
 
@@ -247,9 +281,10 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionNode(
 }
 
 void CPP_CardEffectEvaluator::ApplyEffect(
-	const TArray<FCardEffect>& Effects, 
+	const TArray<FCardEffect>& Effects,
 	ACPP_Table_TimeIsMoney* GameState,
-	bool IsPublicEffect)
+	bool IsPublicEffect,
+	bool IsPlayedByPlayer)
 {
 	for (const FCardEffect& Effect : Effects)
 	{
@@ -258,10 +293,10 @@ void CPP_CardEffectEvaluator::ApplyEffect(
 		switch (Effect.EffectType)
 		{
 		case ECardEffectType::SetCardNumberRelative:
-			SetCardNumberRelative(Effect.IsTargetingOpponent, Effect.IntParam, GameState, ConditionResult, IsPublicEffect);
+			SetCardNumberRelative(Effect.IsTargetingOpponent, Effect.IntParam, GameState, ConditionResult, IsPublicEffect, IsPlayedByPlayer);
 			break;
 		case ECardEffectType::SetCardSuit:
-			SetCardSuit(Effect.IsTargetingOpponent, Effect.SuitParam, GameState, ConditionResult, IsPublicEffect);
+			SetCardSuit(Effect.IsTargetingOpponent, Effect.SuitParam, GameState, ConditionResult, IsPublicEffect, IsPlayedByPlayer);
 			break;
 		case ECardEffectType::IgnoreRevealedEffectOfCard:
 			IgnoreRevealedEffectOfCard(GameState);

@@ -41,33 +41,33 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
-	ACPP_NPC_Opp_TimeIsMoney* Opponent;
+	ACPP_NPC_Opp_TimeIsMoney* OpponentAI;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
-	ACPP_Card_Deck* Deck;
+	ACPP_Card_Deck* PlayerDeck;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
 	ACPP_Card* PublicPlayerCard;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
 	ACPP_Card* PrivatePlayerCard;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
 	ACPP_Card* TruePlayerCard;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
 	ECardSuit PlayerStartingSuit;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
-	TArray<ACPP_Card_EffectCard*> PlayerCards;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
+	ACPP_Card_Deck* OpponentDeck;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
 	ACPP_Card* PublicOppCard;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
 	ACPP_Card* PrivateOppCard;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
 	ACPP_Card* TrueOppCard;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
@@ -78,9 +78,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
 	TMap<ECardSuit, int> OppHands;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
-	TArray<ACPP_Card_EffectCard*> OppCards;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
 	bool GameIsActive;

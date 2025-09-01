@@ -50,14 +50,16 @@ private:
         int32 RelativeNumber, 
         ACPP_Table_TimeIsMoney* GameState,
 		UConditionStateResults* ConditionResult,
-        bool IsPublicEffect);
+        bool IsPublicEffect,
+        bool IsPlayedByPlayer);
 
 	static void SetCardSuit(
         bool IsTargetingOpp, 
         ECardSuit Suit, 
         ACPP_Table_TimeIsMoney* GameState,  
         UConditionStateResults* ConditionResult,
-        bool IsPublicEffect);
+        bool IsPublicEffect,
+        bool IsPlayedByPlayer);
 
 	static void IgnoreRevealedEffectOfCard(
         ACPP_Table_TimeIsMoney* GameState);
@@ -92,5 +94,6 @@ public:
 	static void ApplyEffect(
         const TArray<FCardEffect>& Effects, 
         ACPP_Table_TimeIsMoney* GameState,
-        bool IsPublicEffect);
+        bool IsPublicEffect,
+        bool IsPlayedByPlayer);
 };

@@ -59,7 +59,8 @@ enum class ECardSuit : uint8
 {
 	Time,
 	Money,
-	Blood
+	Blood,
+	Unknown
 };
 
 UENUM(BlueprintType)
@@ -81,3 +82,4 @@ enum class ECardEffectType : uint8
 	RevealHiddenEffectOfCard,
 	RevealStartingSuit
 };
+

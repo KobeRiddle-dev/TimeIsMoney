@@ -25,8 +25,15 @@ void ACPP_NPC_Opp_TimeIsMoney::Tick(float DeltaTime)
 
 }
 
+// TODO: make AI smarter
 ACPP_Card_EffectCard* ACPP_NPC_Opp_TimeIsMoney::PlayCard()
 {
-	// TODO logic to determine which card to play
-	return Deck->OpponentHeldHand.Pop();
+    if (Deck->Hand.Num() == 0)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Opponent has no cards to play!"));
+        return nullptr;
+    }
+
+    // Reference right-most card
+    return Deck->Hand.Last().CardActor;
 }
