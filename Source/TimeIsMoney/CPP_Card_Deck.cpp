@@ -94,7 +94,7 @@ void ACPP_Card_Deck::DrawRandom()
 			UE_LOG(LogTemp, Error, TEXT("DrawRandom: CardActorClass not set! Assign BP_EffectCard in Deck settings."));
 		}
 	}
-	else 
+	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("DrawRandom: CardActor already exists for drawn card!"));
 	}
@@ -151,12 +151,14 @@ void ACPP_Card_Deck::PlayCardFromHand(ACPP_Card_EffectCard* CardToPlay)
 	// Move the actor in the world if it exists
 	if (PlayedCard.CardActor)
 	{
+
 		if (InPlay.Num() > 0) {
 			PlayedCard.CardActor->SetActorLocation(BoardSlots[InPlay.Num() - 1].GetLocation());
 		}
 		else {
 			UE_LOG(LogTemp, Error, TEXT("PlayCardFromHand: BoardSlots index out of range! Make sure BoardSlots are set in Card Deck Setup."));
 		}
+
 	}
 }
 
