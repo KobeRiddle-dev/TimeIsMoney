@@ -37,6 +37,10 @@ class TIMEISMONEY_API ACPP_Card_Deck : public AActor
 {
 	GENERATED_BODY()
 
+private:
+	void UpdateHandLayout();
+	TArray<FVector> CalculateHandPositions() const;
+
 public:
 	ACPP_Card_Deck();
 
@@ -65,6 +69,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck_Setup")
 	TArray<FTransform> BoardSlots;
 
+	// Left and right most points of our hand space in the world
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck_Setup")
 	TArray<FTransform> HandSlots;
 
@@ -80,6 +85,9 @@ public:
 	// The card actor Blueprint to spawn when drawing cards
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck_Setup")
 	TSubclassOf<ACPP_Card_EffectCard> CardActorClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck_Setup")
+	float PreferredCardSpacing = 10.0f;
 
 	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
 	void DiscardHand();
@@ -98,4 +106,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
 	int GetCardFromHandIndex(ACPP_Card_EffectCard* CardToFind);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Cards")
+	void PlayCardAnimation(
+		ACPP_Card_EffectCard* CardActor, 
+		const FVector& TargetLocation, 
+		const FRotator& TargetRotation,
+		const float AnimationDuration = 0.5f
+	);
 };

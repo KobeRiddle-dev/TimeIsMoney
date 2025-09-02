@@ -76,16 +76,20 @@ private:
 
 	static UConditionStateResults* EvaluateConditionNode(
         const TArray<FCardConditionNode>& Nodes,
-        int32 NodeIndex, ACPP_Table_TimeIsMoney* GameState);
+        int32 NodeIndex, 
+        ACPP_Table_TimeIsMoney* GameState,
+        bool IsPlayedByPlayer);
 
 	static UConditionStateResults* EvaluateConditionSuitEquals(
         bool IsTargetingOpp, 
         ECardSuit Suit, 
-        ACPP_Table_TimeIsMoney* GameState);
+        ACPP_Table_TimeIsMoney* GameState,
+        bool IsPlayedByPlayer);
 
 	static UConditionStateResults* EvaluateConditionPlayedPositionEquals(
         int PlayedPosition, 
-        ACPP_Table_TimeIsMoney* GameState);
+        ACPP_Table_TimeIsMoney* GameState,
+        bool IsPlayedByPlayer);
 
 public:
 	CPP_CardEffectEvaluator();

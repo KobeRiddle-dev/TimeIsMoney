@@ -40,4 +40,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "EffectCard")
 	void InitializeCard(UCPP_Data_EffectCards* card);
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Cards")
+	void PlayEffectAnimation(
+		ACPP_Card_EffectCard* CardActor,
+		const FVector& TargetLocation,
+		const FRotator& TargetRotation,
+		const float AnimationDuration = 0.5f
+	);
 };

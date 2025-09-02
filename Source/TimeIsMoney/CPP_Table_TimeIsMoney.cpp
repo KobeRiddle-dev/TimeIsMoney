@@ -29,6 +29,7 @@ void ACPP_Table_TimeIsMoney::StartGame()
 {
 	ResetHands();
 	GameIsActive = true;
+	PlayerGoesFirst = FMath::RandBool();	// this will alternate each hand
 	OnHandStart.Broadcast();
 
 	StartHand();
@@ -54,7 +55,6 @@ bool ACPP_Table_TimeIsMoney::StartHand()
 		UE_LOG(LogTemp, Warning, TEXT("Game is not active. Cannot start hand."));
 		return false;
 	}
-
 	// Null Check for `Deck` FIRST
 	if (!IsValid(PlayerDeck) || !IsValid(OpponentDeck))
 	{
@@ -62,6 +62,9 @@ bool ACPP_Table_TimeIsMoney::StartHand()
 		return false;
 	}
 
+	// Set who goes first
+	PlayerGoesFirst = !PlayerGoesFirst;
+	IsPlayerTurn = PlayerGoesFirst;
 	// Empty the board
 	PlayerDeck->DiscardInPlayCards();
 	OpponentDeck->DiscardInPlayCards();
@@ -74,7 +77,6 @@ bool ACPP_Table_TimeIsMoney::StartHand()
 		PlayerDeck->DrawRandom();
 		OpponentDeck->DrawRandom();
 	}
-
 	// Determine starting suits and reset number value
 	PlayerStartingSuit = GetRandomSuit();
 	PublicPlayerCard->InitializeCard(ECardSuit::Unknown, 0);
@@ -87,34 +89,6 @@ bool ACPP_Table_TimeIsMoney::StartHand()
 
 	// Notify listeners
 	OnHandStart.Broadcast();
-
-	// Null Check for `Opponent`
-	if (!IsValid(OpponentAI))
-	{
-		UE_LOG(LogTemp, Error, TEXT("StartHand: OpponentAI is NULL/invalid!"));
-		return false;
-	}
-	// Opponent plays a card
-	ACPP_Card_EffectCard* OppCard = OpponentAI->PlayCard();
-	if (!IsValid(OppCard))
-	{
-		UE_LOG(LogTemp, Error, TEXT("StartHand: OpponentAI returned null card!"));
-		return false;
-	}
-	// Safely play the card and apply effects
-	OpponentDeck->PlayCardFromHand(OppCard);
-	// CardData check: never assume it exists
-	if (!IsValid(OppCard->CardData))
-	{
-		UE_LOG(LogTemp, Error, TEXT("StartHand: OppCard has no CardData!"));
-	}
-	else
-	{
-		CPP_CardEffectEvaluator::ApplyEffect(OppCard->CardData->RevealedEffects, this, true, false);
-		CPP_CardEffectEvaluator::ApplyEffect(OppCard->CardData->HiddenEffects, this, false, false);
-	}
-	OnOppCardPlayed.Broadcast(OppCard);
-
 	return true;
 }
 
@@ -162,42 +136,79 @@ bool ACPP_Table_TimeIsMoney::CheckIfWin(TMap<ECardSuit, int> PlayerBeingChecked)
 	return hasThreeWins || hasOneWinInEachSuit;
 }
 
-bool ACPP_Table_TimeIsMoney::DetermineWinner()
+// TODO: We need to queue up effect animations and play them all
+// sequentially, then determine winner after all of the effects are done.
+// The camera should follow the card whose effect is being played.
+void ACPP_Table_TimeIsMoney::RevealAllCardEffects()
 {
-	// TODO: need to make this more robust, currently assumes opp always goes first
 	// Apply the Hidden and Revealed effects of the cards
 	OnBeginEffectReveal.Broadcast();
 	PublicPlayerCard->InitializeCard(PlayerStartingSuit, 0);
 	PublicOppCard->InitializeCard(OppStartingSuit, 0);
 	for (int i = 0; i < PlayerDeck->InPlay.Num(); i++)
 	{
-		CPP_CardEffectEvaluator::ApplyEffect(
-			OpponentDeck->InPlay[i].CardData->RevealedEffects, 
-			this, 
-			true,
-			false
-		);
-		CPP_CardEffectEvaluator::ApplyEffect(
-			OpponentDeck->InPlay[i].CardData->HiddenEffects, 
-			this, 
-			false,
-			false
-		);
+		if (PlayerGoesFirst)
+		{
+			CPP_CardEffectEvaluator::ApplyEffect(
+				PlayerDeck->InPlay[i].CardData->RevealedEffects,
+				this,
+				true,
+				true
+			);
+			CPP_CardEffectEvaluator::ApplyEffect(
+				PlayerDeck->InPlay[i].CardData->HiddenEffects,
+				this,
+				false,
+				true
+			);
+			CPP_CardEffectEvaluator::ApplyEffect(
+				OpponentDeck->InPlay[i].CardData->RevealedEffects,
+				this,
+				true,
+				false
+			);
+			CPP_CardEffectEvaluator::ApplyEffect(
+				OpponentDeck->InPlay[i].CardData->HiddenEffects,
+				this,
+				false,
+				false
+			);
+		}
+		else {
+			CPP_CardEffectEvaluator::ApplyEffect(
+				OpponentDeck->InPlay[i].CardData->RevealedEffects,
+				this,
+				true,
+				false
+			);
+			CPP_CardEffectEvaluator::ApplyEffect(
+				OpponentDeck->InPlay[i].CardData->HiddenEffects,
+				this,
+				false,
+				false
+			);
 
-		CPP_CardEffectEvaluator::ApplyEffect(
-			PlayerDeck->InPlay[i].CardData->RevealedEffects, 
-			this, 
-			true,
-			true
-		);
-		CPP_CardEffectEvaluator::ApplyEffect(
-			PlayerDeck->InPlay[i].CardData->HiddenEffects, 
-			this, 
-			false,
-			true
-		);
+			CPP_CardEffectEvaluator::ApplyEffect(
+				PlayerDeck->InPlay[i].CardData->RevealedEffects,
+				this,
+				true,
+				true
+			);
+			CPP_CardEffectEvaluator::ApplyEffect(
+				PlayerDeck->InPlay[i].CardData->HiddenEffects,
+				this,
+				false,
+				true
+			);
+		}
 	}
 
+	// temp
+	DetermineWinner();
+}
+
+bool ACPP_Table_TimeIsMoney::DetermineWinner()
+{
 	// Determine winner based on suit and number
 	bool playerIsWin = false;
 	if ((TruePlayerCard->CardSuit == ECardSuit::Blood && TrueOppCard->CardSuit == ECardSuit::Time) ||	// blood beats time
@@ -245,26 +256,69 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner()
 	return playerIsWin;
 }
 
-// TODO: This function should just play a card agnostic of player or opponent
-void ACPP_Table_TimeIsMoney::PlayCard(ACPP_Card_EffectCard* PlayerCard)
+void ACPP_Table_TimeIsMoney::PlayCard(ACPP_Card_EffectCard* PlayedCard)
 {
-	// Add the card to the player's board
-	PlayerDeck->PlayCardFromHand(PlayerCard);
-	CPP_CardEffectEvaluator::ApplyEffect(PlayerCard->CardData->RevealedEffects, this, true, true);
-	CPP_CardEffectEvaluator::ApplyEffect(PlayerCard->CardData->HiddenEffects, this, false, true);
-	OnPlayerCardPlayed.Broadcast(PlayerCard);
-
-	// Play a card from the opponent's hand in response
-	ACPP_Card_EffectCard* OppCard = OpponentAI->PlayCard();
-	OpponentDeck->PlayCardFromHand(OppCard);
-	CPP_CardEffectEvaluator::ApplyEffect(OppCard->CardData->RevealedEffects, this, true, false);
-	CPP_CardEffectEvaluator::ApplyEffect(OppCard->CardData->HiddenEffects, this, false, false);
-	OnOppCardPlayed.Broadcast(OppCard);
-
-	// If this is the 6th card, determine the winner
-	if (PlayerDeck->InPlay.Num() >= 3) {
-		DetermineWinner();
+	// Safety checks
+	if (!GameIsActive)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Game is not active. Cannot play a card."));
+		return;
 	}
+	if (IsAnimationPlaying)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Card animation in progress. Cannot play card yet."));
+		return;
+	}
+	if (!PlayedCard)
+	{
+		UE_LOG(LogTemp, Error, TEXT("PlayedCard is nullptr."));
+		return;
+	}
+	if (!IsValid(PlayerDeck) || !IsValid(OpponentDeck))
+	{
+		UE_LOG(LogTemp, Error, TEXT("PlayerDeck or OpponentDeck is nullptr or invalid."));
+		return;
+	}
+	if (PlayerDeck->InPlay.Num() >= 3 && OpponentDeck->InPlay.Num() >= 3)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Both players have 3 cards in play. Cannot play more cards."));
+		return;
+	}
+
+	IsAnimationPlaying = true; // Will be reset when animation finishes by Card_Deck::PlayCardAnimation
+
+	ACPP_Card_Deck* ActiveDeck = IsPlayerTurn ? PlayerDeck : OpponentDeck;
+	if (!IsValid(ActiveDeck))
+	{
+		UE_LOG(LogTemp, Error, TEXT("ActiveDeck is invalid."));
+		IsAnimationPlaying = false;
+		return;
+	}
+	ActiveDeck->PlayCardFromHand(PlayedCard);
+	if (PlayedCard->CardData)
+	{
+		CPP_CardEffectEvaluator::ApplyEffect(PlayedCard->CardData->RevealedEffects, this, true, IsPlayerTurn);
+		CPP_CardEffectEvaluator::ApplyEffect(PlayedCard->CardData->HiddenEffects, this, false, IsPlayerTurn);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("PlayedCard->CardData is nullptr. Skipping effects."));
+	}
+
+	if (IsPlayerTurn)
+	{
+		OnPlayerCardPlayed.Broadcast(PlayedCard);
+	}
+	else
+	{
+		OnOppCardPlayed.Broadcast(PlayedCard);
+	}
+	if (PlayerDeck->InPlay.Num() >= 3 && OpponentDeck->InPlay.Num() >= 3)
+	{
+		RevealAllCardEffects();
+		return;
+	}
+	IsPlayerTurn = !IsPlayerTurn;
 }
 
 ECardSuit ACPP_Table_TimeIsMoney::GetRandomSuit()
@@ -276,3 +330,4 @@ ECardSuit ACPP_Table_TimeIsMoney::GetRandomSuit()
 	int32 RandomIndex = FMath::RandRange(0, Suits.Num() - 1);
 	return Suits[RandomIndex];
 }
+

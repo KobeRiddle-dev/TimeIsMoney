@@ -144,9 +144,14 @@ void CPP_CardEffectEvaluator::RevealStartingSuit(bool IsTargetingOpp, ACPP_Table
 UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionSuitEquals(
 	bool IsTargetingOpp,
 	ECardSuit Suit,
-	ACPP_Table_TimeIsMoney* GameState)
+	ACPP_Table_TimeIsMoney* GameState,
+	bool IsPlayedByPlayer)
 {
 	UConditionStateResults* Result = NewObject<UConditionStateResults>();
+	if (!IsPlayedByPlayer)
+	{
+		IsTargetingOpp = !IsTargetingOpp;
+	}
 	if (IsTargetingOpp)
 	{
 		// Check opponent's suit
@@ -164,9 +169,11 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionSuitEquals(
 	return Result;
 }
 
+// TODO
 UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionPlayedPositionEquals(
 	int PlayedPosition,
-	ACPP_Table_TimeIsMoney* GameState)
+	ACPP_Table_TimeIsMoney* GameState,
+	bool IsPlayedByPlayer)
 {
 	UConditionStateResults* Result = NewObject<UConditionStateResults>();
 	Result->Initialize(false, false, false);
@@ -176,7 +183,8 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionPlayedPosition
 UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionNode(
 	const TArray<FCardConditionNode>& Nodes,
 	int32 NodeIndex,
-	ACPP_Table_TimeIsMoney* GameState)
+	ACPP_Table_TimeIsMoney* GameState,
+	bool IsPlayedByPlayer)
 {
 	if (Nodes.Num() == 0)
 	{
@@ -202,7 +210,12 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionNode(
 		{
 		case ECardConditionType::SuitEquals:
 		{
-			UConditionStateResults* Result = EvaluateConditionSuitEquals(Node.IsTargetingOpponent, Node.SuitParam, GameState);
+			UConditionStateResults* Result = EvaluateConditionSuitEquals(
+				Node.IsTargetingOpponent, 
+				Node.SuitParam, 
+				GameState,
+				IsPlayedByPlayer
+			);
 			UE_LOG(LogTemp, Log, TEXT("EvaluateConditionNode: SuitEquals result - Private: %d, Public: %d, True: %d"),
 				Result->Private ? 1 : 0,
 				Result->Public ? 1 : 0,
@@ -244,12 +257,22 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionNode(
 	}
 
 	// Evaluate starting with first child
-	UConditionStateResults* Result = EvaluateConditionNode(Nodes, ChildIndices[0], GameState);
+	UConditionStateResults* Result = EvaluateConditionNode(
+		Nodes, 
+		ChildIndices[0], 
+		GameState, 
+		IsPlayedByPlayer
+	);
 
 	// Combine remaining children based on Operator
 	for (int32 i = 1; i < ChildIndices.Num(); ++i)
 	{
-		UConditionStateResults* ChildResult = EvaluateConditionNode(Nodes, ChildIndices[i], GameState);
+		UConditionStateResults* ChildResult = EvaluateConditionNode(
+			Nodes, 
+			ChildIndices[i], 
+			GameState,
+			IsPlayedByPlayer
+		);
 		switch (Node.Operator)
 		{
 		case EBooleanOperator::AND:
@@ -288,7 +311,13 @@ void CPP_CardEffectEvaluator::ApplyEffect(
 {
 	for (const FCardEffect& Effect : Effects)
 	{
-		UConditionStateResults* ConditionResult = EvaluateConditionNode(Effect.ConditionNodes, 0, GameState);
+		GameState->IsAnimationPlaying = true; // Will be reset when animation finishes by Card_EffectCard::PlayEffectAnimation
+		UConditionStateResults* ConditionResult = EvaluateConditionNode(
+			Effect.ConditionNodes, 
+			0, 
+			GameState,
+			IsPlayedByPlayer
+		);
 
 		switch (Effect.EffectType)
 		{

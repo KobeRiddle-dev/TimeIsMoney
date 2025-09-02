@@ -100,11 +100,23 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney_Events")
 	FOnGameEndedEventDispatcher OnGameEnded;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	bool IsPlayerTurn;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	bool IsAnimationPlaying;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	bool PlayerGoesFirst;
+
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	bool DetermineWinner();
 
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
-	void PlayCard(ACPP_Card_EffectCard* PlayerCard);
+	void RevealAllCardEffects();
+
+	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
+	void PlayCard(ACPP_Card_EffectCard* PlayedCard);
 
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	void StartGame();
@@ -114,5 +126,4 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	bool StartHand();
-
 };

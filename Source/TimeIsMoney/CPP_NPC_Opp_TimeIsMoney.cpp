@@ -34,6 +34,9 @@ ACPP_Card_EffectCard* ACPP_NPC_Opp_TimeIsMoney::PlayCard()
         return nullptr;
     }
 
-    // Reference right-most card
+	// Simulate thinking and play any animations here (e.g., delay, sound, etc.)
+
+
+    // Reference selected card
     return Deck->Hand.Last().CardActor;
 }

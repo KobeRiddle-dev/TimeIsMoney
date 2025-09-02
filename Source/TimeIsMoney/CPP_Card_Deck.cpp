@@ -1,6 +1,5 @@
 #include "CPP_Card_Deck.h"
 
-
 // Sets default values
 ACPP_Card_Deck::ACPP_Card_Deck()
 {
@@ -64,6 +63,24 @@ void ACPP_Card_Deck::DrawRandom()
 	Hand.Add(RandomCard);
 	int32 HandIndex = Hand.Num() - 1;
 
+	// Compute target positions for the whole hand (this uses the updated Hand.Num())
+	TArray<FVector> Positions = CalculateHandPositions();
+	FVector SpawnLocation = GetActorLocation(); // fallback
+	FRotator SpawnRotation = FRotator::ZeroRotator;
+	if (HandSlots.Num() > 0)
+	{
+		SpawnRotation = HandSlots[0].GetRotation().Rotator();
+	}
+	if (Positions.IsValidIndex(HandIndex))
+	{
+		SpawnLocation = Positions[HandIndex];
+	}
+	else if (HandSlots.Num() >= 2)
+	{
+		// Fallback to center between the two hand slots if index missing
+		SpawnLocation = (HandSlots[0].GetLocation() + HandSlots[1].GetLocation()) * 0.5f;
+	}
+
 	// Spawn world actor IF we don't already have one
 	if (!IsValid(Hand[HandIndex].CardActor))
 	{
@@ -72,37 +89,22 @@ void ACPP_Card_Deck::DrawRandom()
 		UWorld* World = GetWorld();
 		if (World && CardActorClass)
 		{
-			// Pick a slot transform if available, otherwise fallback
-			FTransform SpawnTransform = FTransform::Identity;
-			if (HandSlots.IsValidIndex(HandIndex))
-			{
-				SpawnTransform = HandSlots[HandIndex];
-			}
-			else
-			{
-				UE_LOG(LogTemp, Warning, TEXT("HandSlots does not have an entry for HandIndex %d, using identity transform"), HandIndex);
-			}
-
 			ACPP_Card_EffectCard* Spawned = World->SpawnActor<ACPP_Card_EffectCard>(
 				CardActorClass,
-				SpawnTransform.GetLocation(),
-				SpawnTransform.GetRotation().Rotator(),
+				SpawnLocation,
+				SpawnRotation,
 				SpawnParams
 			);
-
-			// THIS IS A STASHED CHANGE
-
 			if (IsValid(Spawned))
 			{
-				// Initialize with card data
+				// Initialize it with its data
 				Spawned->InitializeCard(RandomCard.CardData);
-
-				// Store reference
+				// store reference
 				Hand[HandIndex].CardActor = Spawned;
 			}
 			else
 			{
-				UE_LOG(LogTemp, Warning, TEXT("DrawRandom: spawn failed"));
+				UE_LOG(LogTemp, Warning, TEXT("DrawRandom: spawn failed for index %d"), HandIndex);
 			}
 		}
 		else
@@ -117,6 +119,96 @@ void ACPP_Card_Deck::DrawRandom()
 
 	// notify listeners
 	OnCardDrawn.Broadcast(Hand[HandIndex]);
+	// Update layout for all cards (positions & fixed rotation)
+	UpdateHandLayout();
+}
+
+TArray<FVector> ACPP_Card_Deck::CalculateHandPositions() const
+{
+	TArray<FVector> OutPositions;
+	int32 NumCards = Hand.Num();
+	OutPositions.SetNumZeroed(NumCards);
+
+	if (NumCards == 0)
+	{
+		return OutPositions;
+	}
+
+	// Need two hand slot endpoints
+	if (HandSlots.Num() < 2)
+	{
+		// fallback: put everything at actor location
+		FVector Fallback = GetActorLocation();
+		for (int32 i = 0; i < NumCards; ++i)
+		{
+			OutPositions[i] = Fallback;
+		}
+		return OutPositions;
+	}
+
+	const FVector Start = HandSlots[0].GetLocation();
+	const FVector End = HandSlots[1].GetLocation();
+	const FVector Center = (Start + End) * 0.5f;
+	const FVector Dir = End - Start;
+	const float TotalWidth = Dir.Size();
+
+	// If the two points coincide, put all cards at center.
+	if (TotalWidth <= KINDA_SMALL_NUMBER)
+	{
+		for (int32 i = 0; i < NumCards; ++i)
+			OutPositions[i] = Center;
+		return OutPositions;
+	}
+
+	const FVector DirUnit = Dir / TotalWidth;
+
+	// Compute spacing:
+	// - PreferredCardSpacing is the spacing we'd like if there's enough room.
+	// - If (NumCards - 1) * PreferredCardSpacing > TotalWidth, shrink spacing so cluster fits.
+	float spacing = 0.0f;
+	if (NumCards == 1)
+	{
+		spacing = 0.0f;
+	}
+	else
+	{
+		// maximum spacing that still fits between endpoints
+		const float maxFitSpacing = TotalWidth / float(NumCards - 1);
+		spacing = FMath::Min(PreferredCardSpacing, maxFitSpacing);
+	}
+
+	// Compute left-most start so cluster is centered at Center.
+	const float halfSpan = spacing * float(NumCards - 1) * 0.5f;
+	const FVector clusterStart = Center - DirUnit * halfSpan;
+
+	for (int32 i = 0; i < NumCards; ++i)
+	{
+		OutPositions[i] = clusterStart + DirUnit * (spacing * float(i));
+	}
+
+	return OutPositions;
+}
+
+// Helper: move any already-spawned card actors into their computed positions
+void ACPP_Card_Deck::UpdateHandLayout()
+{
+	if (Hand.Num() == 0) return;
+	TArray<FVector> Positions = CalculateHandPositions();
+	FRotator CardRotation = FRotator::ZeroRotator;
+	// Use the first hand slot's rotation if available
+	if (HandSlots.Num() > 0)
+	{
+		CardRotation = HandSlots[0].GetRotation().Rotator();
+	}
+	int32 Count = FMath::Min<int32>(Hand.Num(), Positions.Num());
+	for (int32 i = 0; i < Count; ++i)
+	{
+		if (IsValid(Hand[i].CardActor))
+		{
+			Hand[i].CardActor->SetActorLocation(Positions[i]);
+			Hand[i].CardActor->SetActorRotation(CardRotation);
+		}
+	}
 }
 
 void ACPP_Card_Deck::DiscardHand()
@@ -158,6 +250,11 @@ void ACPP_Card_Deck::PlayCardFromHand(ACPP_Card_EffectCard* CardToPlay)
 
 	// Find card in Hand
 	int32 Index = GetCardFromHandIndex(CardToPlay);
+	if (Index == INDEX_NONE)
+	{
+		UE_LOG(LogTemp, Error, TEXT("PlayCardFromHand: Could not find card in Hand!"));
+		return;
+	}
 
 	// Add to InPlay
 	FCardInstance PlayedCard = Hand[Index];
@@ -167,15 +264,22 @@ void ACPP_Card_Deck::PlayCardFromHand(ACPP_Card_EffectCard* CardToPlay)
 	// Move the actor in the world if it exists
 	if (PlayedCard.CardActor)
 	{
+		int32 SlotIndex = InPlay.Num() - 1;
+		if (BoardSlots.IsValidIndex(SlotIndex))
+		{
+			FVector TargetLocation = BoardSlots[SlotIndex].GetLocation();
+			FRotator TargetRotation = FRotator::ZeroRotator;
 
-		if (InPlay.Num() > 0) {
-			PlayedCard.CardActor->SetActorLocation(BoardSlots[InPlay.Num() - 1].GetLocation());
+			// Trigger Blueprint animation
+			PlayCardAnimation(PlayedCard.CardActor, TargetLocation, TargetRotation);
 		}
-		else {
-			UE_LOG(LogTemp, Error, TEXT("PlayCardFromHand: BoardSlots index out of range! Make sure BoardSlots are set in Card Deck Setup."));
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("PlayCardFromHand: BoardSlots index %d is out of range! BoardSlots.Num=%d, InPlay.Num=%d"),
+				SlotIndex, BoardSlots.Num(), InPlay.Num());
 		}
-
 	}
+	UpdateHandLayout();
 }
 
 // Returns -1 if the card is not found in hand
