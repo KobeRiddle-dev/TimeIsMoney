@@ -90,6 +90,8 @@ void ACPP_Card_Deck::DrawRandom()
 				SpawnParams
 			);
 
+			// THIS IS A STASHED CHANGE
+
 			if (IsValid(Spawned))
 			{
 				// Initialize with card data
