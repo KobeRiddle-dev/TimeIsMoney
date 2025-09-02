@@ -72,16 +72,30 @@ void ACPP_Card_Deck::DrawRandom()
 		UWorld* World = GetWorld();
 		if (World && CardActorClass)
 		{
+			// Pick a slot transform if available, otherwise fallback
+			FTransform SpawnTransform = FTransform::Identity;
+			if (HandSlots.IsValidIndex(HandIndex))
+			{
+				SpawnTransform = HandSlots[HandIndex];
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("HandSlots does not have an entry for HandIndex %d, using identity transform"), HandIndex);
+			}
+
 			ACPP_Card_EffectCard* Spawned = World->SpawnActor<ACPP_Card_EffectCard>(
 				CardActorClass,
-				FVector::ZeroVector,
-				FRotator::ZeroRotator,
+				SpawnTransform.GetLocation(),
+				SpawnTransform.GetRotation().Rotator(),
 				SpawnParams
 			);
+
 			if (IsValid(Spawned))
 			{
-				// Initialize it with its data
+				// Initialize with card data
 				Spawned->InitializeCard(RandomCard.CardData);
+
+				// Store reference
 				Hand[HandIndex].CardActor = Spawned;
 			}
 			else

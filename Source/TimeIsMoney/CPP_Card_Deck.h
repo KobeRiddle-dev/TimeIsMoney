@@ -66,6 +66,9 @@ public:
 	TArray<FTransform> BoardSlots;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck_Setup")
+	TArray<FTransform> HandSlots;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck_Setup")
 	FTransform DiscardPileSlot;
 
 	UPROPERTY(BlueprintAssignable, Category = "Card_Deck")
