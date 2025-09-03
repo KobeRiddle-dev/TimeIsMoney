@@ -69,13 +69,14 @@ void ACPP_Card_EffectCard::SetCardTexture(UTexture2D* NewTexture)
 	}
 }
 
-void ACPP_Card_EffectCard::InitializeCard(UCPP_Data_EffectCards* card)
+void ACPP_Card_EffectCard::InitializeCard(UCPP_Data_EffectCards* Card)
 {
-	try {
-		CardData = card;
+	if(Card)
+	{
+		CardData = Card;
 		SetCardTexture(CardData->CardTexture);
 	}
-	catch (...)
+	else 
 	{
 		UE_LOG(LogTemp, Warning, TEXT("There was a problem with Effect Card Data"));
 	}

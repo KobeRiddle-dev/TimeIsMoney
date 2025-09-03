@@ -21,8 +21,13 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Card", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* CardMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Card", meta = (AllowPrivateAccess = "true"))
 	UMaterialInstanceDynamic* DynMaterial;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Card", meta = (AllowPrivateAccess = "true"))
 	UTextRenderComponent* CardNumberText;
 
 public:
@@ -50,7 +55,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Card")
 	void SetCardTexture(UTexture2D* NewTexture);
 
-	UFUNCTION(BlueprintCallable, Category = "Card")
+	UFUNCTION(BlueprintImplementableEvent, Category = "Card")
 	void SetCardNumber(int Number);
 
 	UFUNCTION(BlueprintCallable, Category = "Card")
