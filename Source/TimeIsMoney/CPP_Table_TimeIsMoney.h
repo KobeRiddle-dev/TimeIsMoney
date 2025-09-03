@@ -126,4 +126,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	bool StartHand();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Table_TimeIsMoney Animations")
+	void PlayEffectRevealAnimation();
+
+	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
+	void EvaluateEffect_AnimationFinished(FCardInstance Card);
 };

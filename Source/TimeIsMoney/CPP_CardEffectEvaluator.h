@@ -45,6 +45,13 @@ public:
 class TIMEISMONEY_API CPP_CardEffectEvaluator
 {
 private:
+	static void EvaluateEffect(
+		const FCardEffect& Effect,
+		ACPP_Table_TimeIsMoney* GameState,
+		bool IsPublicEffect,
+		bool IsPlayedByPlayer,
+        UConditionStateResults*);
+
 	static void SetCardNumberRelative(
         bool IsTargetingOpp, 
         int32 RelativeNumber, 
@@ -98,6 +105,7 @@ public:
 	static void ApplyEffect(
         const TArray<FCardEffect>& Effects, 
         ACPP_Table_TimeIsMoney* GameState,
+		ACPP_Card_EffectCard* SourceCard,
         bool IsPublicEffect,
         bool IsPlayedByPlayer);
 };

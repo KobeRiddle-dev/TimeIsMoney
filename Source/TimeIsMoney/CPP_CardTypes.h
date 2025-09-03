@@ -75,6 +75,7 @@ enum class ECardConditionType : uint8
 UENUM(BlueprintType)
 enum class ECardEffectType : uint8
 {
+	None,
 	SetCardNumberRelative,
 	SetCardSuit,
 	IgnoreRevealedEffectOfCard,

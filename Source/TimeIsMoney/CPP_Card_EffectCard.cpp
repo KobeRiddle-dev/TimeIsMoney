@@ -80,3 +80,22 @@ void ACPP_Card_EffectCard::InitializeCard(UCPP_Data_EffectCards* card)
 		UE_LOG(LogTemp, Warning, TEXT("There was a problem with Effect Card Data"));
 	}
 }
+
+void ACPP_Card_EffectCard::PlayEffectAnimationWithCallback(
+	ECardEffectType EffectType,
+	std::function<void()> OnFinished
+)
+{
+	AnimationFinishedCallback = OnFinished;
+	PlayEffectAnimation(EffectType);
+}
+
+
+void ACPP_Card_EffectCard::CallAnimationFinished()
+{
+	if (AnimationFinishedCallback)
+	{
+		AnimationFinishedCallback();
+		AnimationFinishedCallback = nullptr; // clear after execution
+	}
+}
