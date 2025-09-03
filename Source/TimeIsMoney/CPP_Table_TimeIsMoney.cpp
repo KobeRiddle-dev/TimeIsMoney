@@ -139,6 +139,7 @@ bool ACPP_Table_TimeIsMoney::CheckIfWin(TMap<ECardSuit, int> PlayerBeingChecked)
 
 void ACPP_Table_TimeIsMoney::EvaluateEffect_AnimationFinished(FCardInstance Card)
 {
+
 	Card.CardActor->PlayEffectAnimation(ECardEffectType::None);	// TODO: animations for every effect type
 	CPP_CardEffectEvaluator::ApplyEffect(
 		Card.CardData->RevealedEffects,
