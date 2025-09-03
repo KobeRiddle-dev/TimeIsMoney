@@ -89,6 +89,7 @@ bool ACPP_Table_TimeIsMoney::StartHand()
 
 	// Notify listeners
 	OnHandStart.Broadcast();
+	IsAnimationPlaying = false;
 	return true;
 }
 
@@ -136,75 +137,43 @@ bool ACPP_Table_TimeIsMoney::CheckIfWin(TMap<ECardSuit, int> PlayerBeingChecked)
 	return hasThreeWins || hasOneWinInEachSuit;
 }
 
+void ACPP_Table_TimeIsMoney::EvaluateEffect_AnimationFinished(FCardInstance Card)
+{
+	Card.CardActor->PlayEffectAnimation(ECardEffectType::None);	// TODO: animations for every effect type
+	CPP_CardEffectEvaluator::ApplyEffect(
+		Card.CardData->RevealedEffects,
+		this,
+		Card.CardActor,
+		true,
+		IsPlayerTurn
+	);
+	CPP_CardEffectEvaluator::ApplyEffect(
+		Card.CardData->HiddenEffects,
+		this,
+		Card.CardActor,
+		false,
+		IsPlayerTurn
+	);
+	IsPlayerTurn = !IsPlayerTurn;
+}
+
 // TODO: We need to queue up effect animations and play them all
 // sequentially, then determine winner after all of the effects are done.
 // The camera should follow the card whose effect is being played.
 void ACPP_Table_TimeIsMoney::RevealAllCardEffects()
 {
 	// Apply the Hidden and Revealed effects of the cards
+	UE_LOG(LogTemp, Log, TEXT("Revealing All Card Effects"));
+	IsAnimationPlaying = true;
 	OnBeginEffectReveal.Broadcast();
+	IsPlayerTurn = PlayerGoesFirst; 
 	PublicPlayerCard->InitializeCard(PlayerStartingSuit, 0);
+	TruePlayerCard->InitializeCard(PlayerStartingSuit, 0);
+	PrivatePlayerCard->InitializeCard(PlayerStartingSuit, 0);
 	PublicOppCard->InitializeCard(OppStartingSuit, 0);
-	for (int i = 0; i < PlayerDeck->InPlay.Num(); i++)
-	{
-		if (PlayerGoesFirst)
-		{
-			CPP_CardEffectEvaluator::ApplyEffect(
-				PlayerDeck->InPlay[i].CardData->RevealedEffects,
-				this,
-				true,
-				true
-			);
-			CPP_CardEffectEvaluator::ApplyEffect(
-				PlayerDeck->InPlay[i].CardData->HiddenEffects,
-				this,
-				false,
-				true
-			);
-			CPP_CardEffectEvaluator::ApplyEffect(
-				OpponentDeck->InPlay[i].CardData->RevealedEffects,
-				this,
-				true,
-				false
-			);
-			CPP_CardEffectEvaluator::ApplyEffect(
-				OpponentDeck->InPlay[i].CardData->HiddenEffects,
-				this,
-				false,
-				false
-			);
-		}
-		else {
-			CPP_CardEffectEvaluator::ApplyEffect(
-				OpponentDeck->InPlay[i].CardData->RevealedEffects,
-				this,
-				true,
-				false
-			);
-			CPP_CardEffectEvaluator::ApplyEffect(
-				OpponentDeck->InPlay[i].CardData->HiddenEffects,
-				this,
-				false,
-				false
-			);
-
-			CPP_CardEffectEvaluator::ApplyEffect(
-				PlayerDeck->InPlay[i].CardData->RevealedEffects,
-				this,
-				true,
-				true
-			);
-			CPP_CardEffectEvaluator::ApplyEffect(
-				PlayerDeck->InPlay[i].CardData->HiddenEffects,
-				this,
-				false,
-				true
-			);
-		}
-	}
-
-	// temp
-	DetermineWinner();
+	TrueOppCard->InitializeCard(OppStartingSuit, 0);
+	PrivateOppCard->InitializeCard(OppStartingSuit, 0);
+	PlayEffectRevealAnimation();
 }
 
 bool ACPP_Table_TimeIsMoney::DetermineWinner()
@@ -297,8 +266,20 @@ void ACPP_Table_TimeIsMoney::PlayCard(ACPP_Card_EffectCard* PlayedCard)
 	ActiveDeck->PlayCardFromHand(PlayedCard);
 	if (PlayedCard->CardData)
 	{
-		CPP_CardEffectEvaluator::ApplyEffect(PlayedCard->CardData->RevealedEffects, this, true, IsPlayerTurn);
-		CPP_CardEffectEvaluator::ApplyEffect(PlayedCard->CardData->HiddenEffects, this, false, IsPlayerTurn);
+		CPP_CardEffectEvaluator::ApplyEffect(
+			PlayedCard->CardData->RevealedEffects, 
+			this,
+			PlayedCard,
+			true, 
+			IsPlayerTurn
+		);
+		CPP_CardEffectEvaluator::ApplyEffect(
+			PlayedCard->CardData->HiddenEffects, 
+			this, 
+			PlayedCard,
+			false, 
+			IsPlayerTurn
+		);
 	}
 	else
 	{

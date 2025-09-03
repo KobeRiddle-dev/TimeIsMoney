@@ -217,6 +217,14 @@ void ACPP_Card_Deck::DiscardHand()
 	while (Hand.Num() > 0)
 	{
 		FCardInstance DiscardedCard = Hand.Pop();
+		if (DiscardedCard.CardActor)
+		{
+			DiscardedCard.CardActor->Destroy();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("DiscardHand: CardActor or DiscardPileSlot is NULL!"));
+		}
 		DiscardPile.Add(DiscardedCard);
 		OnCardDiscarded.Broadcast(DiscardedCard);
 	}
@@ -227,16 +235,17 @@ void ACPP_Card_Deck::DiscardInPlayCards()
 	while (InPlay.Num() > 0)
 	{
 		FCardInstance DiscardedCard = InPlay.Pop();
-		DiscardPile.Add(DiscardedCard);
 		if (DiscardedCard.CardActor)
 		{
-			DiscardedCard.CardActor->SetActorLocation(DiscardPileSlot.GetLocation());
+			DiscardedCard.CardActor->Destroy();
 		}
 		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("DiscardInPlayCards: CardActor or DiscardPileSlot is NULL!"));
 		}
+		DiscardPile.Add(DiscardedCard);
 		OnCardDiscarded.Broadcast(DiscardedCard);
+		UE_LOG(LogTemp, Log, TEXT("Discarded a card to DiscardPile. DiscardPile now has %d cards."), DiscardPile.Num());
 	}
 }
 
@@ -270,7 +279,7 @@ void ACPP_Card_Deck::PlayCardFromHand(ACPP_Card_EffectCard* CardToPlay)
 			FVector TargetLocation = BoardSlots[SlotIndex].GetLocation();
 			FRotator TargetRotation = FRotator::ZeroRotator;
 
-			// Trigger Blueprint animation
+			// Trigger Blueprint animation. Animation callback is Table_TimeIsMoney::PlayCard(...)
 			PlayCardAnimation(PlayedCard.CardActor, TargetLocation, TargetRotation);
 		}
 		else

@@ -5,8 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "CPP_CardTypes.h"
+#include <functional>
 #include "CPP_Data_EffectCards.h"
 #include "CPP_Card_EffectCard.generated.h"
+
+DECLARE_DELEGATE(FOnEffectAnimationFinished);
 
 UCLASS()
 class TIMEISMONEY_API ACPP_Card_EffectCard : public AActor
@@ -40,11 +43,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "EffectCard")
 	void InitializeCard(UCPP_Data_EffectCards* card);
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Cards")
+	UFUNCTION(BlueprintImplementableEvent, Category = "Card Animation")
 	void PlayEffectAnimation(
-		ACPP_Card_EffectCard* CardActor,
-		const FVector& TargetLocation,
-		const FRotator& TargetRotation,
-		const float AnimationDuration = 0.5f
+		ECardEffectType EffectType
 	);
+
+	void PlayEffectAnimationWithCallback(
+		ECardEffectType EffectType,
+		std::function<void()> OnFinished
+	);
+
+	UFUNCTION(BlueprintCallable, Category = "Card Animation")
+	void CallAnimationFinished();
+
+	std::function<void()> AnimationFinishedCallback;
 };

@@ -306,41 +306,59 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionNode(
 void CPP_CardEffectEvaluator::ApplyEffect(
 	const TArray<FCardEffect>& Effects,
 	ACPP_Table_TimeIsMoney* GameState,
+	ACPP_Card_EffectCard* SourceCard,
 	bool IsPublicEffect,
 	bool IsPlayedByPlayer)
 {
 	for (const FCardEffect& Effect : Effects)
 	{
-		GameState->IsAnimationPlaying = true; // Will be reset when animation finishes by Card_EffectCard::PlayEffectAnimation
 		UConditionStateResults* ConditionResult = EvaluateConditionNode(
 			Effect.ConditionNodes, 
 			0, 
 			GameState,
 			IsPlayedByPlayer
 		);
-
-		switch (Effect.EffectType)
-		{
-		case ECardEffectType::SetCardNumberRelative:
-			SetCardNumberRelative(Effect.IsTargetingOpponent, Effect.IntParam, GameState, ConditionResult, IsPublicEffect, IsPlayedByPlayer);
-			break;
-		case ECardEffectType::SetCardSuit:
-			SetCardSuit(Effect.IsTargetingOpponent, Effect.SuitParam, GameState, ConditionResult, IsPublicEffect, IsPlayedByPlayer);
-			break;
-		case ECardEffectType::IgnoreRevealedEffectOfCard:
-			IgnoreRevealedEffectOfCard(GameState);
-			break;
-		case ECardEffectType::DrawCards:
-			DrawCards(Effect.IntParam);
-			break;
-		case ECardEffectType::RevealHiddenEffectOfCard:
-			RevealHiddenEffectOfCard(GameState);
-			break;
-		case ECardEffectType::RevealStartingSuit:
-			RevealStartingSuit(Effect.IsTargetingOpponent, GameState);
-			break;
-		default:
-			break; // Unknown effect type
-		}
+		SourceCard->PlayEffectAnimationWithCallback(
+			Effect.EffectType,
+			[Effect, GameState, IsPublicEffect, IsPlayedByPlayer, ConditionResult]()
+			{
+				CPP_CardEffectEvaluator::EvaluateEffect(
+					Effect, GameState, IsPublicEffect, IsPlayedByPlayer, ConditionResult
+				);
+			}
+		);
 	}
 }
+
+void CPP_CardEffectEvaluator::EvaluateEffect(
+	const FCardEffect& Effect,
+	ACPP_Table_TimeIsMoney* GameState,
+	bool IsPublicEffect,
+	bool IsPlayedByPlayer,
+	UConditionStateResults* ConditionResult)
+{
+	switch (Effect.EffectType)
+	{
+	case ECardEffectType::SetCardNumberRelative:
+		SetCardNumberRelative(Effect.IsTargetingOpponent, Effect.IntParam, GameState, ConditionResult, IsPublicEffect, IsPlayedByPlayer);
+		break;
+	case ECardEffectType::SetCardSuit:
+		SetCardSuit(Effect.IsTargetingOpponent, Effect.SuitParam, GameState, ConditionResult, IsPublicEffect, IsPlayedByPlayer);
+		break;
+	case ECardEffectType::IgnoreRevealedEffectOfCard:
+		IgnoreRevealedEffectOfCard(GameState);
+		break;
+	case ECardEffectType::DrawCards:
+		DrawCards(Effect.IntParam);
+		break;
+	case ECardEffectType::RevealHiddenEffectOfCard:
+		RevealHiddenEffectOfCard(GameState);
+		break;
+	case ECardEffectType::RevealStartingSuit:
+		RevealStartingSuit(Effect.IsTargetingOpponent, GameState);
+		break;
+	default:
+		break; // Unknown effect type
+	}
+}
+
