@@ -35,6 +35,21 @@ void ACPP_Table_TimeIsMoney::StartGame()
 	StartHand();
 }
 
+void  ACPP_Table_TimeIsMoney::RandomizeStartSettings()
+{
+	// Randomize who goes first
+	PlayerGoesFirst = FMath::RandBool();
+
+	// Randomize the starting suits
+	PlayerStartingSuit = GetRandomSuit();
+	OppStartingSuit = GetRandomSuit();
+
+	UE_LOG(LogTemp, Log, TEXT("Randomized Start Settings -> PlayerGoesFirst: %s, PlayerSuit: %s, OppSuit: %s"),
+		PlayerGoesFirst ? TEXT("True") : TEXT("False"),
+		*StaticEnum<ECardSuit>()->GetNameStringByValue((int64)PlayerStartingSuit),
+		*StaticEnum<ECardSuit>()->GetNameStringByValue((int64)OppStartingSuit));
+}
+
 void ACPP_Table_TimeIsMoney::ResetHands()
 {
 	// Reset player hand wins

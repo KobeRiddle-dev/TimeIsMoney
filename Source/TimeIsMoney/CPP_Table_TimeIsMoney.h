@@ -132,4 +132,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	void EvaluateEffect_AnimationFinished(FCardInstance Card);
+
+	UFUNCTION(BlueprintCallable, Category = "Game Setup")
+	void RandomizeStartSettings();
+
+
 };
