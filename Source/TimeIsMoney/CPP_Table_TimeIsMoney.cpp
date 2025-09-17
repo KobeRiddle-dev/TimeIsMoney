@@ -36,8 +36,6 @@ void ACPP_Table_TimeIsMoney::StartGame()
 	ResetHands();
 	GameIsActive = true;
 	PlayerGoesFirst = FMath::RandBool();	// random init, then alternates each hand
-	OnHandStart.Broadcast();
-
 	StartHand();
 }
 
