@@ -50,6 +50,7 @@ private:
 		ACPP_Table_TimeIsMoney* GameState,
 		bool IsPublicEffect,
 		bool IsPlayedByPlayer,
+        int ThisCardPos,
         UConditionStateResults*);
 
 	static void SetCardNumberRelative(
@@ -69,23 +70,34 @@ private:
         bool IsPlayedByPlayer);
 
 	static void IgnoreRevealedEffectOfCard(
-        ACPP_Table_TimeIsMoney* GameState);
+        ACPP_Table_TimeIsMoney* GameState,
+		bool IsTargetingOpp,
+        int TargetCardPos,
+        bool IsPublicEffect,
+        bool IsPlayedByPlayer,
+        int ThisCardPos);
 
 	static void DrawCards(
-        int NumOfDraws);
+		ACPP_Table_TimeIsMoney* GameState,
+        int NumOfDraws,
+        bool IsTargetingOpp,
+        bool IsPlayedByPlayer);
 
+    // TODO
 	static void RevealHiddenEffectOfCard(
         ACPP_Table_TimeIsMoney* GameState);
 
-	static void RevealStartingSuit(
-        bool IsTargetingOpp, 
-        ACPP_Table_TimeIsMoney* GameState);
+	static void RevealStartingSuit( 
+        ACPP_Table_TimeIsMoney* GameState,
+        bool IsTargetinOpp,
+        bool IsPlayedByPlayer);
 
 	static UConditionStateResults* EvaluateConditionNode(
         const TArray<FCardConditionNode>& Nodes,
         int32 NodeIndex, 
         ACPP_Table_TimeIsMoney* GameState,
-        bool IsPlayedByPlayer);
+        bool IsPlayedByPlayer,
+        int ThisCardPos);
 
 	static UConditionStateResults* EvaluateConditionSuitEquals(
         bool IsTargetingOpp, 
@@ -94,9 +106,9 @@ private:
         bool IsPlayedByPlayer);
 
 	static UConditionStateResults* EvaluateConditionPlayedPositionEquals(
-        int PlayedPosition, 
         ACPP_Table_TimeIsMoney* GameState,
-        bool IsPlayedByPlayer);
+        int PlayedPosition, 
+        int ThisCardPos);
 
 public:
 	CPP_CardEffectEvaluator();
@@ -107,5 +119,6 @@ public:
         ACPP_Table_TimeIsMoney* GameState,
 		ACPP_Card_EffectCard* SourceCard,
         bool IsPublicEffect,
-        bool IsPlayedByPlayer);
+        bool IsPlayedByPlayer,
+        int ThisCardPos);
 };

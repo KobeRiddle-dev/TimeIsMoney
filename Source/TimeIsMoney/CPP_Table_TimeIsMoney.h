@@ -35,6 +35,7 @@ protected:
 	bool CheckIfWin(TMap<ECardSuit, int> PlayerBeingChecked);
 	void ResetHands();
 	ECardSuit GetRandomSuit();
+	int GetCardPlayedPosition(ACPP_Card_EffectCard* PlayedCard, bool IsPlayer);
 
 public:
 	// Called every frame
@@ -45,6 +46,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
 	ACPP_Card_Deck* PlayerDeck;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	TArray<bool> PlayerCards_IgnoreRevealedEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	TArray<bool> PlayerCards_IgnoreHiddenEffect;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
 	ACPP_Card* PublicPlayerCard;
@@ -60,6 +67,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
 	ACPP_Card_Deck* OpponentDeck;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	TArray<bool> OppCards_IgnoreRevealedEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney")
+	TArray<bool> OppCards_IgnoreHiddenEffect;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Table_TimeIsMoney_Setup")
 	ACPP_Card* PublicOppCard;

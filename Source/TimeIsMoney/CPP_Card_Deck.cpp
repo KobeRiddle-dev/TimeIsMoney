@@ -309,6 +309,24 @@ int ACPP_Card_Deck::GetCardFromHandIndex(ACPP_Card_EffectCard* CardToFind)
 	return Index;
 }
 
+// Returns -1 if the card is not found in play
+int ACPP_Card_Deck::GetCardFromInPlayIndex(ACPP_Card_EffectCard* CardToFind)
+{
+	if (!CardToFind)
+	{
+		UE_LOG(LogTemp, Error, TEXT("GetCardFromInPlayIndex: CardToFind is NULL!"));
+		return INDEX_NONE;
+	}
+	int32 Index = InPlay.IndexOfByPredicate([CardToFind](const FCardInstance& Card) {
+		return Card.CardActor == CardToFind;
+		});
+	if (Index == INDEX_NONE)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GetCardFromInPlayIndex: Card not found in play!"));
+	}
+	return Index;
+}
+
 // Called every frame
 void ACPP_Card_Deck::Tick(float DeltaTime)
 {

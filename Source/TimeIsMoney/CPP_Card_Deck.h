@@ -107,6 +107,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
 	int GetCardFromHandIndex(ACPP_Card_EffectCard* CardToFind);
 
+	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
+	int GetCardFromInPlayIndex(ACPP_Card_EffectCard* CardToFind);
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "Cards")
 	void PlayCardAnimation(
 		ACPP_Card_EffectCard* CardActor, 

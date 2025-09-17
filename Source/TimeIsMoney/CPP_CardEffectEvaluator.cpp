@@ -120,14 +120,52 @@ void CPP_CardEffectEvaluator::SetCardSuit(
 	}
 }
 
-// TODO
-void CPP_CardEffectEvaluator::IgnoreRevealedEffectOfCard(ACPP_Table_TimeIsMoney* GameState)
+void CPP_CardEffectEvaluator::IgnoreRevealedEffectOfCard(
+	ACPP_Table_TimeIsMoney* GameState,
+	bool IsTargetingOpp,
+	int TargetCardPos,	// if not 1, 2, or 3, it targets the card opposite the current card
+	bool IsPublicEffect,
+	bool IsPlayedByPlayer,
+	int ThisCardPos)
 {
-
+	if (!IsPlayedByPlayer)
+	{
+		IsTargetingOpp = !IsTargetingOpp;
+	}
+	if (TargetCardPos < 1 || TargetCardPos > 3)
+	{
+		TargetCardPos = ThisCardPos;
+	}
+	// TODO: Visually indicate that the card's revealed effect is ignored
+	if (IsTargetingOpp)
+	{
+		GameState->OppCards_IgnoreHiddenEffect[TargetCardPos - 1] = true;
+	}
+	else
+	{
+		GameState->PlayerCards_IgnoreHiddenEffect[TargetCardPos - 1] = true;
+	}
 }
 
-void CPP_CardEffectEvaluator::DrawCards(int NumOfDraws)
+void CPP_CardEffectEvaluator::DrawCards(
+	ACPP_Table_TimeIsMoney* GameState,
+	int NumOfDraws,
+	bool IsTargetingOpp,
+	bool IsPlayedByPlayer)
 {
+	if (!IsPlayedByPlayer)
+	{
+		IsTargetingOpp = !IsTargetingOpp;
+	}
+	for (int i = 0; i < NumOfDraws; i++)
+	{
+		if (IsTargetingOpp) {
+			GameState->OpponentDeck->DrawRandom();
+		}
+		else {
+			GameState->PlayerDeck->DrawRandom();
+		}
+	}
 }
 
 // TODO
@@ -136,9 +174,24 @@ void CPP_CardEffectEvaluator::RevealHiddenEffectOfCard(ACPP_Table_TimeIsMoney* G
 
 }
 
-void CPP_CardEffectEvaluator::RevealStartingSuit(bool IsTargetingOpp, ACPP_Table_TimeIsMoney* GameState)
+void CPP_CardEffectEvaluator::RevealStartingSuit(
+	ACPP_Table_TimeIsMoney* GameState,
+	bool IsTargetingOpp,
+	bool IsPlayedByPlayer)
 {
-
+	if (!IsPlayedByPlayer)
+	{
+		IsTargetingOpp = !IsTargetingOpp;
+	}
+	// TODO: Visually indicate the starting suit then step through public effects up to current cards
+	if (IsTargetingOpp)
+	{
+		GameState->PublicOppCard->SetCardSuit(GameState->OppStartingSuit);
+	}
+	else
+	{
+		GameState->PublicPlayerCard->SetCardSuit(GameState->PlayerStartingSuit);
+	}
 }
 
 UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionSuitEquals(
@@ -171,12 +224,14 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionSuitEquals(
 
 // TODO
 UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionPlayedPositionEquals(
-	int PlayedPosition,
 	ACPP_Table_TimeIsMoney* GameState,
-	bool IsPlayedByPlayer)
+	int PlayedPosition,
+	int ThisCardPos)
 {
 	UConditionStateResults* Result = NewObject<UConditionStateResults>();
-	Result->Initialize(false, false, false);
+	Result->Public = ThisCardPos == PlayedPosition;
+	Result->Private = ThisCardPos == PlayedPosition;
+	Result->True = ThisCardPos == PlayedPosition;
 	return Result;
 }
 
@@ -184,7 +239,8 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionNode(
 	const TArray<FCardConditionNode>& Nodes,
 	int32 NodeIndex,
 	ACPP_Table_TimeIsMoney* GameState,
-	bool IsPlayedByPlayer)
+	bool IsPlayedByPlayer,
+	int ThisCardPos)
 {
 	if (Nodes.Num() == 0)
 	{
@@ -211,8 +267,8 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionNode(
 		case ECardConditionType::SuitEquals:
 		{
 			UConditionStateResults* Result = EvaluateConditionSuitEquals(
-				Node.IsTargetingOpponent, 
-				Node.SuitParam, 
+				Node.IsTargetingOpponent,
+				Node.SuitParam,
 				GameState,
 				IsPlayedByPlayer
 			);
@@ -226,14 +282,18 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionNode(
 		case ECardConditionType::PlayedPositionEquals:
 		{
 			// TODO: implement playedpositionequals method
-			UConditionStateResults* Result = NewObject<UConditionStateResults>();
-			Result->Initialize(false, false, false);
+			UConditionStateResults* Result = EvaluateConditionPlayedPositionEquals(
+				GameState,
+				Node.IntParam,
+				ThisCardPos
+			);
 			return Result;
 		}
 		default:
 		{
 			UConditionStateResults* Result = NewObject<UConditionStateResults>();
-			Result->Initialize(false, false, false);
+			Result->Initialize(true, true, true);	// if uknown condition, consider the condition met
+			UE_LOG(LogTemp, Warning, TEXT("EvaluateConditionNode: Unknown LeafConditionType, returning true"));
 			return Result;
 		}
 		}
@@ -258,20 +318,22 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionNode(
 
 	// Evaluate starting with first child
 	UConditionStateResults* Result = EvaluateConditionNode(
-		Nodes, 
-		ChildIndices[0], 
-		GameState, 
-		IsPlayedByPlayer
+		Nodes,
+		ChildIndices[0],
+		GameState,
+		IsPlayedByPlayer,
+		ThisCardPos
 	);
 
 	// Combine remaining children based on Operator
 	for (int32 i = 1; i < ChildIndices.Num(); ++i)
 	{
 		UConditionStateResults* ChildResult = EvaluateConditionNode(
-			Nodes, 
-			ChildIndices[i], 
+			Nodes,
+			ChildIndices[i],
 			GameState,
-			IsPlayedByPlayer
+			IsPlayedByPlayer,
+			ThisCardPos
 		);
 		switch (Node.Operator)
 		{
@@ -308,22 +370,24 @@ void CPP_CardEffectEvaluator::ApplyEffect(
 	ACPP_Table_TimeIsMoney* GameState,
 	ACPP_Card_EffectCard* SourceCard,
 	bool IsPublicEffect,
-	bool IsPlayedByPlayer)
+	bool IsPlayedByPlayer,
+	int ThisCardPos)
 {
 	for (const FCardEffect& Effect : Effects)
 	{
 		UConditionStateResults* ConditionResult = EvaluateConditionNode(
-			Effect.ConditionNodes, 
-			0, 
+			Effect.ConditionNodes,
+			0,
 			GameState,
-			IsPlayedByPlayer
+			IsPlayedByPlayer,
+			ThisCardPos
 		);
 		SourceCard->PlayEffectAnimationWithCallback(
 			Effect.EffectType,
-			[Effect, GameState, IsPublicEffect, IsPlayedByPlayer, ConditionResult]()
+			[Effect, GameState, IsPublicEffect, IsPlayedByPlayer, ThisCardPos, ConditionResult]()
 			{
 				CPP_CardEffectEvaluator::EvaluateEffect(
-					Effect, GameState, IsPublicEffect, IsPlayedByPlayer, ConditionResult
+					Effect, GameState, IsPublicEffect, IsPlayedByPlayer, ThisCardPos, ConditionResult
 				);
 			}
 		);
@@ -335,27 +399,57 @@ void CPP_CardEffectEvaluator::EvaluateEffect(
 	ACPP_Table_TimeIsMoney* GameState,
 	bool IsPublicEffect,
 	bool IsPlayedByPlayer,
+	int ThisCardPos,
 	UConditionStateResults* ConditionResult)
 {
 	switch (Effect.EffectType)
 	{
 	case ECardEffectType::SetCardNumberRelative:
-		SetCardNumberRelative(Effect.IsTargetingOpponent, Effect.IntParam, GameState, ConditionResult, IsPublicEffect, IsPlayedByPlayer);
+		SetCardNumberRelative(
+			Effect.IsTargetingOpponent, 
+			Effect.IntParam, 
+			GameState, 
+			ConditionResult, 
+			IsPublicEffect, 
+			IsPlayedByPlayer
+		);
 		break;
 	case ECardEffectType::SetCardSuit:
-		SetCardSuit(Effect.IsTargetingOpponent, Effect.SuitParam, GameState, ConditionResult, IsPublicEffect, IsPlayedByPlayer);
+		SetCardSuit(Effect.IsTargetingOpponent, 
+			Effect.SuitParam, 
+			GameState, 
+			ConditionResult, 
+			IsPublicEffect, 
+			IsPlayedByPlayer
+		);
 		break;
 	case ECardEffectType::IgnoreRevealedEffectOfCard:
-		IgnoreRevealedEffectOfCard(GameState);
+		IgnoreRevealedEffectOfCard(
+			GameState,
+			Effect.IsTargetingOpponent,
+			Effect.IntParam,
+			IsPublicEffect,
+			IsPlayedByPlayer,
+			ThisCardPos
+		);
 		break;
 	case ECardEffectType::DrawCards:
-		DrawCards(Effect.IntParam);
+		DrawCards(
+			GameState,
+			Effect.IntParam,
+			Effect.IsTargetingOpponent,
+			IsPlayedByPlayer
+		);
 		break;
 	case ECardEffectType::RevealHiddenEffectOfCard:
 		RevealHiddenEffectOfCard(GameState);
 		break;
 	case ECardEffectType::RevealStartingSuit:
-		RevealStartingSuit(Effect.IsTargetingOpponent, GameState);
+		RevealStartingSuit(
+			GameState,
+			Effect.IsTargetingOpponent,
+			IsPlayedByPlayer
+		);
 		break;
 	default:
 		break; // Unknown effect type

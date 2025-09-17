@@ -15,6 +15,12 @@ ACPP_Table_TimeIsMoney::ACPP_Table_TimeIsMoney()
 void ACPP_Table_TimeIsMoney::BeginPlay()
 {
 	Super::BeginPlay();
+
+	PlayerCards_IgnoreRevealedEffect.Init(false, 3);
+	PlayerCards_IgnoreHiddenEffect.Init(false, 3);
+	OppCards_IgnoreRevealedEffect.Init(false, 3);
+	OppCards_IgnoreHiddenEffect.Init(false, 3);
+
 	ResetHands();
 	GameIsActive = false;
 }
@@ -29,7 +35,7 @@ void ACPP_Table_TimeIsMoney::StartGame()
 {
 	ResetHands();
 	GameIsActive = true;
-	PlayerGoesFirst = FMath::RandBool();	// this will alternate each hand
+	PlayerGoesFirst = FMath::RandBool();	// random init, then alternates each hand
 	OnHandStart.Broadcast();
 
 	StartHand();
@@ -154,22 +160,38 @@ bool ACPP_Table_TimeIsMoney::CheckIfWin(TMap<ECardSuit, int> PlayerBeingChecked)
 
 void ACPP_Table_TimeIsMoney::EvaluateEffect_AnimationFinished(FCardInstance Card)
 {
-
 	Card.CardActor->PlayEffectAnimation(ECardEffectType::None);	// TODO: animations for every effect type
-	CPP_CardEffectEvaluator::ApplyEffect(
-		Card.CardData->RevealedEffects,
-		this,
-		Card.CardActor,
-		true,
-		IsPlayerTurn
-	);
-	CPP_CardEffectEvaluator::ApplyEffect(
-		Card.CardData->HiddenEffects,
-		this,
-		Card.CardActor,
-		false,
-		IsPlayerTurn
-	);
+	int32 CardPos = GetCardPlayedPosition(Card.CardActor, IsPlayerTurn);
+	if (CardPos < 1 || CardPos > 3 || !Card.CardData)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Invalid card or position in EvaluateEffect_AnimationFinished. Skipping Effects"));
+		IsPlayerTurn = !IsPlayerTurn;
+		return;
+	}
+	if (!(IsPlayerTurn ? PlayerCards_IgnoreRevealedEffect[CardPos - 1]
+		: OppCards_IgnoreRevealedEffect[CardPos - 1]))
+	{
+		CPP_CardEffectEvaluator::ApplyEffect(
+			Card.CardData->RevealedEffects,
+			this,
+			Card.CardActor,
+			true,
+			IsPlayerTurn,
+			CardPos
+		);
+	}
+	if (!(IsPlayerTurn ? PlayerCards_IgnoreHiddenEffect[CardPos - 1]
+		: OppCards_IgnoreHiddenEffect[CardPos - 1]))
+	{
+		CPP_CardEffectEvaluator::ApplyEffect(
+			Card.CardData->HiddenEffects,
+			this,
+			Card.CardActor,
+			false,
+			IsPlayerTurn,
+			CardPos
+		);
+	}
 	IsPlayerTurn = !IsPlayerTurn;
 }
 
@@ -280,26 +302,37 @@ void ACPP_Table_TimeIsMoney::PlayCard(ACPP_Card_EffectCard* PlayedCard)
 		return;
 	}
 	ActiveDeck->PlayCardFromHand(PlayedCard);
-	if (PlayedCard->CardData)
+	int32 CardPos = GetCardPlayedPosition(PlayedCard, IsPlayerTurn);
+	if (CardPos != 0 && PlayedCard->CardData) 
 	{
-		CPP_CardEffectEvaluator::ApplyEffect(
-			PlayedCard->CardData->RevealedEffects, 
-			this,
-			PlayedCard,
-			true, 
-			IsPlayerTurn
-		);
-		CPP_CardEffectEvaluator::ApplyEffect(
-			PlayedCard->CardData->HiddenEffects, 
-			this, 
-			PlayedCard,
-			false, 
-			IsPlayerTurn
-		);
+		if (!(IsPlayerTurn ? PlayerCards_IgnoreRevealedEffect[CardPos - 1]
+			: OppCards_IgnoreRevealedEffect[CardPos - 1]))
+		{
+			CPP_CardEffectEvaluator::ApplyEffect(
+				PlayedCard->CardData->RevealedEffects,
+				this,
+				PlayedCard,
+				true,
+				IsPlayerTurn,
+				CardPos
+			);
+		}
+		if (!(IsPlayerTurn ? PlayerCards_IgnoreHiddenEffect[CardPos - 1] 
+			: OppCards_IgnoreHiddenEffect[CardPos - 1]))
+		{
+			CPP_CardEffectEvaluator::ApplyEffect(
+				PlayedCard->CardData->HiddenEffects,
+				this,
+				PlayedCard,
+				false,
+				IsPlayerTurn,
+				CardPos
+			);
+		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("PlayedCard->CardData is nullptr. Skipping effects."));
+		UE_LOG(LogTemp, Error, TEXT("PlayedCard->CardData is nullptr or not found in play. Skipping effects."));
 	}
 
 	if (IsPlayerTurn)
@@ -326,5 +359,22 @@ ECardSuit ACPP_Table_TimeIsMoney::GetRandomSuit()
 	Suits.Add(ECardSuit::Money);
 	int32 RandomIndex = FMath::RandRange(0, Suits.Num() - 1);
 	return Suits[RandomIndex];
+}
+
+// returns 0 if PlayedCard is null or card is not found in play
+int ACPP_Table_TimeIsMoney::GetCardPlayedPosition(ACPP_Card_EffectCard* PlayedCard, bool IsPlayer)
+{
+	if (!PlayedCard)
+	{
+		return 0;
+	}
+	if (IsPlayer)
+	{
+		return PlayerDeck->GetCardFromInPlayIndex(PlayedCard) + 1;
+	}
+	else
+	{
+		return OpponentDeck->GetCardFromInPlayIndex(PlayedCard) + 1;
+	}
 }
 
