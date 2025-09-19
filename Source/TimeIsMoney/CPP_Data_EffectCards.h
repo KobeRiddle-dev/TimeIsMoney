@@ -85,4 +85,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effect Cards Data")
 	TArray<FCardEffect> HiddenEffects;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effect Cards Data")
+	FString tooltip;
 };
