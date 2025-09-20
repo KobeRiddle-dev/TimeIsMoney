@@ -1,12 +1,22 @@
-#include "CPP_GameTimer.h"
+#include "GameTimerComponent.h"
 
 // Sets default values
-UGameTimer::UGameTimer()
+UGameTimerComponent::UGameTimerComponent()
 {
 	CurrentTime = FTimespan::Zero();
 	MaxTime = FTimespan::Zero();
+	StartingHours = 72.0f;
+	bAutoInitializeOnBeginPlay = true;
 }
+void UGameTimerComponent::BeginPlay()
+{
+	Super::BeginPlay();
 
+	if (bAutoInitializeOnBeginPlay)
+	{
+		InitializeTimer(StartingHours);
+	}
+}
 // Initialize timer with starting time (in hours)
 /*
 * This sets the current time and max time to the specified hours.
@@ -14,24 +24,26 @@ UGameTimer::UGameTimer()
 *
 * StartingHours: The initial time in hours (default 72 hours = 3 days)
 */
-void UGameTimer::InitializeTimer(float StartingHours)
+void UGameTimerComponent::InitializeTimer(float Hours)
 {
-	CurrentTime = FTimespan::FromHours(StartingHours);
+	CurrentTime = FTimespan::FromHours(Hours);
 	MaxTime = CurrentTime;
+	StartingHours = Hours;
 	BroadcastTimeChanged();
 }
 
-bool UGameTimer::SpendTime(const FTimespan& TimeToSpend)
+bool UGameTimerComponent::SpendTime(const FTimespan& TimeToSpend)
 {
 	if (TimeToSpend.GetTotalSeconds() <= 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("GameTimer: Cannot spend negative or zero time"));
+		UE_LOG(LogTemp, Warning, TEXT("GameTimerComponent: Cannot spend negative or zero time"));
 		return false;
 	}
 
 	if (!HasEnoughTime(TimeToSpend))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("GameTimer: Not enough time to spend %s"), *TimeToSpend.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("GameTimerComponent: Not enough time to spend %s"),
+			*TimeToSpend.ToString());
 		return false;
 	}
 
@@ -46,38 +58,38 @@ bool UGameTimer::SpendTime(const FTimespan& TimeToSpend)
 	BroadcastTimeChanged();
 	CheckTimeExpired();
 
-	UE_LOG(LogTemp, Log, TEXT("GameTimer: Spent %s, remaining: %s"),
+	UE_LOG(LogTemp, Log, TEXT("GameTimerComponent: Spent %s, remaining: %s"),
 		*TimeToSpend.ToString(), *GetTimeAsString());
 
 	return true;
 }
 
-void UGameTimer::AddTime(const FTimespan& TimeToAdd)
+void UGameTimerComponent::AddTime(const FTimespan& TimeToAdd)
 {
 	if (TimeToAdd.GetTotalSeconds() <= 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("GameTimer: Cannot add negative or zero time"));
+		UE_LOG(LogTemp, Warning, TEXT("GameTimerComponent: Cannot add negative or zero time"));
 		return;
 	}
 
 	CurrentTime += TimeToAdd;
 	BroadcastTimeChanged();
 
-	UE_LOG(LogTemp, Log, TEXT("GameTimer: Added %s, current: %s"),
+	UE_LOG(LogTemp, Log, TEXT("GameTimerComponent: Added %s, current: %s"),
 		*TimeToAdd.ToString(), *GetTimeAsString());
 }
 
-bool UGameTimer::HasEnoughTime(const FTimespan& RequiredTime) const
+bool UGameTimerComponent::HasEnoughTime(const FTimespan& RequiredTime) const
 {
 	return CurrentTime >= RequiredTime;
 }
 
-FTimespan UGameTimer::GetRemainingTime() const
+FTimespan UGameTimerComponent::GetRemainingTime() const
 {
 	return CurrentTime;
 }
 
-FString UGameTimer::GetTimeAsString() const
+FString UGameTimerComponent::GetTimeAsString() const
 {
 	int32 Days = CurrentTime.GetDays();
 	int32 Hours = CurrentTime.GetHours();
@@ -97,61 +109,61 @@ FString UGameTimer::GetTimeAsString() const
 	}
 }
 
-float UGameTimer::GetTimeInHours() const
+float UGameTimerComponent::GetTimeInHours() const
 {
 	return static_cast<float>(CurrentTime.GetTotalHours());
 }
 
-int32 UGameTimer::GetDays() const
+int32 UGameTimerComponent::GetDays() const
 {
 	return CurrentTime.GetDays();
 }
 
-int32 UGameTimer::GetHours() const
+int32 UGameTimerComponent::GetHours() const
 {
 	return CurrentTime.GetHours();
 }
 
-int32 UGameTimer::GetMinutes() const
+int32 UGameTimerComponent::GetMinutes() const
 {
 	return CurrentTime.GetMinutes();
 }
 
-bool UGameTimer::IsTimeExpired() const
+bool UGameTimerComponent::IsTimeExpired() const
 {
 	return CurrentTime.GetTotalSeconds() <= 0;
 }
 
-bool UGameTimer::SpendMinutes(int32 Minutes)
+bool UGameTimerComponent::SpendMinutes(int32 Minutes)
 {
 	return SpendTime(FTimespan::FromMinutes(Minutes));
 }
 
-bool UGameTimer::SpendHours(int32 Hours)
+bool UGameTimerComponent::SpendHours(int32 Hours)
 {
 	return SpendTime(FTimespan::FromHours(Hours));
 }
 
-void UGameTimer::AddMinutes(int32 Minutes)
+void UGameTimerComponent::AddMinutes(int32 Minutes)
 {
 	AddTime(FTimespan::FromMinutes(Minutes));
 }
 
-void UGameTimer::AddHours(int32 Hours)
+void UGameTimerComponent::AddHours(int32 Hours)
 {
 	AddTime(FTimespan::FromHours(Hours));
 }
 
-void UGameTimer::BroadcastTimeChanged()
+void UGameTimerComponent::BroadcastTimeChanged()
 {
 	OnTimeChanged.Broadcast(CurrentTime);
 }
 
-void UGameTimer::CheckTimeExpired()
+void UGameTimerComponent::CheckTimeExpired()
 {
 	if (IsTimeExpired())
 	{
 		OnTimeExpired.Broadcast();
-		UE_LOG(LogTemp, Warning, TEXT("GameTimer: Time has expired!"));
+		UE_LOG(LogTemp, Warning, TEXT("GameTimerComponent: Time has expired!"));
 	}
 }

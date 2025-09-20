@@ -1,34 +1,41 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
+#include "Components/ActorComponent.h"
 #include "Engine/Engine.h"
-#include "CPP_GameTimer.generated.h"
+#include "GameTimerComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTimeChanged, const FTimespan&, NewTime);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTimeExpired);
 
-UCLASS(BlueprintType, Blueprintable)
-class TIMEISMONEY_API UGameTimer : public UObject
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+class TIMEISMONEY_API UGameTimerComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values
-	UGameTimer();
+	UGameTimerComponent();
 
 protected:
+	virtual void BeginPlay() override;
+
 	// Called when the timer is initialized or when spawned
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Game Timer")
 	FTimespan CurrentTime;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Game Timer")
 	FTimespan MaxTime;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game Timer")
+	float StartingHours;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game Timer")
+	bool bAutoInitializeOnBeginPlay;
 
 public:
 	// Initialize timer with starting time (in hours)
 	UFUNCTION(BlueprintCallable, Category = "Game Timer")
-	void InitializeTimer(float StartingHours = 72.0f);
+	void InitializeTimer(float Hours = 72.0f);
 
 	// Spend time (subtract from current time)
 	UFUNCTION(BlueprintCallable, Category = "Game Timer")
