@@ -31,12 +31,17 @@ void ACPP_Table_TimeIsMoney::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ACPP_Table_TimeIsMoney::StartGame()
+void ACPP_Table_TimeIsMoney::GameSetup() 
 {
 	ResetHands();
 	GameIsActive = true;
 	PlayerGoesFirst = FMath::RandBool();	// random init, then alternates each hand
 	StartHand();
+}
+
+void ACPP_Table_TimeIsMoney::StartGame()
+{
+	OnGameStarted.Broadcast();
 }
 
 void  ACPP_Table_TimeIsMoney::RandomizeStartSettings()
