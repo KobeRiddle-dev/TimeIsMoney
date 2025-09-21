@@ -16,6 +16,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerCardPlayedEventDispatcher, 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOppCardPlayedEventDispatcher, ACPP_Card_EffectCard*, CardPlayed);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHandStartEventDispatcher);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWinnerDeterminedEventDispatcher);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStartGameEventDispatcher);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBeginEffectReveal);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGameEndedEventDispatcher, bool, PlayerIsWin);
 
@@ -96,6 +97,9 @@ public:
 	bool GameIsActive;
 
 	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney_Events")
+	FOnStartGameEventDispatcher OnGameStarted;
+
+	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney_Events")
 	FOnPlayerCardPlayedEventDispatcher OnPlayerCardPlayed;
 
 	UPROPERTY(BlueprintAssignable, Category = "Table_TimeIsMoney_Events")
@@ -146,8 +150,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	void EvaluateEffect_AnimationFinished(FCardInstance Card);
 
-	UFUNCTION(BlueprintCallable, Category = "Game Setup")
+	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	void RandomizeStartSettings();
+
+	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
+	void GameSetup();
 
 
 };
