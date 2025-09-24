@@ -31,8 +31,7 @@ void ACPP_Card::BeginPlay()
 	Super::BeginPlay();
 
 	CardMesh = Cast<UStaticMeshComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass()));
-	CardNumberText = Cast<UTextRenderComponent>(GetComponentByClass(UTextRenderComponent::StaticClass()));
-	if (CardMesh && CardNumberText)
+	if (CardMesh)
 	{
 		UMaterialInterface* Material = CardMesh->GetMaterial(0);
 		if (Material)
@@ -79,25 +78,6 @@ void ACPP_Card::SetCardTexture(UTexture2D* NewTexture)
 		UE_LOG(LogTemp, Warning, TEXT("ACPP_CARD::SetCardTexture: CardMesh, CardMeshMaterial, or NewTexture is NULL"));
 	}
 }
-
-void ACPP_Card::SetCardNumber(int Number)
-{
-	CardNumber = Number;
-	// Update the text on the CardNumberText
-	if (CardNumberText)
-	{
-		// Convert the number to a string and then to FText
-		FText NewText = FText::FromString(FString::Printf(TEXT("%d"), CardNumber));
-
-		// Set the new text
-		CardNumberText->SetText(NewText);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("ACPP_CARD::SetCardNumber: CardNumberText is NULL"));
-	}
-}
-
 
 void ACPP_Card::SetCardSuit(ECardSuit Suit)
 {

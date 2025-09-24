@@ -71,14 +71,21 @@ void ACPP_Card_EffectCard::SetCardTexture(UTexture2D* NewTexture)
 
 void ACPP_Card_EffectCard::InitializeCard(UCPP_Data_EffectCards* card)
 {
-	try {
-		CardData = card;
-		SetCardTexture(CardData->CardTexture);
-	}
-	catch (...)
+	if (!card)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("There was a problem with Effect Card Data"));
+		UE_LOG(LogTemp, Warning, TEXT("InitializeCard failed: Card data is null"));
+		return;
 	}
+
+	CardData = card;
+
+	if (!CardData->CardTexture)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("InitializeCard warning: Card texture is null"));
+		return;
+	}
+
+	SetCardTexture(CardData->CardTexture);
 }
 
 void ACPP_Card_EffectCard::PlayEffectAnimationWithCallback(

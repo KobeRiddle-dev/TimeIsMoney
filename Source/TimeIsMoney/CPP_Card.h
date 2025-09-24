@@ -23,7 +23,6 @@ protected:
 
 	UStaticMeshComponent* CardMesh;
 	UMaterialInstanceDynamic* DynMaterial;
-	UTextRenderComponent* CardNumberText;
 
 public:
 	// Called every frame
@@ -50,7 +49,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Card")
 	void SetCardTexture(UTexture2D* NewTexture);
 
-	UFUNCTION(BlueprintCallable, Category = "Card")
+	UFUNCTION(BlueprintImplementableEvent, Category = "Card")
 	void SetCardNumber(int Number);
 
 	UFUNCTION(BlueprintCallable, Category = "Card")
