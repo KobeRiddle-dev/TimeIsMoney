@@ -40,12 +40,13 @@ bool UGameTimerComponent::SpendTime(const FTimespan& TimeToSpend)
 		return false;
 	}
 
-	if (!HasEnoughTime(TimeToSpend))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("GameTimerComponent: Not enough time to spend %s"),
-			*TimeToSpend.ToString());
-		return false;
-	}
+	// Removing to allow for spending time down to 0.
+	// if (!HasEnoughTime(TimeToSpend))
+	// {
+	// 	UE_LOG(LogTemp, Warning, TEXT("GameTimerComponent: Not enough time to spend %s"),
+	// 		*TimeToSpend.ToString());
+	// 	return false;
+	// }
 
 	CurrentTime -= TimeToSpend;
 
