@@ -106,7 +106,11 @@ DerivedDataCache/*
 # Solution Files
 *.sln
 
-# VSCode Cache Directory
+##################
+# VS Code Files #
+#################
+
+# VSCode Directory
 .vscode/*
 
 # Exception for Tasks.json
