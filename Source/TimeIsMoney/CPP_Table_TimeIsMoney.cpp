@@ -354,6 +354,12 @@ void ACPP_Table_TimeIsMoney::PlayCard(ACPP_Card_EffectCard* PlayedCard)
 	IsPlayerTurn = !IsPlayerTurn;
 }
 
+void ACPP_Table_TimeIsMoney::BossDefeated() 
+{
+
+
+}
+
 ECardSuit ACPP_Table_TimeIsMoney::GetRandomSuit()
 {
 	TArray<ECardSuit> Suits;

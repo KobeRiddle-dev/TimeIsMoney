@@ -156,5 +156,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	void GameSetup();
 
+	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
+	void BossDefeated();
 
 };
