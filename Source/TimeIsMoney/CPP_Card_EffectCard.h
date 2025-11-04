@@ -40,6 +40,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "EffectCard")
 	void SetCardTexture(UTexture2D* NewTexture);
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "EffectCard")
+	void SetCardText();
+
+	UFUNCTION(BlueprintCallable, Category = "EffectCard")
+	FString ParseTooltip(FString Text);
+
 	UFUNCTION(BlueprintCallable, Category = "EffectCard")
 	void InitializeCard(UCPP_Data_EffectCards* card);
 

@@ -106,3 +106,35 @@ void ACPP_Card_EffectCard::CallAnimationFinished()
 		AnimationFinishedCallback = nullptr; // clear after execution
 	}
 }
+
+FString ACPP_Card_EffectCard::ParseTooltip(FString Tooltip)
+{
+	TArray<FString> Parsed;
+	Tooltip.ParseIntoArray(Parsed, TEXT(" "), false);
+
+	FString SplitTooltip;
+
+	int i = 0;
+
+	SplitTooltip.Append(Parsed[i]);
+	SplitTooltip.Append(" ");
+	i++;
+
+	while (i < Parsed.Num())
+	{
+		if (i % 3 == 0)
+		{
+			SplitTooltip.Append(Parsed[i]);
+			SplitTooltip.Append("\n");
+		}
+		else
+		{
+			SplitTooltip.Append(Parsed[i]);
+			SplitTooltip.Append(" ");
+		}
+		i++;
+	}
+
+	return SplitTooltip;
+}
+
