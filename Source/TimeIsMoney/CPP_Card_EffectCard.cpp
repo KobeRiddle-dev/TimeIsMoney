@@ -58,6 +58,7 @@ void ACPP_Card_EffectCard::Tick(float DeltaTime)
 
 void ACPP_Card_EffectCard::SetCardTexture(UTexture2D* NewTexture)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Setting Texture!"))
 	if (CardMesh && DynMaterial && NewTexture)
 	{
 		DynMaterial->SetTextureParameterValue("CardTexture", NewTexture);	// "CardTexture" needs to match the param name exactly
@@ -113,22 +114,27 @@ FString ACPP_Card_EffectCard::ParseTooltip(FString Tooltip)
 	Tooltip.ParseIntoArray(Parsed, TEXT(" "), false);
 
 	FString SplitTooltip;
-
+	// 12 characters long
+	int characterLimit = 12;
+	int currCharCount = 0;
 	int i = 0;
 
+	currCharCount += Parsed[i].Len();
 	SplitTooltip.Append(Parsed[i]);
 	SplitTooltip.Append(" ");
 	i++;
 
 	while (i < Parsed.Num())
 	{
-		if (i % 3 == 0)
+		if (currCharCount + Parsed[i].Len() >= characterLimit)
 		{
 			SplitTooltip.Append(Parsed[i]);
 			SplitTooltip.Append("\n");
+			currCharCount = 0;
 		}
 		else
 		{
+			currCharCount += Parsed[i].Len();
 			SplitTooltip.Append(Parsed[i]);
 			SplitTooltip.Append(" ");
 		}
