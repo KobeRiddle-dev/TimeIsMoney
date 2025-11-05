@@ -58,6 +58,7 @@ void ACPP_Card_EffectCard::Tick(float DeltaTime)
 
 void ACPP_Card_EffectCard::SetCardTexture(UTexture2D* NewTexture)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Setting Texture!"))
 	if (CardMesh && DynMaterial && NewTexture)
 	{
 		DynMaterial->SetTextureParameterValue("CardTexture", NewTexture);	// "CardTexture" needs to match the param name exactly
