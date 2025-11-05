@@ -114,8 +114,7 @@ FString ACPP_Card_EffectCard::ParseTooltip(FString Tooltip)
 	Tooltip.ParseIntoArray(Parsed, TEXT(" "), false);
 
 	FString SplitTooltip;
-	// 12 characters long
-	int characterLimit = 12;
+	int characterLimit = 10;
 	int currCharCount = 0;
 	int i = 0;
 
