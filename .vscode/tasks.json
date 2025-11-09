@@ -4,11 +4,20 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "delete generated files",
+            "label": "Delete generated files - UE Project",
             "type": "shell",
             "windows": {
                 "command": "rm -r ./Binaries, ./DerivedDataCache, ./Intermediate, ./Saved"
-            }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Delete generated files - UE Plugins",
+            "type": "shell",
+            "windows": {
+                "command": "rm -r ./Plugins/*/Binaries, ./Plugins/*/Intermediate"
+            },
+            "problemMatcher": []
         }
     ]
 }
