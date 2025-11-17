@@ -39,6 +39,7 @@ class TIMEISMONEY_API ACPP_Card_Deck : public AActor
 
 private:
 	void UpdateHandLayout();
+	void UpdateHandIndexes();
 	TArray<FVector> CalculateHandPositions() const;
 
 public:
@@ -82,12 +83,12 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Card_Deck")
 	F_CardDiscardedEventDispatcher OnCardDiscarded;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck")
+	float CardMeshWidth = 20.0f;
+
 	// The card actor Blueprint to spawn when drawing cards
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck_Setup")
 	TSubclassOf<ACPP_Card_EffectCard> CardActorClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck_Setup")
-	float PreferredCardSpacing = 10.0f;
 
 	UFUNCTION(BlueprintCallable, Category = "Card_Deck")
 	void DiscardHand();

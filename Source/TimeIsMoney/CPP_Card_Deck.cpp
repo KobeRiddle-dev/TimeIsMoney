@@ -122,6 +122,7 @@ void ACPP_Card_Deck::DrawRandom()
 	OnCardDrawn.Broadcast(Hand[HandIndex]);
 	// Update layout for all cards (positions & fixed rotation)
 	UpdateHandLayout();
+	UpdateHandIndexes();
 }
 
 TArray<FVector> ACPP_Card_Deck::CalculateHandPositions() const
@@ -131,64 +132,72 @@ TArray<FVector> ACPP_Card_Deck::CalculateHandPositions() const
 	OutPositions.SetNumZeroed(NumCards);
 
 	if (NumCards == 0)
-	{
 		return OutPositions;
-	}
 
-	// Need two hand slot endpoints
 	if (HandSlots.Num() < 2)
 	{
-		// fallback: put everything at actor location
 		FVector Fallback = GetActorLocation();
 		for (int32 i = 0; i < NumCards; ++i)
-		{
 			OutPositions[i] = Fallback;
-		}
 		return OutPositions;
 	}
 
+	// =======================================
+	// Hand location
+	// =======================================
 	const FVector Start = HandSlots[0].GetLocation();
 	const FVector End = HandSlots[1].GetLocation();
-	const FVector Center = (Start + End) * 0.5f;
 	const FVector Dir = End - Start;
 	const float TotalWidth = Dir.Size();
 
-	// If the two points coincide, put all cards at center.
 	if (TotalWidth <= KINDA_SMALL_NUMBER)
 	{
+		FVector Center = (Start + End) * 0.5f;
 		for (int32 i = 0; i < NumCards; ++i)
 			OutPositions[i] = Center;
 		return OutPositions;
 	}
 
 	const FVector DirUnit = Dir / TotalWidth;
+	const FVector Center = (Start + End) * 0.5f;
 
-	// Compute spacing:
-	// - PreferredCardSpacing is the spacing we'd like if there's enough room.
-	// - If (NumCards - 1) * PreferredCardSpacing > TotalWidth, shrink spacing so cluster fits.
-	float spacing = 0.0f;
-	if (NumCards == 1)
+	// =======================================
+	// Spacing
+	// =======================================
+	if (NumCards <= 5)
 	{
-		spacing = 0.0f;
+		// Case 1: 5 or fewer cards - center cluster 
+		float fullSpacing = TotalWidth / 4.0f; // for 5 cards = 4 gaps
+		float minSpacing = CardMeshWidth * 1.05f; // small buffer to avoid overlap
+
+		// Blend between minSpacing (1-2 cards) and fullSpacing (5 cards)
+		float t = FMath::Clamp(static_cast<float>(NumCards - 1) / 4.0f, 0.0f, 1.0f);
+		float spacing = FMath::Lerp(minSpacing, fullSpacing, t);
+
+		float usedSpan = spacing * (NumCards - 1);
+		FVector clusterStart = Center - DirUnit * (usedSpan * 0.5f);
+
+		for (int32 i = 0; i < NumCards; ++i)
+		{
+			OutPositions[i] = clusterStart + DirUnit * (spacing * i);
+		}
 	}
 	else
 	{
-		// maximum spacing that still fits between endpoints
-		const float maxFitSpacing = TotalWidth / float(NumCards - 1);
-		spacing = FMath::Min(PreferredCardSpacing, maxFitSpacing);
-	}
+		// More than 5 cards - still fit inside anchors but stagger slightly on X
+		float spacing = TotalWidth / (NumCards - 1);
+		float xOffset = -1.0f * (NumCards - 5); 
+		FVector xShift = FVector(xOffset, 0, 0);
 
-	// Compute left-most start so cluster is centered at Center.
-	const float halfSpan = spacing * float(NumCards - 1) * 0.5f;
-	const FVector clusterStart = Center - DirUnit * halfSpan;
-
-	for (int32 i = 0; i < NumCards; ++i)
-	{
-		OutPositions[i] = clusterStart + DirUnit * (spacing * float(i));
+		for (int32 i = 0; i < NumCards; ++i)
+		{
+			OutPositions[i] = Start + DirUnit * (spacing * i) + xShift;
+		}
 	}
 
 	return OutPositions;
 }
+
 
 // Helper: move any already-spawned card actors into their computed positions
 void ACPP_Card_Deck::UpdateHandLayout()
@@ -269,6 +278,7 @@ void ACPP_Card_Deck::PlayCardFromHand(ACPP_Card_EffectCard* CardToPlay)
 	// Add to InPlay
 	FCardInstance PlayedCard = Hand[Index];
 	Hand.RemoveAt(Index);
+	PlayedCard.CardActor->HandIndex = -1; // No longer in hand
 	InPlay.Add(PlayedCard);
 
 	// Move the actor in the world if it exists
@@ -289,6 +299,7 @@ void ACPP_Card_Deck::PlayCardFromHand(ACPP_Card_EffectCard* CardToPlay)
 				SlotIndex, BoardSlots.Num(), InPlay.Num());
 		}
 	}
+	UpdateHandIndexes();
 	UpdateHandLayout();
 }
 
@@ -300,13 +311,13 @@ int ACPP_Card_Deck::GetCardFromHandIndex(ACPP_Card_EffectCard* CardToFind)
 		UE_LOG(LogTemp, Error, TEXT("GetCardFromHandIndex: CardToFind is NULL!"));
 		return INDEX_NONE;
 	}
-	int32 Index = Hand.IndexOfByPredicate([CardToFind](const FCardInstance& Card) {
-		return Card.CardActor == CardToFind;
-		});
-	if (Index == INDEX_NONE)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("GetCardFromHandIndex: Card not found in hand!"));
+	if (CardToFind->HandIndex < 0 || CardToFind->HandIndex >= Hand.Num()) {
+		UE_LOG(LogTemp, Log, TEXT("GetCardFromHandIndex: Card not in hand"));
+		UpdateHandIndexes();
+		return INDEX_NONE;
 	}
+	int32 Index = CardToFind->HandIndex;
+	UE_LOG(LogTemp, Log, TEXT("GetCardFromHandIndex: Found card at index %d"), Index);
 	return Index;
 }
 
@@ -334,4 +345,14 @@ void ACPP_Card_Deck::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ACPP_Card_Deck::UpdateHandIndexes()
+{
+	for (int32 i = 0; i < Hand.Num(); ++i)
+	{
+		if (IsValid(Hand[i].CardActor))
+		{
+			Hand[i].CardActor->HandIndex = i;
+		}
+	}
+}
 

@@ -37,6 +37,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EffectCard")
 	UTexture2D* CardTexture;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EffectCard")
+	int32 HandIndex = -1;
+
 	UFUNCTION(BlueprintCallable, Category = "EffectCard")
 	void SetCardTexture(UTexture2D* NewTexture);
 
