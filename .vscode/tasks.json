@@ -18,6 +18,12 @@
                 "command": "rm -r ./Plugins/*/Binaries, ./Plugins/*/Intermediate"
             },
             "problemMatcher": []
+        },
+        {
+            "label": "Unlock my Git LFS locks",
+            "type": "shell",
+            "command": ".vscode/Scripts/UnlockAllMyLocks.ps1",
+            "problemMatcher": []
         }
     ]
 }

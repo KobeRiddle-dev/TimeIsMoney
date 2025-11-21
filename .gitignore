@@ -115,6 +115,7 @@ DerivedDataCache/*
 
 # Exception for Tasks.json
 !.vscode/tasks.json
+!.vscode/Scripts/
 
 # VSCode History Files
 **/.history
