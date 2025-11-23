@@ -122,6 +122,7 @@ void CPP_CardEffectEvaluator::SetCardSuit(
 
 void CPP_CardEffectEvaluator::IgnoreRevealedEffectOfCard(
 	ACPP_Table_TimeIsMoney* GameState,
+	UConditionStateResults* ConditionResult,
 	bool IsTargetingOpp,
 	int TargetCardPos,	// if not 1, 2, or 3, it targets the card opposite the current card
 	bool IsPublicEffect,
@@ -149,10 +150,16 @@ void CPP_CardEffectEvaluator::IgnoreRevealedEffectOfCard(
 
 void CPP_CardEffectEvaluator::DrawCards(
 	ACPP_Table_TimeIsMoney* GameState,
+	UConditionStateResults* ConditionResult,
 	int NumOfDraws,
 	bool IsTargetingOpp,
 	bool IsPlayedByPlayer)
 {
+	if (ConditionResult->Private == false || ConditionResult->Public == false || ConditionResult->True == false)
+	{
+		// Condition not met, do not draw cards
+		return;
+	}
 	if (!IsPlayedByPlayer)
 	{
 		IsTargetingOpp = !IsTargetingOpp;
@@ -228,6 +235,7 @@ UConditionStateResults* CPP_CardEffectEvaluator::EvaluateConditionPlayedPosition
 	int PlayedPosition,
 	int ThisCardPos)
 {
+	UE_LOG(LogTemp, Log, TEXT("Evaluating PlayedPositionEquals: ThisCardPos=%d, PlayedPosition=%d"), ThisCardPos, PlayedPosition);
 	UConditionStateResults* Result = NewObject<UConditionStateResults>();
 	Result->Public = ThisCardPos == PlayedPosition;
 	Result->Private = ThisCardPos == PlayedPosition;
@@ -426,6 +434,7 @@ void CPP_CardEffectEvaluator::EvaluateEffect(
 	case ECardEffectType::IgnoreRevealedEffectOfCard:
 		IgnoreRevealedEffectOfCard(
 			GameState,
+			ConditionResult,
 			Effect.IsTargetingOpponent,
 			Effect.IntParam,
 			IsPublicEffect,
@@ -436,6 +445,7 @@ void CPP_CardEffectEvaluator::EvaluateEffect(
 	case ECardEffectType::DrawCards:
 		DrawCards(
 			GameState,
+			ConditionResult,
 			Effect.IntParam,
 			Effect.IsTargetingOpponent,
 			IsPlayedByPlayer

@@ -71,6 +71,7 @@ private:
 
 	static void IgnoreRevealedEffectOfCard(
         ACPP_Table_TimeIsMoney* GameState,
+		UConditionStateResults* ConditionResult,
 		bool IsTargetingOpp,
         int TargetCardPos,
         bool IsPublicEffect,
@@ -79,6 +80,7 @@ private:
 
 	static void DrawCards(
 		ACPP_Table_TimeIsMoney* GameState,
+		UConditionStateResults* ConditionResult,
         int NumOfDraws,
         bool IsTargetingOpp,
         bool IsPlayedByPlayer);
