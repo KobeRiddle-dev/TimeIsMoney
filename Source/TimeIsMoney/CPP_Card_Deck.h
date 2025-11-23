@@ -7,6 +7,8 @@
 #include "GameFramework/Actor.h"
 #include "CPP_Card_Deck.generated.h"
 
+class ACPP_Table_TimeIsMoney;
+
 /// <summary>
 /// Lightweight instance of an effect card for deck/hand management
 /// </summary>
@@ -50,6 +52,10 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
+
+	// CPP refs to table code
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck_Setup")
+	ACPP_Table_TimeIsMoney* CPP_OwningTable;
 
 	// The editor-only template deck
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Card_Deck_Setup")

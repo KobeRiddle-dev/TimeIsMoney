@@ -9,6 +9,7 @@
 #include "CPP_Data_EffectCards.h"
 #include "CPP_Card_EffectCard.generated.h"
 
+class ACPP_Card_Deck;
 DECLARE_DELEGATE(FOnEffectAnimationFinished);
 
 UCLASS()
@@ -39,6 +40,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EffectCard")
 	int32 HandIndex = -1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EffectCard")
+	ACPP_Card_Deck* OwningDeck;
 
 	UFUNCTION(BlueprintCallable, Category = "EffectCard")
 	void SetCardTexture(UTexture2D* NewTexture);

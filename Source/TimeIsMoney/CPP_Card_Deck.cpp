@@ -100,6 +100,7 @@ void ACPP_Card_Deck::DrawRandom()
 				// Initialize it with its data
 				Spawned->InitializeCard(RandomCard.CardData);
 				Spawned->SetCardText();
+				Spawned->OwningDeck = this;
 				// store reference
 				Hand[HandIndex].CardActor = Spawned;
 			}
