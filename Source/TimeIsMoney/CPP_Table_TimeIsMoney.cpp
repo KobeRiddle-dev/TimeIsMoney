@@ -262,6 +262,7 @@ bool ACPP_Table_TimeIsMoney::DetermineWinner()
 	}
 
 	// Notify listeners that the winner has been determined
+	OnHandWin(playerIsWin);
 	OnWinnerDetermined.Broadcast();
 	return playerIsWin;
 }
@@ -379,5 +380,29 @@ int ACPP_Table_TimeIsMoney::GetCardPlayedPosition(ACPP_Card_EffectCard* PlayedCa
 	{
 		return OpponentDeck->GetCardFromInPlayIndex(PlayedCard) + 1;
 	}
+}
+
+bool ACPP_Table_TimeIsMoney::IsPotentialLastHand()
+{
+	const int pBlood = PlayerHands.Contains(ECardSuit::Blood) ? PlayerHands[ECardSuit::Blood] : 0;
+	const int pTime = PlayerHands.Contains(ECardSuit::Time) ? PlayerHands[ECardSuit::Time] : 0;
+	const int pMoney = PlayerHands.Contains(ECardSuit::Money) ? PlayerHands[ECardSuit::Money] : 0;
+	const int oBlood = OppHands.Contains(ECardSuit::Blood) ? OppHands[ECardSuit::Blood] : 0;
+	const int oTime = OppHands.Contains(ECardSuit::Time) ? OppHands[ECardSuit::Time] : 0;
+	const int oMoney = OppHands.Contains(ECardSuit::Money) ? OppHands[ECardSuit::Money] : 0;
+
+	// Any suit is at 2 wins
+	if (pBlood == 2 || pTime == 2 || pMoney == 2 ||
+		oBlood == 2 || oTime == 2 || oMoney == 2)
+	{
+		return true;
+	}
+	// Any two suits are at 1 or more wins
+	if ((pBlood >= 1 && pTime >= 1) || (pBlood >= 1 && pMoney >= 1) || (pTime >= 1 && pMoney >= 1) ||
+		(oBlood >= 1 && oTime >= 1) || (oBlood >= 1 && oMoney >= 1) || (oTime >= 1 && oMoney >= 1))
+	{
+		return true;
+	}
+	return false;
 }
 

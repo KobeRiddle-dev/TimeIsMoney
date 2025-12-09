@@ -156,5 +156,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
 	void GameSetup();
 
+	UFUNCTION(BlueprintCallable, Category = "Table_TimeIsMoney")
+	bool IsPotentialLastHand();
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Table_TimeIsMoney_Animations")
+	void OnHandWin(bool PlayerIsWin);
 };
